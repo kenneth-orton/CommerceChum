@@ -12,11 +12,9 @@ namespace DeskJockey
         private static string pathToDB = System.IO.Path.Combine(folder, "sales_manager.db");
         private static string connStr = string.Format("{0}{1}", "DataSource=", pathToDB);
 
-        public static Dictionary<int, List<object>> getDBProducts()
+        public static List<Product> getDBProducts()
         {
-            int i = 0;
-            Dictionary<int, List<object>> dbDict = new Dictionary<int, List<object>>();
-            
+            List<Product> resultSet = new List<Product>();
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
             {
                 string query = "SELECT * FROM products ORDER BY productID;"; 
@@ -29,24 +27,20 @@ namespace DeskJockey
                         {
                             if (reader.GetInt32(4) == 1) // item is set as active in database
                             {
-                                List<object> dbEntries = new List<object>();
-                                dbEntries.Add(reader["name"]);
-                                dbEntries.Add(reader["description"]);
-                                dbEntries.Add(reader["price"]);
-                                dbDict[i++] = dbEntries;
+                                Product product = new Product(reader.GetInt32(0), reader["name"].ToString(), reader["description"].ToString(),
+                                                              reader.GetDouble(3), true);
+                                resultSet.Add(product);
                             }
                         }
                     }
                 }
             }
-            return dbDict;
+            return resultSet;
         }
 
-        public static Dictionary<int, Customer> getDBCustomers()
+        public static List<Customer> getDBCustomers()
         {
-            int i = 0;
-            Dictionary<int, Customer> dbDict = new Dictionary<int, Customer>();
-
+            List<Customer> resultSet = new List<Customer>();
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
             {
                 string query = @"SELECT customers.customerID, companyName, payTerms, addressSame, active, billContactName, billAddr1, billAddr2, billCity, billState, 
@@ -74,47 +68,18 @@ namespace DeskJockey
 
                                 bool addrSame = reader.GetInt32(3) != 0;
                                 Customer customer = new Customer(reader.GetInt32(0), reader["companyName"].ToString(), reader["payTerms"].ToString(),
-                                                                 addrSame, billAddress, shipAddress);
-                                dbDict[i++] = customer;
+                                                                 addrSame, true, billAddress, shipAddress);
+                                resultSet.Add(customer);
                             }
                         }
                     }
                 }
             }
-            return dbDict;
+            return resultSet;
         }
 
-        public enum TableID { products, customers, orders };
 
-        public static int getTableSize(TableID table)
-        {
-            string tableName;
-            switch(table)
-            {
-                case TableID.products:
-                    tableName = "products";
-                    break;
-                case TableID.customers:
-                    tableName = "customers";
-                    break;
-                default:
-                    return 0;
-            }
-
-            int rowCount;
-            using (SQLiteConnection conn = new SQLiteConnection(connStr))
-            {
-                string query = string.Format("SELECT COUNT(*) FROM \"{0}\";", tableName);
-                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
-                {
-                    conn.Open();
-                    rowCount = Convert.ToInt32(cmd.ExecuteScalar());
-                }
-            }
-            return rowCount;
-        }
-
-        public static int getProductIndex(string productName)
+        public static bool partExists(string productName)
         {
             int productID = 0;
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
@@ -132,73 +97,29 @@ namespace DeskJockey
                     }
                 }
             }
-            return productID - 1;
+            return productID > 0;
         }
 
-        public static string getProductDescription(string productName)
+        public static void insertPart(string partName, string partDesc, double partPrice, bool active = true)
         {
-            string productDescription = "";
+            int activeBit = active ? 1 : 0;
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
             {
-                string query = string.Format("SELECT description FROM products WHERE name = \"{0}\";", productName);
-                using (SQLiteCommand cmd = new SQLiteCommand(query.ToString(), conn))
-                {
-                    conn.Open();
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            productDescription = reader.GetString(0);
-                        }
-                    }
-                }
-            }
-            return productDescription;
-        }
-
-        public static double getProductPrice(string productName)
-        {
-            double productPrice = 0.0;
-            using (SQLiteConnection conn = new SQLiteConnection(connStr))
-            {
-                string query = string.Format("SELECT price FROM products WHERE name = \"{0}\";", productName);
-                using (SQLiteCommand cmd = new SQLiteCommand(query.ToString(), conn))
-                {
-                    conn.Open();
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            productPrice = reader.GetDouble(0);
-                        }
-                    }
-                }
-            }
-            return productPrice;
-        }
-
-        public static void insertPart(string partName, string partDesc, double partPrice)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(connStr))
-            {
-                string query = "INSERT INTO products(name, description, price) VALUES(@name, @description, @price)";
+                string query = "INSERT INTO products(name, description, price, active) VALUES(@name, @description, @price, @active)";
                 using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@name", partName);
                     cmd.Parameters.AddWithValue("@description", partDesc);
                     cmd.Parameters.AddWithValue("@price", partPrice);
+                    cmd.Parameters.AddWithValue("@active", activeBit);
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
-        public static void updatePart(string partName, string partDesc, double partPrice, bool active)
+        public static void updatePart(Product selectedProduct, bool active = true)
         {
-            int index = getProductIndex(partName) + 1;
-            if (index < 1)
-                return;
-
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
             {
                 int activeBit = active ? 1 : 0;
@@ -207,21 +128,20 @@ namespace DeskJockey
 
                 using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@name", partName);
-                    cmd.Parameters.AddWithValue("@description", partDesc);
-                    cmd.Parameters.AddWithValue("@price", partPrice);
+                    cmd.Parameters.AddWithValue("@productID", selectedProduct.productID);
+                    cmd.Parameters.AddWithValue("@name", selectedProduct.productName);
+                    cmd.Parameters.AddWithValue("@description", selectedProduct.productDescription);
+                    cmd.Parameters.AddWithValue("@price", selectedProduct.price);
                     cmd.Parameters.AddWithValue("@active", activeBit);
-                    cmd.Parameters.AddWithValue("@productID", index);
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
-        public static void removePart(string partName)
+        public static void removePart(Product selectedProduct)
         {
-            int index = getProductIndex(partName) + 1;
-            if (index < 1)
+            if (selectedProduct == null)
                 return;
 
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
@@ -230,7 +150,7 @@ namespace DeskJockey
                 using (SQLiteCommand cmd = new SQLiteCommand(query1, conn))
                 {
                     conn.Open();
-                    cmd.Parameters.AddWithValue("@name", partName);
+                    cmd.Parameters.AddWithValue("@name", selectedProduct.productName);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -241,25 +161,24 @@ namespace DeskJockey
                 using (SQLiteCommand cmd = new SQLiteCommand(query2, conn))
                 {
                     conn.Open();
-                    cmd.Parameters.AddWithValue("@productID", index);
+                    cmd.Parameters.AddWithValue("@productID", selectedProduct.productID);
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
-        //public static void insertCustomer(int customerID, string payTerms, bool addressSame, string[] billingAddress, string[] shippingAddress = null)
         public static void insertCustomer(Customer customer)
         {
-            //int addrSame = (bool)customer.addressSame ? 1 : 0;
+            int addrSame = (bool)customer.addressSame ? 1 : 0;
             using (SQLiteConnection conn = new SQLiteConnection(connStr))
             {
-                string query = "INSERT INTO customers(customerID, companyName, payTerms) VALUES(@cid, @coName, @payTerms)";
+                string query = "INSERT INTO customers(customerID, companyName, payTerms, addressSame) VALUES(@cid, @coName, @payTerms, @addrSame)";
                 using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@cid", customer.customerID);
                     cmd.Parameters.AddWithValue("@coName", customer.companyName);
                     cmd.Parameters.AddWithValue("@payTerms", customer.payTerms);
-                    //cmd.Parameters.AddWithValue("@addrSame", customer.addrSame);
+                    cmd.Parameters.AddWithValue("@addrSame", addrSame);
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }

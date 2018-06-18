@@ -55,21 +55,21 @@ namespace DeskJockey
             this.label4 = new System.Windows.Forms.Label();
             this.txtBillPhoneNumber = new System.Windows.Forms.TextBox();
             this.lblCoName1 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtBillCoName = new System.Windows.Forms.TextBox();
             this.lblBillZip = new System.Windows.Forms.Label();
             this.lblBillState = new System.Windows.Forms.Label();
             this.lblBillCountry = new System.Windows.Forms.Label();
             this.lblBillCity = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.txtBillZip = new System.Windows.Forms.TextBox();
+            this.txtBillState = new System.Windows.Forms.TextBox();
+            this.txtBillCountry = new System.Windows.Forms.TextBox();
+            this.txtBillCity = new System.Windows.Forms.TextBox();
             this.lblBillAddr2 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtBillAddr2 = new System.Windows.Forms.TextBox();
             this.lblBillAddr1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtBillAddr1 = new System.Windows.Forms.TextBox();
             this.grpCustomers = new System.Windows.Forms.GroupBox();
-            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+            this.mskTxtCustomerID = new System.Windows.Forms.MaskedTextBox();
             this.rdoRemoveCustomer = new System.Windows.Forms.RadioButton();
             this.rdoEditCustomer = new System.Windows.Forms.RadioButton();
             this.btnCustomerSubmit = new System.Windows.Forms.Button();
@@ -89,6 +89,8 @@ namespace DeskJockey
             this.cboProductsEdit = new System.Windows.Forms.ComboBox();
             this.tabQuote = new System.Windows.Forms.TabPage();
             this.grpOutputSelection = new System.Windows.Forms.GroupBox();
+            this.lblPONum = new System.Windows.Forms.Label();
+            this.txtPONum = new System.Windows.Forms.TextBox();
             this.cboCustomers = new System.Windows.Forms.ComboBox();
             this.rdoExcelSheet = new System.Windows.Forms.RadioButton();
             this.rdoPackingList = new System.Windows.Forms.RadioButton();
@@ -327,19 +329,19 @@ namespace DeskJockey
             this.grpBillAddr.Controls.Add(this.label4);
             this.grpBillAddr.Controls.Add(this.txtBillPhoneNumber);
             this.grpBillAddr.Controls.Add(this.lblCoName1);
-            this.grpBillAddr.Controls.Add(this.textBox2);
+            this.grpBillAddr.Controls.Add(this.txtBillCoName);
             this.grpBillAddr.Controls.Add(this.lblBillZip);
             this.grpBillAddr.Controls.Add(this.lblBillState);
             this.grpBillAddr.Controls.Add(this.lblBillCountry);
             this.grpBillAddr.Controls.Add(this.lblBillCity);
-            this.grpBillAddr.Controls.Add(this.textBox6);
-            this.grpBillAddr.Controls.Add(this.textBox5);
-            this.grpBillAddr.Controls.Add(this.textBox7);
-            this.grpBillAddr.Controls.Add(this.textBox4);
+            this.grpBillAddr.Controls.Add(this.txtBillZip);
+            this.grpBillAddr.Controls.Add(this.txtBillState);
+            this.grpBillAddr.Controls.Add(this.txtBillCountry);
+            this.grpBillAddr.Controls.Add(this.txtBillCity);
             this.grpBillAddr.Controls.Add(this.lblBillAddr2);
-            this.grpBillAddr.Controls.Add(this.textBox3);
+            this.grpBillAddr.Controls.Add(this.txtBillAddr2);
             this.grpBillAddr.Controls.Add(this.lblBillAddr1);
-            this.grpBillAddr.Controls.Add(this.textBox1);
+            this.grpBillAddr.Controls.Add(this.txtBillAddr1);
             this.grpBillAddr.Location = new System.Drawing.Point(3, 163);
             this.grpBillAddr.Name = "grpBillAddr";
             this.grpBillAddr.Size = new System.Drawing.Size(541, 108);
@@ -388,12 +390,12 @@ namespace DeskJockey
             this.lblCoName1.TabIndex = 21;
             this.lblCoName1.Text = "Company Name:";
             // 
-            // textBox2
+            // txtBillCoName
             // 
-            this.textBox2.Location = new System.Drawing.Point(6, 36);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(162, 20);
-            this.textBox2.TabIndex = 20;
+            this.txtBillCoName.Location = new System.Drawing.Point(6, 36);
+            this.txtBillCoName.Name = "txtBillCoName";
+            this.txtBillCoName.Size = new System.Drawing.Size(162, 20);
+            this.txtBillCoName.TabIndex = 20;
             // 
             // lblBillZip
             // 
@@ -431,33 +433,33 @@ namespace DeskJockey
             this.lblBillCity.TabIndex = 17;
             this.lblBillCity.Text = "City:";
             // 
-            // textBox6
+            // txtBillZip
             // 
-            this.textBox6.Location = new System.Drawing.Point(174, 75);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(60, 20);
-            this.textBox6.TabIndex = 8;
+            this.txtBillZip.Location = new System.Drawing.Point(174, 75);
+            this.txtBillZip.Name = "txtBillZip";
+            this.txtBillZip.Size = new System.Drawing.Size(60, 20);
+            this.txtBillZip.TabIndex = 8;
             // 
-            // textBox5
+            // txtBillState
             // 
-            this.textBox5.Location = new System.Drawing.Point(90, 75);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(78, 20);
-            this.textBox5.TabIndex = 9;
+            this.txtBillState.Location = new System.Drawing.Point(90, 75);
+            this.txtBillState.Name = "txtBillState";
+            this.txtBillState.Size = new System.Drawing.Size(78, 20);
+            this.txtBillState.TabIndex = 9;
             // 
-            // textBox7
+            // txtBillCountry
             // 
-            this.textBox7.Location = new System.Drawing.Point(240, 75);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(106, 20);
-            this.textBox7.TabIndex = 10;
+            this.txtBillCountry.Location = new System.Drawing.Point(240, 75);
+            this.txtBillCountry.Name = "txtBillCountry";
+            this.txtBillCountry.Size = new System.Drawing.Size(106, 20);
+            this.txtBillCountry.TabIndex = 10;
             // 
-            // textBox4
+            // txtBillCity
             // 
-            this.textBox4.Location = new System.Drawing.Point(6, 75);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(78, 20);
-            this.textBox4.TabIndex = 11;
+            this.txtBillCity.Location = new System.Drawing.Point(6, 75);
+            this.txtBillCity.Name = "txtBillCity";
+            this.txtBillCity.Size = new System.Drawing.Size(78, 20);
+            this.txtBillCity.TabIndex = 11;
             // 
             // lblBillAddr2
             // 
@@ -468,12 +470,12 @@ namespace DeskJockey
             this.lblBillAddr2.TabIndex = 18;
             this.lblBillAddr2.Text = "Address 2:";
             // 
-            // textBox3
+            // txtBillAddr2
             // 
-            this.textBox3.Location = new System.Drawing.Point(351, 36);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(184, 20);
-            this.textBox3.TabIndex = 12;
+            this.txtBillAddr2.Location = new System.Drawing.Point(351, 36);
+            this.txtBillAddr2.Name = "txtBillAddr2";
+            this.txtBillAddr2.Size = new System.Drawing.Size(184, 20);
+            this.txtBillAddr2.TabIndex = 12;
             // 
             // lblBillAddr1
             // 
@@ -484,16 +486,16 @@ namespace DeskJockey
             this.lblBillAddr1.TabIndex = 19;
             this.lblBillAddr1.Text = "Address 1:";
             // 
-            // textBox1
+            // txtBillAddr1
             // 
-            this.textBox1.Location = new System.Drawing.Point(174, 36);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(171, 20);
-            this.textBox1.TabIndex = 13;
+            this.txtBillAddr1.Location = new System.Drawing.Point(174, 36);
+            this.txtBillAddr1.Name = "txtBillAddr1";
+            this.txtBillAddr1.Size = new System.Drawing.Size(171, 20);
+            this.txtBillAddr1.TabIndex = 13;
             // 
             // grpCustomers
             // 
-            this.grpCustomers.Controls.Add(this.maskedTextBox1);
+            this.grpCustomers.Controls.Add(this.mskTxtCustomerID);
             this.grpCustomers.Controls.Add(this.rdoRemoveCustomer);
             this.grpCustomers.Controls.Add(this.rdoEditCustomer);
             this.grpCustomers.Controls.Add(this.btnCustomerSubmit);
@@ -507,14 +509,14 @@ namespace DeskJockey
             this.grpCustomers.TabStop = false;
             this.grpCustomers.Text = "Customers";
             // 
-            // maskedTextBox1
+            // mskTxtCustomerID
             // 
-            this.maskedTextBox1.Location = new System.Drawing.Point(241, 19);
-            this.maskedTextBox1.Mask = "9999";
-            this.maskedTextBox1.Name = "maskedTextBox1";
-            this.maskedTextBox1.PromptChar = ' ';
-            this.maskedTextBox1.Size = new System.Drawing.Size(40, 20);
-            this.maskedTextBox1.TabIndex = 16;
+            this.mskTxtCustomerID.Location = new System.Drawing.Point(241, 19);
+            this.mskTxtCustomerID.Mask = "9999";
+            this.mskTxtCustomerID.Name = "mskTxtCustomerID";
+            this.mskTxtCustomerID.PromptChar = ' ';
+            this.mskTxtCustomerID.Size = new System.Drawing.Size(40, 20);
+            this.mskTxtCustomerID.TabIndex = 16;
             // 
             // rdoRemoveCustomer
             // 
@@ -565,6 +567,7 @@ namespace DeskJockey
             this.cboDBCustomers.Name = "cboDBCustomers";
             this.cboDBCustomers.Size = new System.Drawing.Size(202, 21);
             this.cboDBCustomers.TabIndex = 0;
+            this.cboDBCustomers.SelectedIndexChanged += new System.EventHandler(this.cboDBCustomers_SelectedIndexChanged);
             // 
             // lblCustomerID
             // 
@@ -718,6 +721,8 @@ namespace DeskJockey
             // 
             // grpOutputSelection
             // 
+            this.grpOutputSelection.Controls.Add(this.lblPONum);
+            this.grpOutputSelection.Controls.Add(this.txtPONum);
             this.grpOutputSelection.Controls.Add(this.cboCustomers);
             this.grpOutputSelection.Controls.Add(this.rdoExcelSheet);
             this.grpOutputSelection.Controls.Add(this.rdoPackingList);
@@ -729,45 +734,67 @@ namespace DeskJockey
             this.grpOutputSelection.TabStop = false;
             this.grpOutputSelection.Text = "Customer";
             // 
+            // lblPONum
+            // 
+            this.lblPONum.AutoSize = true;
+            this.lblPONum.Location = new System.Drawing.Point(436, 22);
+            this.lblPONum.Name = "lblPONum";
+            this.lblPONum.Size = new System.Drawing.Size(25, 13);
+            this.lblPONum.TabIndex = 5;
+            this.lblPONum.Text = "PO:";
+            // 
+            // txtPONum
+            // 
+            this.txtPONum.Enabled = false;
+            this.txtPONum.Location = new System.Drawing.Point(467, 19);
+            this.txtPONum.Name = "txtPONum";
+            this.txtPONum.Size = new System.Drawing.Size(58, 20);
+            this.txtPONum.TabIndex = 4;
+            // 
             // cboCustomers
             // 
+            this.cboCustomers.Enabled = false;
             this.cboCustomers.FormattingEnabled = true;
             this.cboCustomers.Location = new System.Drawing.Point(6, 19);
             this.cboCustomers.Name = "cboCustomers";
-            this.cboCustomers.Size = new System.Drawing.Size(270, 21);
+            this.cboCustomers.Size = new System.Drawing.Size(206, 21);
             this.cboCustomers.TabIndex = 3;
+            this.cboCustomers.SelectedIndexChanged += new System.EventHandler(this.cboCustomers_SelectedIndexChanged);
             // 
             // rdoExcelSheet
             // 
             this.rdoExcelSheet.AutoSize = true;
             this.rdoExcelSheet.Checked = true;
-            this.rdoExcelSheet.Location = new System.Drawing.Point(286, 20);
+            this.rdoExcelSheet.Location = new System.Drawing.Point(221, 20);
             this.rdoExcelSheet.Name = "rdoExcelSheet";
-            this.rdoExcelSheet.Size = new System.Drawing.Size(83, 17);
+            this.rdoExcelSheet.Size = new System.Drawing.Size(54, 17);
             this.rdoExcelSheet.TabIndex = 2;
             this.rdoExcelSheet.TabStop = true;
-            this.rdoExcelSheet.Text = "Excel Quote";
+            this.rdoExcelSheet.Text = "Quote";
             this.rdoExcelSheet.UseVisualStyleBackColor = true;
+            this.rdoExcelSheet.CheckedChanged += new System.EventHandler(this.rdoExcelSheet_CheckedChanged);
             // 
             // rdoPackingList
             // 
             this.rdoPackingList.AutoSize = true;
-            this.rdoPackingList.Location = new System.Drawing.Point(446, 20);
+            this.rdoPackingList.Location = new System.Drawing.Point(347, 20);
             this.rdoPackingList.Name = "rdoPackingList";
             this.rdoPackingList.Size = new System.Drawing.Size(83, 17);
             this.rdoPackingList.TabIndex = 1;
             this.rdoPackingList.Text = "Packing List";
             this.rdoPackingList.UseVisualStyleBackColor = true;
+            this.rdoPackingList.CheckedChanged += new System.EventHandler(this.rdoPackingList_CheckedChanged);
             // 
             // rdoInvoice
             // 
             this.rdoInvoice.AutoSize = true;
-            this.rdoInvoice.Location = new System.Drawing.Point(382, 20);
+            this.rdoInvoice.Location = new System.Drawing.Point(281, 20);
             this.rdoInvoice.Name = "rdoInvoice";
             this.rdoInvoice.Size = new System.Drawing.Size(60, 17);
             this.rdoInvoice.TabIndex = 0;
             this.rdoInvoice.Text = "Invoice";
             this.rdoInvoice.UseVisualStyleBackColor = true;
+            this.rdoInvoice.CheckedChanged += new System.EventHandler(this.rdoInvoice_CheckedChanged);
             // 
             // btnMoveItemDown
             // 
@@ -1239,19 +1266,19 @@ namespace DeskJockey
         private System.Windows.Forms.ComboBox cboDBCustomers;
         private System.Windows.Forms.GroupBox grpBillAddr;
         private System.Windows.Forms.Label lblCoName1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtBillCoName;
         private System.Windows.Forms.Label lblBillZip;
         private System.Windows.Forms.Label lblBillState;
         private System.Windows.Forms.Label lblBillCountry;
         private System.Windows.Forms.Label lblBillCity;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox txtBillZip;
+        private System.Windows.Forms.TextBox txtBillState;
+        private System.Windows.Forms.TextBox txtBillCountry;
+        private System.Windows.Forms.TextBox txtBillCity;
         private System.Windows.Forms.Label lblBillAddr2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtBillAddr2;
         private System.Windows.Forms.Label lblBillAddr1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtBillAddr1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtBillPhoneNumber;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -1274,9 +1301,11 @@ namespace DeskJockey
         private System.Windows.Forms.CheckBox chkSameAsBilling;
         private System.Windows.Forms.Button btnCustomerSubmit;
         private System.Windows.Forms.Label lblCustomerID;
-        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
+        private System.Windows.Forms.MaskedTextBox mskTxtCustomerID;
         private System.Windows.Forms.Label lblBillPayTerms;
         private System.Windows.Forms.TextBox txtBillPayTerms;
+        private System.Windows.Forms.Label lblPONum;
+        private System.Windows.Forms.TextBox txtPONum;
     }
 }
 

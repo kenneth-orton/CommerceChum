@@ -7,8 +7,10 @@ namespace DeskJockey
 {
     public partial class MainForm : Form
     {
-        private Dictionary<int, List<object>> productDict = null; // reduce repetition by creating/using Product class
-        private Dictionary<int, Customer> customerDict = null;
+        private List<Product> rsProduct = null;
+        private Product selectedProduct = null;
+        private List<Customer> rsCustomer = null;
+        private Customer selectedCustomer = null;
         private static string folder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         private string filePath = System.IO.Path.Combine(folder, "quote.xlsx");
         private string discountCalc;
@@ -29,7 +31,8 @@ namespace DeskJockey
 
         private void initQuoteTab()
         {
-            populateCombobox(cboProducts, CBOBoxID.ONE);
+            populateFormFromCombobox(cboProducts, CBOBoxID.ONE);
+            populateFormFromCombobox(cboCustomers, CBOBoxID.THREE);
             grpShipping.Enabled = false;
             grpDiscount.Enabled = false;
             btnGenQuote.Enabled = false;
@@ -38,51 +41,80 @@ namespace DeskJockey
             btnMoveItemDown.Text = ((char)0x25BC).ToString();
         }
 
-        private void refreshComboboxes()
-        {
-            populateCombobox(cboProducts, CBOBoxID.ONE);
-            populateCombobox(cboProductsEdit, CBOBoxID.TWO);
-        }
-
-        private enum CBOBoxID {ONE, TWO, THREE, FOUR, FIVE, SIX};
+        private enum CBOBoxID { ONE, TWO, THREE, FOUR, FIVE, SIX };
         private void initDBTab()
         {
-            populateCombobox(cboProductsEdit, CBOBoxID.TWO);
-            populateCombobox(cboDBCustomers, CBOBoxID.THREE);
+            populateFormFromCombobox(cboProductsEdit, CBOBoxID.TWO);
+            populateFormFromCombobox(cboDBCustomers, CBOBoxID.THREE);
             enableShippingInput();
         }
 
-        private void populateCombobox(ComboBox comboBox, CBOBoxID cboID)
+        private void getSelectedCustomer(ComboBox comboBox)
+        {
+            if (comboBox.SelectedItem == null)
+            {
+                selectedProduct = null;
+                return;
+            }
+            if (!rsCustomer.Exists(customer => customer.companyName == comboBox.SelectedItem.ToString()))
+            {
+                selectedProduct = null;
+                return;
+            }
+            selectedCustomer = rsCustomer.Find(customer => customer.companyName == comboBox.SelectedItem.ToString());
+        }
+
+        private void getSelectedProduct(ComboBox comboBox)
+        {
+            if (comboBox.SelectedItem == null)
+            {
+                selectedCustomer = null;
+                return;
+            }
+            if (!rsProduct.Exists(product => product.productName == comboBox.SelectedItem.ToString()))
+            {
+                selectedCustomer = null;
+                return;
+            }
+            selectedProduct = rsProduct.Find(product => product.productName == comboBox.SelectedItem.ToString());
+        }
+        
+        private void populateFormFromCombobox(ComboBox comboBox, CBOBoxID cboID)
         {
             comboBox.Items.Clear();
-            
-            switch(cboID)
+
+            int i = 0;
+            switch (cboID)
             {
                 case CBOBoxID.ONE:
-                    productDict = DatabaseManager.getDBProducts();
-                    foreach (KeyValuePair<int, List<object>> entry in productDict)
-                        comboBox.Items.Insert(entry.Key, entry.Value[0].ToString());
+                    rsProduct = DatabaseManager.getDBProducts();
+                    getSelectedProduct(comboBox);
+                    foreach (var product in rsProduct)
+                        comboBox.Items.Insert(i++, product.productName);
 
                     if (comboBox.Items.Count > 0)
                         comboBox.SelectedIndex = 0;
                     break;
                 case CBOBoxID.TWO:
-                    productDict = DatabaseManager.getDBProducts();
-                    foreach (KeyValuePair<int, List<object>> entry in productDict)
-                        comboBox.Items.Insert(entry.Key, entry.Value[0].ToString());
+                    rsProduct = DatabaseManager.getDBProducts();
+                    getSelectedProduct(comboBox);
+                    foreach (var product in rsProduct)
+                        comboBox.Items.Insert(i++, product.productName);
 
                     if (cboProductsEdit.Items.Count > 0)
                     {
                         comboBox.SelectedIndex = 0;
-                        txtDBPartName.Text = comboBox.Text;
-                        txtDBPartDesc.Text = DatabaseManager.getProductDescription(comboBox.Text);
-                        mskTxtDBPrice.Text = DatabaseManager.getProductPrice(comboBox.Text).ToString();
+                        txtDBPartName.Text = selectedProduct.productName;
+                        txtDBPartDesc.Text = selectedProduct.productDescription;
+                        mskTxtDBPrice.Text = selectedProduct.price.ToString();
                     }
                     break;
                 case CBOBoxID.THREE:
-                    customerDict = DatabaseManager.getDBCustomers();
-                    foreach (KeyValuePair<int, Customer> entry in customerDict)
-                        comboBox.Items.Insert(entry.Key, entry.Value.companyName);
+                    rsCustomer = DatabaseManager.getDBCustomers();
+                    getSelectedCustomer(comboBox);
+                    foreach (var customer in rsCustomer)
+                        comboBox.Items.Insert(i++, customer.companyName);
+
                     if (comboBox.Items.Count > 0)
                         comboBox.SelectedIndex = 0;
                     break;
@@ -126,20 +158,18 @@ namespace DeskJockey
 
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
-            if (!productDict.ContainsKey(cboProducts.SelectedIndex))
-                return;
-            string partName = productDict[cboProducts.SelectedIndex][0].ToString();
-            var item = lstVwQuote.FindItemWithText(partName.ToString());
+            getSelectedProduct(cboProducts);
+            var item = lstVwQuote.FindItemWithText(selectedProduct.productName);
 
             if (item != null)
                 lstVwQuote.Items.Remove(item);
 
-            double price = Convert.ToDouble(productDict[cboProducts.SelectedIndex][2]); //price
+            double price = selectedProduct.price;
             decimal qty = numericUpDown.Value;
             double extendedPrice = price * (double)qty;
 
-            ListViewItem lstVwItm = new ListViewItem(partName); //name
-            lstVwItm.SubItems.Add(productDict[cboProducts.SelectedIndex][1].ToString()); //description
+            ListViewItem lstVwItm = new ListViewItem(selectedProduct.productName); 
+            lstVwItm.SubItems.Add(selectedProduct.productDescription);
             lstVwItm.SubItems.Add(string.Format("{0}{1}", "$", price.ToString()));
             lstVwItm.SubItems.Add(qty.ToString());
             lstVwItm.SubItems.Add(string.Format("{0}{1}", "$", extendedPrice.ToString()));
@@ -461,33 +491,51 @@ namespace DeskJockey
                 int itemIndex = lstVwQuote.SelectedIndices[0];
                 partName = lstVwQuote.Items[itemIndex].SubItems[0].Text;
             }
-            int prodID = DatabaseManager.getProductIndex(partName);
-            if (prodID >= 0)
-                cboProducts.SelectedIndex = prodID;
+            //int prodID = DatabaseManager.getProductIndex(partName);
+            if (!rsProduct.Exists(product => product.productName == partName))
+            {
+                selectedProduct = null;
+                return;
+            }
+            selectedProduct = rsProduct.Find(product => product.productName == partName);
+            if (selectedProduct.productID >= 0)
+                cboProducts.SelectedIndex = selectedProduct.productID - 1;
         }
 
         private void cboProductsEdit_SelectedIndexChanged(object sender, EventArgs e)
         {
+            getSelectedProduct(cboProductsEdit);
             cboProducts.SelectedIndex = cboProductsEdit.SelectedIndex;
-
+            
             if (cboProductsEdit.SelectedIndex >= 0) 
             {
-                txtDBPartName.Text = cboProductsEdit.Text;
-                txtDBPartDesc.Text = DatabaseManager.getProductDescription(cboProductsEdit.Text);
-                mskTxtDBPrice.Text = DatabaseManager.getProductPrice(cboProductsEdit.Text).ToString();
+                txtDBPartName.Text = selectedProduct.productName;
+                txtDBPartDesc.Text = selectedProduct.productDescription;
+                mskTxtDBPrice.Text = selectedProduct.price.ToString();
             }
         }
 
+        /* TODO: figure out way to insert into result set lists and insert/update database so
+           that a remove and add operation is not needed to just update the database item  */
         private void btnDBActions_Click(object sender, EventArgs e)
         {
+            getSelectedProduct(cboProductsEdit);
+
             string partName = txtDBPartName.Text;
             string partDesc = txtDBPartDesc.Text;
             double partPrice = 0.0;
             Double.TryParse(mskTxtDBPrice.Text.Replace("$", String.Empty), out partPrice);
-            bool activeBit = false;
 
-            if (rdoDBAdd.Checked) 
-                activeBit = true;
+            if (rdoDBAdd.Checked)
+            {
+                if (!DatabaseManager.partExists(partName)) // new product
+                    DatabaseManager.insertPart(partName, partDesc, partPrice);
+                else
+                {
+                    DatabaseManager.removePart(selectedProduct);
+                    DatabaseManager.insertPart(partName, partDesc, partPrice);
+                }
+            }
 
             if (rdoDBRemove.Checked)
             {
@@ -496,17 +544,12 @@ namespace DeskJockey
                                                        MessageBoxDefaultButton.Button2);
                 if (result == DialogResult.Yes)
                 {
-                    DatabaseManager.removePart(partName);
-                    DatabaseManager.insertPart(partName, partDesc, partPrice);
-                    activeBit = false;
+                    DatabaseManager.removePart(selectedProduct);
+                    DatabaseManager.insertPart(partName, partDesc, partPrice, false);
                 }
                 else
                     return;
             }
-
-            DatabaseManager.updatePart(partName, partDesc, partPrice, activeBit);
-            refreshComboboxes();
-
             initDBTab();
             initQuoteTab();
         }
@@ -527,6 +570,84 @@ namespace DeskJockey
         private void chkSameAsBilling_CheckedChanged(object sender, EventArgs e)
         {
             enableShippingInput();
+            if (chkSameAsBilling.Checked)
+                clearShippingAddrInfo();
+            else
+                addShippingAddrInfo();
+        }
+
+        private void clearShippingAddrInfo()
+        {
+            txtShipCoName.Text = "";
+            txtShipAddr1.Text = "";
+            txtShipAddr2.Text = "";
+            txtShipCity.Text = "";
+            txtShipState.Text = "";
+            txtShipZip.Text = "";
+            txtShipCountry.Text = "";
+            txtShipPhoneNumber.Text = "";
+        }
+
+        private void addShippingAddrInfo()
+        {
+            txtShipCoName.Text = selectedCustomer.companyName;
+            txtShipAddr1.Text = selectedCustomer.shipAddress.addr1;
+            txtShipAddr2.Text = selectedCustomer.shipAddress.addr2;
+            txtShipCity.Text = selectedCustomer.shipAddress.city;
+            txtShipState.Text = selectedCustomer.shipAddress.state;
+            txtShipZip.Text = selectedCustomer.shipAddress.zip;
+            txtShipCountry.Text = selectedCustomer.shipAddress.country;
+            txtShipPhoneNumber.Text = selectedCustomer.shipAddress.phoneNo;
+        }
+
+        private void cboDBCustomers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            getSelectedCustomer(cboDBCustomers);
+            mskTxtCustomerID.Text = selectedCustomer.customerID.ToString();
+
+            txtBillCoName.Text = selectedCustomer.companyName;
+            txtBillAddr1.Text = selectedCustomer.billAddress.addr1;
+            txtBillAddr2.Text = selectedCustomer.billAddress.addr2;
+            txtBillCity.Text = selectedCustomer.billAddress.city;
+            txtBillState.Text = selectedCustomer.billAddress.state;
+            txtBillZip.Text = selectedCustomer.billAddress.zip;
+            txtBillCountry.Text = selectedCustomer.billAddress.country;
+            txtBillPhoneNumber.Text = selectedCustomer.billAddress.phoneNo;
+            txtBillPayTerms.Text = selectedCustomer.payTerms;
+
+            if (selectedCustomer.addressSame)
+            {
+                chkSameAsBilling.Checked = true;
+                clearShippingAddrInfo();
+            }
+            else
+            {
+                chkSameAsBilling.Checked = false;
+                addShippingAddrInfo();
+            }
+        }
+
+        private void cboCustomers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            getSelectedCustomer(cboCustomers);
+        }
+
+        private void rdoInvoice_CheckedChanged(object sender, EventArgs e)
+        {
+            txtPONum.Enabled = true;
+            cboCustomers.Enabled = true;
+        }
+
+        private void rdoPackingList_CheckedChanged(object sender, EventArgs e)
+        {
+            txtPONum.Enabled = true;
+            cboCustomers.Enabled = true;
+        }
+
+        private void rdoExcelSheet_CheckedChanged(object sender, EventArgs e)
+        {
+            txtPONum.Enabled = false;
+            cboCustomers.Enabled = false;
         }
     }
 }

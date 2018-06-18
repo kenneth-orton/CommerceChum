@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Desk_Jockey.Properties {
+namespace DeskJockey.Properties {
     using System;
     
     

@@ -121,6 +121,7 @@
     <Compile Include="BillAddress.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="DatabaseManager.cs" />
+    <Compile Include="Product.cs" />
     <Compile Include="QuoteWorksheetBuilder.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
