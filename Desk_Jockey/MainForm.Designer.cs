@@ -546,7 +546,7 @@ namespace DeskJockey
             this.btnCustomerSubmit.TabIndex = 14;
             this.btnCustomerSubmit.Text = "Submit";
             this.btnCustomerSubmit.UseVisualStyleBackColor = true;
-            this.btnCustomerSubmit.Click += new System.EventHandler(this.btnDBActions_Click);
+            this.btnCustomerSubmit.Click += new System.EventHandler(this.btnCustomerSubmit_Click);
             // 
             // rdoAddCustomer
             // 

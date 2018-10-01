@@ -1,30 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DeskJockey
 {
-    // TODO: implement a list for convenience
-    class Product
+    [Table("product")]
+    public class Product
     {
-        public int productID;
-        public string productName;
-        public string productDescription;
-        public double price;
-        public bool active;
-
-        public Product() {}
-
-        public Product(int productID, string productName, string productDescription, double price, bool active)
-        {
-            this.productID = productID;
-            this.productName = productName;
-            this.productDescription = productDescription;
-            this.price = price;
-            this.active = active;
-        }
-        
+        [Key]
+        [Column("productID")]
+        public int productID { get; set; }
+        [Column("name")]
+        public string name { get; set; }
+        [Column("description")]
+        public string description { get; set; }
+        [Column("price")]
+        public double price { get; set; }
+        [Column("active")]
+        public bool active { get; set; }
     }
 }
