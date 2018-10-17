@@ -35,7 +35,7 @@ namespace DeskJockey
 
     class DatabaseManager
     {
-        public static List<Product> products
+        public List<Product> products
         {
             get
             {
@@ -44,7 +44,7 @@ namespace DeskJockey
             }
         }
 
-        public static List<Customer> customers
+        public List<Customer> customers
         {
             get
             {
@@ -53,7 +53,7 @@ namespace DeskJockey
             }
         }
 
-        public static void removePart(Product selectedProduct)
+        public void removePart(Product selectedProduct)
         {
             using (var context = new dbContext())
             {
@@ -64,8 +64,8 @@ namespace DeskJockey
         }
 
 
-        public static void insertPart(Product newProduct)
-        {
+        public void insertPart(Product newProduct)
+        { 
             using (var context = new dbContext())
             {
                 if (partExists(newProduct.name))
@@ -85,21 +85,25 @@ namespace DeskJockey
             }  
         }
 
-        public static bool partExists(string productName)
+        private bool partExists(string productName)
         {
             using (var context = new dbContext())
                 return context.Products.Where(p => p.name == productName).Any();
         }
 
-        public static void insertCustomer(Customer customer)
+        public void insertCustomer(Customer newCustomer)
         {
-            if (customerExists(customer.companyName))
+            using (var context = new dbContext())
             {
-
+                if (customerExists(newCustomer.companyName))
+                {
+                    var customer = context.Customers.FirstOrDefault(c => c.companyName == newCustomer.companyName);
+                    customer.companyName = newCustomer.companyName;
+                }
             }
         }
 
-        public static bool customerExists(string companyName)
+        public bool customerExists(string companyName)
         {
             using (var context = new dbContext())
                 return context.Customers.Where(c => c.companyName == companyName).Any();

@@ -71,7 +71,6 @@ namespace DeskJockey
             this.grpCustomers = new System.Windows.Forms.GroupBox();
             this.mskTxtCustomerID = new System.Windows.Forms.MaskedTextBox();
             this.rdoRemoveCustomer = new System.Windows.Forms.RadioButton();
-            this.rdoEditCustomer = new System.Windows.Forms.RadioButton();
             this.btnCustomerSubmit = new System.Windows.Forms.Button();
             this.rdoAddCustomer = new System.Windows.Forms.RadioButton();
             this.cboDBCustomers = new System.Windows.Forms.ComboBox();
@@ -497,7 +496,6 @@ namespace DeskJockey
             // 
             this.grpCustomers.Controls.Add(this.mskTxtCustomerID);
             this.grpCustomers.Controls.Add(this.rdoRemoveCustomer);
-            this.grpCustomers.Controls.Add(this.rdoEditCustomer);
             this.grpCustomers.Controls.Add(this.btnCustomerSubmit);
             this.grpCustomers.Controls.Add(this.rdoAddCustomer);
             this.grpCustomers.Controls.Add(this.cboDBCustomers);
@@ -511,7 +509,7 @@ namespace DeskJockey
             // 
             // mskTxtCustomerID
             // 
-            this.mskTxtCustomerID.Location = new System.Drawing.Point(241, 19);
+            this.mskTxtCustomerID.Location = new System.Drawing.Point(267, 19);
             this.mskTxtCustomerID.Mask = "9999";
             this.mskTxtCustomerID.Name = "mskTxtCustomerID";
             this.mskTxtCustomerID.PromptChar = ' ';
@@ -528,16 +526,6 @@ namespace DeskJockey
             this.rdoRemoveCustomer.Text = "Remove";
             this.rdoRemoveCustomer.UseVisualStyleBackColor = true;
             // 
-            // rdoEditCustomer
-            // 
-            this.rdoEditCustomer.AutoSize = true;
-            this.rdoEditCustomer.Location = new System.Drawing.Point(343, 20);
-            this.rdoEditCustomer.Name = "rdoEditCustomer";
-            this.rdoEditCustomer.Size = new System.Drawing.Size(43, 17);
-            this.rdoEditCustomer.TabIndex = 2;
-            this.rdoEditCustomer.Text = "Edit";
-            this.rdoEditCustomer.UseVisualStyleBackColor = true;
-            // 
             // btnCustomerSubmit
             // 
             this.btnCustomerSubmit.Location = new System.Drawing.Point(460, 17);
@@ -552,12 +540,12 @@ namespace DeskJockey
             // 
             this.rdoAddCustomer.AutoSize = true;
             this.rdoAddCustomer.Checked = true;
-            this.rdoAddCustomer.Location = new System.Drawing.Point(293, 20);
+            this.rdoAddCustomer.Location = new System.Drawing.Point(319, 20);
             this.rdoAddCustomer.Name = "rdoAddCustomer";
-            this.rdoAddCustomer.Size = new System.Drawing.Size(44, 17);
+            this.rdoAddCustomer.Size = new System.Drawing.Size(67, 17);
             this.rdoAddCustomer.TabIndex = 1;
             this.rdoAddCustomer.TabStop = true;
-            this.rdoAddCustomer.Text = "Add";
+            this.rdoAddCustomer.Text = "Add/Edit";
             this.rdoAddCustomer.UseVisualStyleBackColor = true;
             // 
             // cboDBCustomers
@@ -565,14 +553,14 @@ namespace DeskJockey
             this.cboDBCustomers.FormattingEnabled = true;
             this.cboDBCustomers.Location = new System.Drawing.Point(6, 19);
             this.cboDBCustomers.Name = "cboDBCustomers";
-            this.cboDBCustomers.Size = new System.Drawing.Size(202, 21);
+            this.cboDBCustomers.Size = new System.Drawing.Size(225, 21);
             this.cboDBCustomers.TabIndex = 0;
             this.cboDBCustomers.SelectedIndexChanged += new System.EventHandler(this.cboDBCustomers_SelectedIndexChanged);
             // 
             // lblCustomerID
             // 
             this.lblCustomerID.AutoSize = true;
-            this.lblCustomerID.Location = new System.Drawing.Point(214, 22);
+            this.lblCustomerID.Location = new System.Drawing.Point(237, 22);
             this.lblCustomerID.Name = "lblCustomerID";
             this.lblCustomerID.Size = new System.Drawing.Size(21, 13);
             this.lblCustomerID.TabIndex = 15;
@@ -606,6 +594,7 @@ namespace DeskJockey
             this.rdoDBRemove.TabIndex = 17;
             this.rdoDBRemove.Text = "Remove";
             this.rdoDBRemove.UseVisualStyleBackColor = true;
+            this.rdoDBRemove.CheckedChanged += new System.EventHandler(this.rdoDBRemove_CheckedChanged);
             // 
             // rdoDBAdd
             // 
@@ -618,6 +607,7 @@ namespace DeskJockey
             this.rdoDBAdd.TabStop = true;
             this.rdoDBAdd.Text = "Add/Edit";
             this.rdoDBAdd.UseVisualStyleBackColor = true;
+            this.rdoDBAdd.CheckedChanged += new System.EventHandler(this.rdoDBAdd_CheckedChanged);
             // 
             // btnDBActions
             // 
@@ -673,6 +663,7 @@ namespace DeskJockey
             this.txtDBPartDesc.Name = "txtDBPartDesc";
             this.txtDBPartDesc.Size = new System.Drawing.Size(289, 20);
             this.txtDBPartDesc.TabIndex = 3;
+            this.txtDBPartDesc.TextChanged += new System.EventHandler(this.txtDBPartDesc_TextChanged);
             // 
             // txtDBPartName
             // 
@@ -680,6 +671,7 @@ namespace DeskJockey
             this.txtDBPartName.Name = "txtDBPartName";
             this.txtDBPartName.Size = new System.Drawing.Size(100, 20);
             this.txtDBPartName.TabIndex = 2;
+            this.txtDBPartName.TextChanged += new System.EventHandler(this.txtDBPartName_TextChanged);
             // 
             // cboProductsEdit
             // 
@@ -1261,7 +1253,6 @@ namespace DeskJockey
         private System.Windows.Forms.ComboBox cboCustomers;
         private System.Windows.Forms.GroupBox grpCustomers;
         private System.Windows.Forms.RadioButton rdoRemoveCustomer;
-        private System.Windows.Forms.RadioButton rdoEditCustomer;
         private System.Windows.Forms.RadioButton rdoAddCustomer;
         private System.Windows.Forms.ComboBox cboDBCustomers;
         private System.Windows.Forms.GroupBox grpBillAddr;

@@ -7,6 +7,7 @@ namespace DeskJockey
 {
     public partial class MainForm : Form
     {
+        DatabaseManager dbMngr = new DatabaseManager();
         private List<Product> rsProduct = null;
         private Product selectedProduct = null;
         private List<Customer> rsCustomer = null;
@@ -31,6 +32,7 @@ namespace DeskJockey
 
         private void initQuoteTab()
         {
+            //dbMngr = new DatabaseManager();
             populateFormFromCombobox(cboProducts, CBOBoxID.ONE);
             populateFormFromCombobox(cboCustomers, CBOBoxID.THREE);
             grpShipping.Enabled = false;
@@ -78,7 +80,7 @@ namespace DeskJockey
             }
             selectedProduct = rsProduct.Find(product => product.name == comboBox.SelectedItem.ToString());
         }
-        
+
         private void populateFormFromCombobox(ComboBox comboBox, CBOBoxID cboID)
         {
             comboBox.Items.Clear();
@@ -87,7 +89,7 @@ namespace DeskJockey
             switch (cboID)
             {
                 case CBOBoxID.ONE:
-                    rsProduct = DatabaseManager.products;
+                    rsProduct = dbMngr.products;
                     getSelectedProduct(comboBox);
                     foreach (var product in rsProduct)
                         comboBox.Items.Insert(i++, product.name);
@@ -96,7 +98,7 @@ namespace DeskJockey
                         comboBox.SelectedIndex = 0;
                     break;
                 case CBOBoxID.TWO:
-                    rsProduct = DatabaseManager.products;
+                    rsProduct = dbMngr.products;
                     getSelectedProduct(comboBox);
                     foreach (var product in rsProduct)
                         comboBox.Items.Insert(i++, product.name);
@@ -110,7 +112,7 @@ namespace DeskJockey
                     }
                     break;
                 case CBOBoxID.THREE:
-                    rsCustomer = DatabaseManager.customers;
+                    rsCustomer = dbMngr.customers;
                     getSelectedCustomer(comboBox);
                     foreach (var customer in rsCustomer)
                         comboBox.Items.Insert(i++, customer.companyName);
@@ -168,7 +170,7 @@ namespace DeskJockey
             decimal qty = numericUpDown.Value;
             double extendedPrice = price * (double)qty;
 
-            ListViewItem lstVwItm = new ListViewItem(selectedProduct.name); 
+            ListViewItem lstVwItm = new ListViewItem(selectedProduct.name);
             lstVwItm.SubItems.Add(selectedProduct.description);
             lstVwItm.SubItems.Add(string.Format("{0}{1}", "$", price.ToString()));
             lstVwItm.SubItems.Add(qty.ToString());
@@ -236,7 +238,7 @@ namespace DeskJockey
                 int itemIndex = lstVwQuote.SelectedIndices[0];
                 lstVwQuote.Items.RemoveAt(itemIndex);
             }
-            
+
             if (lstVwQuote.Items.Count == 0)
             {
                 grpShipping.Enabled = false;
@@ -276,7 +278,7 @@ namespace DeskJockey
                 double subtotal, percentDiscount;
                 Double.TryParse(mskTxtSubtotal.Text.Replace("$", String.Empty), out subtotal);
                 Double.TryParse(mskTxtDiscount.Text.Replace("%", String.Empty), out percentDiscount);
-                discount = subtotal * (percentDiscount/100);
+                discount = subtotal * (percentDiscount / 100);
                 discountCalc = "*" + (percentDiscount / 100).ToString();
             }
             else
@@ -432,7 +434,7 @@ namespace DeskJockey
 
         private void rdoPayBank_CheckedChanged(object sender, EventArgs e)
         {
-           updateTransactionFee();
+            updateTransactionFee();
         }
 
         private void exportQuoteToExcel()
@@ -446,7 +448,7 @@ namespace DeskJockey
             wsBuilder.insertShippingRow(lblShippingCost, mskTxtShipCostTotal);
             wsBuilder.insertTransactionFeeRow(rdoPayCheck, lblTransFee, mskTxtTransFee, transFeeCalc);
             wsBuilder.insertTotalRow(lblTotal);
-            wsBuilder.saveExcelFile(filePath);         
+            wsBuilder.saveExcelFile(filePath);
         }
 
         private void btnMoveItemUp_Click(object sender, EventArgs e)
@@ -495,8 +497,8 @@ namespace DeskJockey
         {
             getSelectedProduct(cboProductsEdit);
             cboProducts.SelectedIndex = cboProductsEdit.SelectedIndex;
-            
-            if (cboProductsEdit.SelectedIndex >= 0) 
+
+            if (cboProductsEdit.SelectedIndex >= 0)
             {
                 txtDBPartName.Text = selectedProduct.name;
                 txtDBPartDesc.Text = selectedProduct.description;
@@ -504,42 +506,79 @@ namespace DeskJockey
             }
         }
 
+        private void partInputChecks()
+        {
+            btnDBActions.Enabled = (string.IsNullOrWhiteSpace(txtDBPartName.Text) || string.IsNullOrWhiteSpace(txtDBPartDesc.Text)) ? false : true;
+        }
+
         private void btnDBActions_Click(object sender, EventArgs e)
         {
-            getSelectedProduct(cboProductsEdit);
-
-            string partName = txtDBPartName.Text;
-            string partDesc = txtDBPartDesc.Text;
-            double partPrice = 0.0;
-            Double.TryParse(mskTxtDBPrice.Text.Replace("$", String.Empty), out partPrice);
-
             if (rdoDBAdd.Checked)
             {
+                //if (string.IsNullOrWhiteSpace(txtDBPartName.Text))
+                //{
+                //    MessageBox.Show("Part Name not entered", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //    return;
+                //}
+                //if (string.IsNullOrWhiteSpace(txtDBPartDesc.Text))
+                //{
+                //    MessageBox.Show("Part Description not entered", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //    return;
+                //}
+
+                string partName = txtDBPartName.Text;
+                string partDesc = txtDBPartDesc.Text;
+                double partPrice = 0.0;
+                Double.TryParse(mskTxtDBPrice.Text.Replace("$", String.Empty), out partPrice);
+
                 Product newProduct = new Product();
                 newProduct.name = partName;
                 newProduct.description = partDesc;
                 newProduct.price = partPrice;
                 newProduct.active = true;
-                DatabaseManager.insertPart(newProduct);
+                dbMngr.insertPart(newProduct);
             }
 
             if (rdoDBRemove.Checked)
             {
-                DialogResult result = MessageBox.Show("Are you sure you want to delete this item from database?", "Warning",
-                                                       MessageBoxButtons.YesNo, MessageBoxIcon.Information, 
-                                                       MessageBoxDefaultButton.Button2);
+                getSelectedProduct(cboProductsEdit);
+
+                string msg = string.Format("Are you sure you want to delete \"{0}\" from the database?", selectedProduct.name);
+                DialogResult result = MessageBox.Show(msg, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2);
+
                 if (result == DialogResult.Yes)
-                    DatabaseManager.removePart(selectedProduct);
+                    dbMngr.removePart(selectedProduct);
                 else
                     return;
             }
+
             initDBTab();
             initQuoteTab();
         }
         
+        private void txtDBPartName_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoDBAdd.Checked)
+                partInputChecks();
+        }
+        
+        private void txtDBPartDesc_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoDBAdd.Checked)
+                partInputChecks();
+        }
+
         private void btnCustomerSubmit_Click(object sender, EventArgs e)
         {
+            if (rdoAddCustomer.Checked)
+            {
 
+            }
+
+            if (rdoRemoveCustomer.Checked)
+            {
+
+            }
         }
 
         private void enableShippingInput()
@@ -636,6 +675,16 @@ namespace DeskJockey
         {
             txtPONum.Enabled = false;
             cboCustomers.Enabled = false;
+        }
+
+        private void rdoDBRemove_CheckedChanged(object sender, EventArgs e)
+        {
+            btnDBActions.Enabled = true;
+        }
+
+        private void rdoDBAdd_CheckedChanged(object sender, EventArgs e)
+        {
+            btnDBActions.Enabled = false;
         }
     }
 }
