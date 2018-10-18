@@ -506,11 +506,6 @@ namespace DeskJockey
             }
         }
 
-        private void partInputChecks()
-        {
-            btnDBActions.Enabled = (string.IsNullOrWhiteSpace(txtDBPartName.Text) || string.IsNullOrWhiteSpace(txtDBPartDesc.Text)) ? false : true;
-        }
-
         private void btnDBActions_Click(object sender, EventArgs e)
         {
             if (rdoDBAdd.Checked)
@@ -544,7 +539,12 @@ namespace DeskJockey
             initDBTab();
             initQuoteTab();
         }
-        
+
+        private void partInputChecks()
+        {
+            btnDBActions.Enabled = (string.IsNullOrWhiteSpace(txtDBPartName.Text) || string.IsNullOrWhiteSpace(txtDBPartDesc.Text)) ? false : true;
+        }
+
         private void txtDBPartName_TextChanged(object sender, EventArgs e)
         {
             if (rdoDBAdd.Checked)
@@ -555,19 +555,6 @@ namespace DeskJockey
         {
             if (rdoDBAdd.Checked)
                 partInputChecks();
-        }
-
-        private void btnCustomerSubmit_Click(object sender, EventArgs e)
-        {
-            if (rdoAddCustomer.Checked)
-            {
-
-            }
-
-            if (rdoRemoveCustomer.Checked)
-            {
-
-            }
         }
 
         private void enableShippingInput()
@@ -674,6 +661,161 @@ namespace DeskJockey
         private void rdoDBAdd_CheckedChanged(object sender, EventArgs e)
         {
             btnDBActions.Enabled = false;
+            partInputChecks();
+        }
+
+        private void rdoAddCustomer_CheckedChanged(object sender, EventArgs e)
+        {
+            btnCustomerSubmit.Enabled = false;
+            customerInputChecks();
+        }
+
+        private void rdoRemoveCustomer_CheckedChanged(object sender, EventArgs e)
+        {
+            btnCustomerSubmit.Enabled = true;
+        }
+
+        private void btnCustomerSubmit_Click(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+            {
+
+            }
+
+            if (rdoRemoveCustomer.Checked)
+            {
+
+            }
+        }
+
+        private void customerInputChecks()
+        {
+            btnCustomerSubmit.Enabled = false;
+
+            if (string.IsNullOrWhiteSpace(mskTxtCustomerID.Text))
+                return;
+            if (string.IsNullOrWhiteSpace(txtBillCoName.Text))
+                return;
+            if (string.IsNullOrWhiteSpace(txtBillAddr1.Text))
+                return;
+            if (string.IsNullOrWhiteSpace(txtBillCity.Text))
+                return;
+            if (string.IsNullOrWhiteSpace(txtBillState.Text))
+                return;
+            if (string.IsNullOrWhiteSpace(txtBillZip.Text))
+                return;
+            if (string.IsNullOrWhiteSpace(txtBillCountry.Text))
+                return;
+            if (string.IsNullOrWhiteSpace(txtBillPhoneNumber.Text))
+                return;
+            if (string.IsNullOrWhiteSpace(txtBillPayTerms.Text))
+                return;
+            if (!chkSameAsBilling.Checked)
+            {
+                if (string.IsNullOrWhiteSpace(txtShipCoName.Text))
+                    return;
+                if (string.IsNullOrWhiteSpace(txtShipAddr1.Text))
+                    return;
+                if (string.IsNullOrWhiteSpace(txtShipCity.Text))
+                    return;
+                if (string.IsNullOrWhiteSpace(txtShipState.Text))
+                    return;
+                if (string.IsNullOrWhiteSpace(txtShipZip.Text))
+                    return;
+                if (string.IsNullOrWhiteSpace(txtShipCountry.Text))
+                    return;
+            }
+            btnCustomerSubmit.Enabled = true;
+        }
+
+        private void txtBillCoName_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtBillAddr1_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtBillCity_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtBillState_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtBillZip_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtBillCountry_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtBillPhoneNumber_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtBillPayTerms_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtShipCoName_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtShipAddr1_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtShipCity_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtShipState_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtShipZip_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void txtShipCountry_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
+        }
+
+        private void mskTxtCustomerID_TextChanged(object sender, EventArgs e)
+        {
+            if (rdoAddCustomer.Checked)
+                customerInputChecks();
         }
     }
 }

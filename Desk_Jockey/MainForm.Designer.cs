@@ -224,6 +224,7 @@ namespace DeskJockey
             this.txtShipCoName.Name = "txtShipCoName";
             this.txtShipCoName.Size = new System.Drawing.Size(162, 20);
             this.txtShipCoName.TabIndex = 20;
+            this.txtShipCoName.TextChanged += new System.EventHandler(this.txtShipCoName_TextChanged);
             // 
             // lblShipZip
             // 
@@ -267,6 +268,7 @@ namespace DeskJockey
             this.txtShipZip.Name = "txtShipZip";
             this.txtShipZip.Size = new System.Drawing.Size(60, 20);
             this.txtShipZip.TabIndex = 8;
+            this.txtShipZip.TextChanged += new System.EventHandler(this.txtShipZip_TextChanged);
             // 
             // txtShipState
             // 
@@ -274,6 +276,7 @@ namespace DeskJockey
             this.txtShipState.Name = "txtShipState";
             this.txtShipState.Size = new System.Drawing.Size(78, 20);
             this.txtShipState.TabIndex = 9;
+            this.txtShipState.TextChanged += new System.EventHandler(this.txtShipState_TextChanged);
             // 
             // txtShipCountry
             // 
@@ -281,6 +284,7 @@ namespace DeskJockey
             this.txtShipCountry.Name = "txtShipCountry";
             this.txtShipCountry.Size = new System.Drawing.Size(106, 20);
             this.txtShipCountry.TabIndex = 10;
+            this.txtShipCountry.TextChanged += new System.EventHandler(this.txtShipCountry_TextChanged);
             // 
             // txtShipCity
             // 
@@ -288,6 +292,7 @@ namespace DeskJockey
             this.txtShipCity.Name = "txtShipCity";
             this.txtShipCity.Size = new System.Drawing.Size(78, 20);
             this.txtShipCity.TabIndex = 11;
+            this.txtShipCity.TextChanged += new System.EventHandler(this.txtShipCity_TextChanged);
             // 
             // lblShipAddr2
             // 
@@ -320,6 +325,7 @@ namespace DeskJockey
             this.txtShipAddr1.Name = "txtShipAddr1";
             this.txtShipAddr1.Size = new System.Drawing.Size(171, 20);
             this.txtShipAddr1.TabIndex = 13;
+            this.txtShipAddr1.TextChanged += new System.EventHandler(this.txtShipAddr1_TextChanged);
             // 
             // grpBillAddr
             // 
@@ -363,6 +369,7 @@ namespace DeskJockey
             this.txtBillPayTerms.Name = "txtBillPayTerms";
             this.txtBillPayTerms.Size = new System.Drawing.Size(86, 20);
             this.txtBillPayTerms.TabIndex = 22;
+            this.txtBillPayTerms.TextChanged += new System.EventHandler(this.txtBillPayTerms_TextChanged);
             // 
             // label4
             // 
@@ -379,6 +386,7 @@ namespace DeskJockey
             this.txtBillPhoneNumber.Name = "txtBillPhoneNumber";
             this.txtBillPhoneNumber.Size = new System.Drawing.Size(94, 20);
             this.txtBillPhoneNumber.TabIndex = 22;
+            this.txtBillPhoneNumber.TextChanged += new System.EventHandler(this.txtBillPhoneNumber_TextChanged);
             // 
             // lblCoName1
             // 
@@ -395,6 +403,7 @@ namespace DeskJockey
             this.txtBillCoName.Name = "txtBillCoName";
             this.txtBillCoName.Size = new System.Drawing.Size(162, 20);
             this.txtBillCoName.TabIndex = 20;
+            this.txtBillCoName.TextChanged += new System.EventHandler(this.txtBillCoName_TextChanged);
             // 
             // lblBillZip
             // 
@@ -438,6 +447,7 @@ namespace DeskJockey
             this.txtBillZip.Name = "txtBillZip";
             this.txtBillZip.Size = new System.Drawing.Size(60, 20);
             this.txtBillZip.TabIndex = 8;
+            this.txtBillZip.TextChanged += new System.EventHandler(this.txtBillZip_TextChanged);
             // 
             // txtBillState
             // 
@@ -445,6 +455,7 @@ namespace DeskJockey
             this.txtBillState.Name = "txtBillState";
             this.txtBillState.Size = new System.Drawing.Size(78, 20);
             this.txtBillState.TabIndex = 9;
+            this.txtBillState.TextChanged += new System.EventHandler(this.txtBillState_TextChanged);
             // 
             // txtBillCountry
             // 
@@ -452,6 +463,7 @@ namespace DeskJockey
             this.txtBillCountry.Name = "txtBillCountry";
             this.txtBillCountry.Size = new System.Drawing.Size(106, 20);
             this.txtBillCountry.TabIndex = 10;
+            this.txtBillCountry.TextChanged += new System.EventHandler(this.txtBillCountry_TextChanged);
             // 
             // txtBillCity
             // 
@@ -459,6 +471,7 @@ namespace DeskJockey
             this.txtBillCity.Name = "txtBillCity";
             this.txtBillCity.Size = new System.Drawing.Size(78, 20);
             this.txtBillCity.TabIndex = 11;
+            this.txtBillCity.TextChanged += new System.EventHandler(this.txtBillCity_TextChanged);
             // 
             // lblBillAddr2
             // 
@@ -491,6 +504,7 @@ namespace DeskJockey
             this.txtBillAddr1.Name = "txtBillAddr1";
             this.txtBillAddr1.Size = new System.Drawing.Size(171, 20);
             this.txtBillAddr1.TabIndex = 13;
+            this.txtBillAddr1.TextChanged += new System.EventHandler(this.txtBillAddr1_TextChanged);
             // 
             // grpCustomers
             // 
@@ -509,12 +523,13 @@ namespace DeskJockey
             // 
             // mskTxtCustomerID
             // 
-            this.mskTxtCustomerID.Location = new System.Drawing.Point(267, 19);
-            this.mskTxtCustomerID.Mask = "9999";
+            this.mskTxtCustomerID.Location = new System.Drawing.Point(249, 19);
+            this.mskTxtCustomerID.Mask = "99999";
             this.mskTxtCustomerID.Name = "mskTxtCustomerID";
             this.mskTxtCustomerID.PromptChar = ' ';
-            this.mskTxtCustomerID.Size = new System.Drawing.Size(40, 20);
+            this.mskTxtCustomerID.Size = new System.Drawing.Size(58, 20);
             this.mskTxtCustomerID.TabIndex = 16;
+            this.mskTxtCustomerID.TextChanged += new System.EventHandler(this.mskTxtCustomerID_TextChanged);
             // 
             // rdoRemoveCustomer
             // 
@@ -525,6 +540,7 @@ namespace DeskJockey
             this.rdoRemoveCustomer.TabIndex = 3;
             this.rdoRemoveCustomer.Text = "Remove";
             this.rdoRemoveCustomer.UseVisualStyleBackColor = true;
+            this.rdoRemoveCustomer.CheckedChanged += new System.EventHandler(this.rdoRemoveCustomer_CheckedChanged);
             // 
             // btnCustomerSubmit
             // 
@@ -547,20 +563,21 @@ namespace DeskJockey
             this.rdoAddCustomer.TabStop = true;
             this.rdoAddCustomer.Text = "Add/Edit";
             this.rdoAddCustomer.UseVisualStyleBackColor = true;
+            this.rdoAddCustomer.CheckedChanged += new System.EventHandler(this.rdoAddCustomer_CheckedChanged);
             // 
             // cboDBCustomers
             // 
             this.cboDBCustomers.FormattingEnabled = true;
             this.cboDBCustomers.Location = new System.Drawing.Point(6, 19);
             this.cboDBCustomers.Name = "cboDBCustomers";
-            this.cboDBCustomers.Size = new System.Drawing.Size(225, 21);
+            this.cboDBCustomers.Size = new System.Drawing.Size(210, 21);
             this.cboDBCustomers.TabIndex = 0;
             this.cboDBCustomers.SelectedIndexChanged += new System.EventHandler(this.cboDBCustomers_SelectedIndexChanged);
             // 
             // lblCustomerID
             // 
             this.lblCustomerID.AutoSize = true;
-            this.lblCustomerID.Location = new System.Drawing.Point(237, 22);
+            this.lblCustomerID.Location = new System.Drawing.Point(222, 22);
             this.lblCustomerID.Name = "lblCustomerID";
             this.lblCustomerID.Size = new System.Drawing.Size(21, 13);
             this.lblCustomerID.TabIndex = 15;
