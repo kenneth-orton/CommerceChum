@@ -19,5 +19,14 @@ namespace DeskJockey
         public bool active { get; set; }
         public virtual BillAddress billAddress { get; set; }
         public virtual ShipAddress shipAddress { get; set; }
+
+        public Customer()
+        {
+            this.customerID = 0;
+            this.companyName = "";
+            this.payTerms = "";
+            this.addressSame = true;
+            this.active = true;
+        }
     }
 }

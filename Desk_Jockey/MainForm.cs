@@ -53,14 +53,11 @@ namespace DeskJockey
 
         private void getSelectedCustomer(ComboBox comboBox)
         {
-            if (comboBox.SelectedItem == null)
+            if ((comboBox.SelectedItem == null) || (!rsCustomer.Exists(customer => customer.companyName == comboBox.SelectedItem.ToString())))
             {
-                selectedProduct = null;
-                return;
-            }
-            if (!rsCustomer.Exists(customer => customer.companyName == comboBox.SelectedItem.ToString()))
-            {
-                selectedProduct = null;
+                selectedCustomer = new Customer();
+                selectedCustomer.billAddress = new BillAddress();
+                selectedCustomer.shipAddress = new ShipAddress();
                 return;
             }
             selectedCustomer = rsCustomer.Find(customer => customer.companyName == comboBox.SelectedItem.ToString());
@@ -68,14 +65,9 @@ namespace DeskJockey
 
         private void getSelectedProduct(ComboBox comboBox)
         {
-            if (comboBox.SelectedItem == null)
+            if ((comboBox.SelectedItem == null) || (!rsProduct.Exists(product => product.name == comboBox.SelectedItem.ToString())))
             {
-                selectedCustomer = null;
-                return;
-            }
-            if (!rsProduct.Exists(product => product.name == comboBox.SelectedItem.ToString()))
-            {
-                selectedCustomer = null;
+                selectedProduct = new Product();
                 return;
             }
             selectedProduct = rsProduct.Find(product => product.name == comboBox.SelectedItem.ToString());
@@ -83,29 +75,36 @@ namespace DeskJockey
 
         private void populateFormFromCombobox(ComboBox comboBox, CBOBoxID cboID)
         {
-            comboBox.Items.Clear();
-
             int i = 0;
+            comboBox.Items.Clear();
+            comboBox.Items.Insert(i++, "");
+
             switch (cboID)
             {
                 case CBOBoxID.ONE:
                     rsProduct = dbMngr.products;
-                    getSelectedProduct(comboBox);
+                    //getSelectedProduct(comboBox);
                     foreach (var product in rsProduct)
-                        comboBox.Items.Insert(i++, product.name);
+                    {
+                        if (product.active)
+                            comboBox.Items.Insert(i++, product.name);
+                    }
 
                     if (comboBox.Items.Count > 0)
-                        comboBox.SelectedIndex = 0;
+                        comboBox.SelectedIndex = 1;
                     break;
                 case CBOBoxID.TWO:
                     rsProduct = dbMngr.products;
-                    getSelectedProduct(comboBox);
+                    //getSelectedProduct(comboBox);
                     foreach (var product in rsProduct)
-                        comboBox.Items.Insert(i++, product.name);
+                    {
+                        if (product.active)
+                            comboBox.Items.Insert(i++, product.name);
+                    }
 
                     if (cboProductsEdit.Items.Count > 0)
                     {
-                        comboBox.SelectedIndex = 0;
+                        comboBox.SelectedIndex = 1;
                         txtDBPartName.Text = selectedProduct.name;
                         txtDBPartDesc.Text = selectedProduct.description;
                         mskTxtDBPrice.Text = selectedProduct.price.ToString();
@@ -113,12 +112,15 @@ namespace DeskJockey
                     break;
                 case CBOBoxID.THREE:
                     rsCustomer = dbMngr.customers;
-                    getSelectedCustomer(comboBox);
+                    //getSelectedCustomer(comboBox);
                     foreach (var customer in rsCustomer)
-                        comboBox.Items.Insert(i++, customer.companyName);
+                    {
+                        if (customer.active)
+                            comboBox.Items.Insert(i++, customer.companyName);
+                    }
 
                     if (comboBox.Items.Count > 0)
-                        comboBox.SelectedIndex = 0;
+                        comboBox.SelectedIndex = 1;
                     break;
             }
         }
@@ -498,7 +500,7 @@ namespace DeskJockey
             getSelectedProduct(cboProductsEdit);
             cboProducts.SelectedIndex = cboProductsEdit.SelectedIndex;
 
-            if (cboProductsEdit.SelectedIndex >= 0)
+            if (cboProductsEdit.SelectedIndex > 0)
             {
                 txtDBPartName.Text = selectedProduct.name;
                 txtDBPartDesc.Text = selectedProduct.description;
@@ -679,13 +681,56 @@ namespace DeskJockey
         {
             if (rdoAddCustomer.Checked)
             {
+                int customerID = 0;
+                Int32.TryParse(mskTxtCustomerID.Text, out customerID);
+                Customer newCustomer = new Customer();
 
+                newCustomer.billAddress = new BillAddress();
+                newCustomer.customerID = customerID;
+                newCustomer.companyName = txtBillCoName.Text;
+                newCustomer.billAddress.addr1 = txtBillAddr1.Text;
+                newCustomer.billAddress.addr2 = txtBillAddr2.Text;
+                newCustomer.billAddress.city = txtBillCity.Text;
+                newCustomer.billAddress.state = txtBillState.Text;
+                newCustomer.billAddress.zip = txtBillZip.Text;
+                newCustomer.billAddress.country = txtBillCountry.Text;
+                newCustomer.billAddress.phoneNo = txtBillPhoneNumber.Text;
+                newCustomer.payTerms = txtBillPayTerms.Text;
+
+                if (!chkSameAsBilling.Checked)
+                {
+                    newCustomer.shipAddress = new ShipAddress();
+                    newCustomer.shipAddress.contactName = txtShipCoName.Text;
+                    newCustomer.shipAddress.addr1 = txtShipAddr1.Text;
+                    newCustomer.shipAddress.addr2 = txtShipAddr2.Text;
+                    newCustomer.shipAddress.city = txtShipCity.Text;
+                    newCustomer.shipAddress.state = txtShipState.Text;
+                    newCustomer.shipAddress.zip = txtShipZip.Text;
+                    newCustomer.shipAddress.country = txtShipCountry.Text;
+                    newCustomer.shipAddress.phoneNo = txtShipPhoneNumber.Text;
+                    newCustomer.addressSame = false;
+                }
+                else
+                    newCustomer.addressSame = true;
+
+                dbMngr.insertCustomer(newCustomer);
             }
 
             if (rdoRemoveCustomer.Checked)
             {
+                getSelectedCustomer(cboDBCustomers);
 
+                string msg = string.Format("Are you sure you want to delete \"{0}\" from the database?", selectedCustomer.companyName);
+                DialogResult result = MessageBox.Show(msg, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2);
+
+                if (result == DialogResult.Yes)
+                    dbMngr.removeCustomer(selectedCustomer);
+                else
+                    return;
             }
+
+            initDBTab();
+            initQuoteTab();
         }
 
         private void customerInputChecks()

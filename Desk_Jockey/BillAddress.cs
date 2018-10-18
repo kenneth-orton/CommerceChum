@@ -27,5 +27,18 @@ namespace DeskJockey
         public string phoneNo { get; set; }
         [Required]
         public virtual Customer customer { get; set; }
+
+        public BillAddress()
+        {
+            this.customerID = 0;
+            this.contactName = "";
+            this.addr1 = "";
+            this.addr2 = "";
+            this.city = "";
+            this.state = "";
+            this.zip = "";
+            this.country = "";
+            this.phoneNo = "";
+        }
     }
 }

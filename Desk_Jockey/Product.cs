@@ -17,5 +17,14 @@ namespace DeskJockey
         public double price { get; set; }
         [Column("active")]
         public bool active { get; set; }
+
+        public Product()
+        {
+            this.productID = 0;
+            this.name = "";
+            this.description = "";
+            this.price = 0.0;
+            this.active = false;
+        }
     }
 }
