@@ -515,17 +515,6 @@ namespace DeskJockey
         {
             if (rdoDBAdd.Checked)
             {
-                //if (string.IsNullOrWhiteSpace(txtDBPartName.Text))
-                //{
-                //    MessageBox.Show("Part Name not entered", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //    return;
-                //}
-                //if (string.IsNullOrWhiteSpace(txtDBPartDesc.Text))
-                //{
-                //    MessageBox.Show("Part Description not entered", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //    return;
-                //}
-
                 string partName = txtDBPartName.Text;
                 string partDesc = txtDBPartDesc.Text;
                 double partPrice = 0.0;
