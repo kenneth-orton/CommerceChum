@@ -28,5 +28,31 @@ namespace DeskJockey
             this.addressSame = true;
             this.active = true;
         }
+
+        public Customer(int id, string name, string terms, bool sameAddr = true, bool status = true)
+        {
+            this.customerID = id;
+            this.companyName = name;
+            this.payTerms = terms;
+            this.addressSame = sameAddr;
+            this.active = status;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (GetType() != obj.GetType()) 
+                return false;
+
+            Customer cust = obj as Customer;
+            return (this.customerID == cust.customerID && this.companyName == cust.companyName && this.payTerms == cust.payTerms
+                    && this.addressSame == cust.addressSame && this.active == cust.active && this.billAddress.Equals(cust.billAddress)
+                    && this.shipAddress.Equals(cust.shipAddress));
+        }
+
+        public override int GetHashCode()
+        {
+            return (customerID.GetHashCode() + companyName.GetHashCode() + payTerms.GetHashCode() + addressSame.GetHashCode() + active.GetHashCode()
+                    + billAddress.GetHashCode() + shipAddress.GetHashCode());
+        }
     }
 }

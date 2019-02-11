@@ -40,5 +40,35 @@ namespace DeskJockey
             this.country = "";
             this.phoneNo = "";
         }
+        
+        public BillAddress(int id, string name, string addr1, string addr2, string city, string state, string zip, string country, string phone)
+        {
+            this.customerID = id;
+            this.contactName = name;
+            this.addr1 = addr1;
+            this.addr2 = addr2;
+            this.city = city;
+            this.state = state;
+            this.zip = zip;
+            this.country = country;
+            this.phoneNo = phone;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (GetType() != obj.GetType())
+                return false;
+
+            BillAddress billAddr = obj as BillAddress;
+            return (this.customerID == billAddr.customerID && this.contactName == billAddr.contactName && this.addr1 == billAddr.addr1
+                    && this.addr2 == billAddr.addr2 && this.city == billAddr.city && this.state == billAddr.state && this.zip == billAddr.zip
+                    && this.country == billAddr.country && this.phoneNo == billAddr.phoneNo);
+        }
+
+        public override int GetHashCode()
+        {
+            return (customerID.GetHashCode() + contactName.GetHashCode() + addr1.GetHashCode() + addr2.GetHashCode() + city.GetHashCode()
+                    + state.GetHashCode() + zip.GetHashCode() + country.GetHashCode() + phoneNo.GetHashCode());
+        }
     }
 }

@@ -38,15 +38,17 @@ namespace DeskJockey
 
         public override bool Equals(object obj)
         {
-            if (GetType() != obj.GetType()) // || !System.Object.ReferenceEquals(this, obj))
+            if (GetType() != obj.GetType())
                 return false;
 
             Product prod = obj as Product;
-            if (this.productID == prod.productID && this.name == prod.name && this.description == prod.description 
-                && this.price == prod.price && this.active == prod.active)
-                return true;
+            return (this.productID == prod.productID && this.name == prod.name && this.description == prod.description 
+                    && this.price == prod.price && this.active == prod.active);
+        }
 
-            return false;
+        public override int GetHashCode()
+        {
+            return (productID.GetHashCode() + name.GetHashCode() + description.GetHashCode() + price.GetHashCode() + active.GetHashCode());
         }
     }
 }

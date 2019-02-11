@@ -104,42 +104,9 @@ namespace DeskJockey
                 if (customerExists(newCustomer.companyName))
                 {
                     var customer = context.Customers.Include("BillAddress").Include("ShipAddress").FirstOrDefault(c => c.companyName == newCustomer.companyName);
-                    customer.active = true;
-                    //customer.customerID = newCustomer.customerID;
-                    customer.companyName = newCustomer.companyName;
-                    customer.billAddress.addr1 = newCustomer.billAddress.addr1;
-                    customer.billAddress.addr2 = newCustomer.billAddress.addr2;
-                    customer.billAddress.city = newCustomer.billAddress.city;
-                    customer.billAddress.state = newCustomer.billAddress.state;
-                    customer.billAddress.zip = newCustomer.billAddress.zip;
-                    customer.billAddress.country = newCustomer.billAddress.country;
-                    customer.billAddress.phoneNo = newCustomer.billAddress.phoneNo;
-
-                    customer.addressSame = newCustomer.addressSame;
-
-                    if (!customer.addressSame)
-                    {
-                        customer.shipAddress.contactName = newCustomer.shipAddress.contactName;
-                        customer.shipAddress.addr1 = newCustomer.shipAddress.addr1;
-                        customer.shipAddress.addr2 = newCustomer.shipAddress.addr2;
-                        customer.shipAddress.city = newCustomer.shipAddress.city;
-                        customer.shipAddress.state = newCustomer.shipAddress.state;
-                        customer.shipAddress.zip = newCustomer.shipAddress.zip;
-                        customer.shipAddress.country = newCustomer.shipAddress.country;
-                        customer.shipAddress.phoneNo = newCustomer.shipAddress.phoneNo;
-                    }
-                    else
-                    {
-                        customer.shipAddress = new ShipAddress();
-                        customer.shipAddress.contactName = newCustomer.companyName;
-                        customer.shipAddress.addr1 = newCustomer.billAddress.addr1;
-                        customer.shipAddress.addr2 = newCustomer.billAddress.addr2;
-                        customer.shipAddress.city = newCustomer.billAddress.city;
-                        customer.shipAddress.state = newCustomer.billAddress.state;
-                        customer.shipAddress.zip = newCustomer.billAddress.zip;
-                        customer.shipAddress.country = newCustomer.billAddress.country;
-                        customer.shipAddress.phoneNo = newCustomer.billAddress.phoneNo;
-                    }
+                    newCustomer.customerID = customer.customerID;
+                    if (!customer.Equals(newCustomer))
+                        customer = newCustomer;
                 }
                 else
                     context.Customers.Add(newCustomer);

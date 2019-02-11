@@ -517,7 +517,7 @@ namespace DeskJockey
                 double partPrice = 0.0;
                 Double.TryParse(mskTxtDBPrice.Text.Replace("$", String.Empty), out partPrice);
 
-                Product newProduct = new Product(0, partName, partDesc, partPrice, true);
+                Product newProduct = new Product(0, partName, partDesc, partPrice);
                 dbMngr.insertPart(newProduct);
             }
 
@@ -548,7 +548,7 @@ namespace DeskJockey
             if (rdoDBAdd.Checked)
                 partInputChecks();
         }
-        
+
         private void txtDBPartDesc_TextChanged(object sender, EventArgs e)
         {
             if (rdoDBAdd.Checked)
@@ -591,7 +591,7 @@ namespace DeskJockey
 
         private void addShippingAddrInfo()
         {
-            txtShipCoName.Text = selectedCustomer.companyName;
+            txtShipCoName.Text = selectedCustomer.shipAddress.contactName;
             txtShipAddr1.Text = selectedCustomer.shipAddress.addr1;
             txtShipAddr2.Text = selectedCustomer.shipAddress.addr2;
             txtShipCity.Text = selectedCustomer.shipAddress.city;
@@ -606,7 +606,7 @@ namespace DeskJockey
             getSelectedCustomer(cboDBCustomers);
             mskTxtCustomerID.Text = selectedCustomer.customerID.ToString();
 
-            txtBillCoName.Text = selectedCustomer.companyName;
+            txtBillCoName.Text = selectedCustomer.billAddress.contactName;
             txtBillAddr1.Text = selectedCustomer.billAddress.addr1;
             txtBillAddr2.Text = selectedCustomer.billAddress.addr2;
             txtBillCity.Text = selectedCustomer.billAddress.city;
@@ -679,35 +679,15 @@ namespace DeskJockey
             {
                 int customerID = 0;
                 Int32.TryParse(mskTxtCustomerID.Text, out customerID);
-                Customer newCustomer = new Customer();
-
-                newCustomer.billAddress = new BillAddress();
-                newCustomer.customerID = customerID;
-                newCustomer.companyName = txtBillCoName.Text;
-                newCustomer.billAddress.addr1 = txtBillAddr1.Text;
-                newCustomer.billAddress.addr2 = txtBillAddr2.Text;
-                newCustomer.billAddress.city = txtBillCity.Text;
-                newCustomer.billAddress.state = txtBillState.Text;
-                newCustomer.billAddress.zip = txtBillZip.Text;
-                newCustomer.billAddress.country = txtBillCountry.Text;
-                newCustomer.billAddress.phoneNo = txtBillPhoneNumber.Text;
-                newCustomer.payTerms = txtBillPayTerms.Text;
+                Customer newCustomer = new Customer(customerID, cboDBCustomers.Text, /*.SelectedItem.ToString()*/ txtBillPayTerms.Text, chkSameAsBilling.Checked);
+                newCustomer.billAddress = new BillAddress(customerID, txtBillCoName.Text, txtBillAddr1.Text, txtBillAddr2.Text, txtBillCity.Text, txtBillState.Text, txtBillZip.Text, txtBillCountry.Text, txtBillPhoneNumber.Text);
+                newCustomer.shipAddress = new ShipAddress(newCustomer.billAddress);
 
                 if (!chkSameAsBilling.Checked)
                 {
-                    newCustomer.shipAddress = new ShipAddress();
-                    newCustomer.shipAddress.contactName = txtShipCoName.Text;
-                    newCustomer.shipAddress.addr1 = txtShipAddr1.Text;
-                    newCustomer.shipAddress.addr2 = txtShipAddr2.Text;
-                    newCustomer.shipAddress.city = txtShipCity.Text;
-                    newCustomer.shipAddress.state = txtShipState.Text;
-                    newCustomer.shipAddress.zip = txtShipZip.Text;
-                    newCustomer.shipAddress.country = txtShipCountry.Text;
-                    newCustomer.shipAddress.phoneNo = txtShipPhoneNumber.Text;
+                    newCustomer.shipAddress = new ShipAddress(customerID, txtShipCoName.Text, txtShipAddr1.Text, txtShipAddr2.Text, txtShipCity.Text, txtShipState.Text, txtShipZip.Text, txtShipCountry.Text, txtShipPhoneNumber.Text);
                     newCustomer.addressSame = false;
                 }
-                else
-                    newCustomer.addressSame = true;
 
                 dbMngr.insertCustomer(newCustomer);
             }
@@ -733,37 +713,17 @@ namespace DeskJockey
         {
             btnCustomerSubmit.Enabled = false;
 
-            if (string.IsNullOrWhiteSpace(mskTxtCustomerID.Text))
-                return;
-            if (string.IsNullOrWhiteSpace(txtBillCoName.Text))
-                return;
-            if (string.IsNullOrWhiteSpace(txtBillAddr1.Text))
-                return;
-            if (string.IsNullOrWhiteSpace(txtBillCity.Text))
-                return;
-            if (string.IsNullOrWhiteSpace(txtBillState.Text))
-                return;
-            if (string.IsNullOrWhiteSpace(txtBillZip.Text))
-                return;
-            if (string.IsNullOrWhiteSpace(txtBillCountry.Text))
-                return;
-            if (string.IsNullOrWhiteSpace(txtBillPhoneNumber.Text))
-                return;
-            if (string.IsNullOrWhiteSpace(txtBillPayTerms.Text))
+            if (string.IsNullOrWhiteSpace(mskTxtCustomerID.Text) || string.IsNullOrWhiteSpace(txtBillCoName.Text) ||
+                string.IsNullOrWhiteSpace(txtBillAddr1.Text) || string.IsNullOrWhiteSpace(txtBillCity.Text) ||
+                string.IsNullOrWhiteSpace(txtBillState.Text) || string.IsNullOrWhiteSpace(txtBillZip.Text) ||
+                string.IsNullOrWhiteSpace(txtBillCountry.Text) || string.IsNullOrWhiteSpace(txtBillPhoneNumber.Text) ||
+                string.IsNullOrWhiteSpace(txtBillPayTerms.Text))
                 return;
             if (!chkSameAsBilling.Checked)
             {
-                if (string.IsNullOrWhiteSpace(txtShipCoName.Text))
-                    return;
-                if (string.IsNullOrWhiteSpace(txtShipAddr1.Text))
-                    return;
-                if (string.IsNullOrWhiteSpace(txtShipCity.Text))
-                    return;
-                if (string.IsNullOrWhiteSpace(txtShipState.Text))
-                    return;
-                if (string.IsNullOrWhiteSpace(txtShipZip.Text))
-                    return;
-                if (string.IsNullOrWhiteSpace(txtShipCountry.Text))
+                if (string.IsNullOrWhiteSpace(txtShipCoName.Text) || string.IsNullOrWhiteSpace(txtShipAddr1.Text) ||
+                    string.IsNullOrWhiteSpace(txtShipCity.Text) || string.IsNullOrWhiteSpace(txtShipState.Text) ||
+                    string.IsNullOrWhiteSpace(txtShipZip.Text) || string.IsNullOrWhiteSpace(txtShipCountry.Text))
                     return;
             }
             btnCustomerSubmit.Enabled = true;

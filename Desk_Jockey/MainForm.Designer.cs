@@ -214,9 +214,9 @@ namespace DeskJockey
             this.lblShipCoName.AutoSize = true;
             this.lblShipCoName.Location = new System.Drawing.Point(9, 44);
             this.lblShipCoName.Name = "lblShipCoName";
-            this.lblShipCoName.Size = new System.Drawing.Size(85, 13);
+            this.lblShipCoName.Size = new System.Drawing.Size(78, 13);
             this.lblShipCoName.TabIndex = 21;
-            this.lblShipCoName.Text = "Company Name:";
+            this.lblShipCoName.Text = "Contact Name:";
             // 
             // txtShipCoName
             // 
@@ -393,9 +393,9 @@ namespace DeskJockey
             this.lblCoName1.AutoSize = true;
             this.lblCoName1.Location = new System.Drawing.Point(9, 20);
             this.lblCoName1.Name = "lblCoName1";
-            this.lblCoName1.Size = new System.Drawing.Size(85, 13);
+            this.lblCoName1.Size = new System.Drawing.Size(78, 13);
             this.lblCoName1.TabIndex = 21;
-            this.lblCoName1.Text = "Company Name:";
+            this.lblCoName1.Text = "Contact Name:";
             // 
             // txtBillCoName
             // 
