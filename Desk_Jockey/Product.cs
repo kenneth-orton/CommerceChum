@@ -26,5 +26,27 @@ namespace DeskJockey
             this.price = 0.0;
             this.active = false;
         }
+
+        public Product(int id, string prodName, string desc, double prodPrice, bool dbStatus = true)
+        {
+            this.productID = id;
+            this.name = prodName;
+            this.description = desc;
+            this.price = prodPrice;
+            this.active = dbStatus;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (GetType() != obj.GetType()) // || !System.Object.ReferenceEquals(this, obj))
+                return false;
+
+            Product prod = obj as Product;
+            if (this.productID == prod.productID && this.name == prod.name && this.description == prod.description 
+                && this.price == prod.price && this.active == prod.active)
+                return true;
+
+            return false;
+        }
     }
 }

@@ -70,10 +70,9 @@ namespace DeskJockey
                 if (partExists(newProduct.name))
                 {
                     var prod = context.Products.FirstOrDefault(p => p.name == newProduct.name);
-                    prod.name = newProduct.name;
-                    prod.price = newProduct.price;
-                    prod.description = newProduct.description;
-                    prod.active = true;
+                    newProduct.productID = prod.productID;
+                    if (!prod.Equals(newProduct))
+                        prod = newProduct;
                 }
                 else
                     context.Products.Add(newProduct);
@@ -106,7 +105,7 @@ namespace DeskJockey
                 {
                     var customer = context.Customers.Include("BillAddress").Include("ShipAddress").FirstOrDefault(c => c.companyName == newCustomer.companyName);
                     customer.active = true;
-                    customer.customerID = newCustomer.customerID;
+                    //customer.customerID = newCustomer.customerID;
                     customer.companyName = newCustomer.companyName;
                     customer.billAddress.addr1 = newCustomer.billAddress.addr1;
                     customer.billAddress.addr2 = newCustomer.billAddress.addr2;

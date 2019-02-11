@@ -517,11 +517,7 @@ namespace DeskJockey
                 double partPrice = 0.0;
                 Double.TryParse(mskTxtDBPrice.Text.Replace("$", String.Empty), out partPrice);
 
-                Product newProduct = new Product();
-                newProduct.name = partName;
-                newProduct.description = partDesc;
-                newProduct.price = partPrice;
-                newProduct.active = true;
+                Product newProduct = new Product(0, partName, partDesc, partPrice, true);
                 dbMngr.insertPart(newProduct);
             }
 
