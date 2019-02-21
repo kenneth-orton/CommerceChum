@@ -26,6 +26,8 @@ namespace DeskJockey
         public DbSet<Customer> Customers { get; set; }
         public DbSet<BillAddress> BillAddresses { get; set; }
         public DbSet<ShipAddress> ShipAddresses { get; set; }
+        public DbSet<OrderHistory> OrderHistory { get; set; }
+        public DbSet<Manifest> Manifest { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -119,6 +121,25 @@ namespace DeskJockey
         {
             using (var context = new dbContext())
                 return context.Customers.Where(c => c.companyName == companyName).Any();
+        }
+
+        public static int getNextInvoiceNumber()
+        {
+            int lastOrderID = 0;
+
+            using (var context = new dbContext())
+            {
+                try
+                {
+                    lastOrderID = context.OrderHistory.Max(id => id.orderID);
+                }
+                catch
+                {
+                    lastOrderID = 9995; // new customer invoices start at 10000
+                }
+            }
+
+            return lastOrderID + 5;
         }
     }
 }

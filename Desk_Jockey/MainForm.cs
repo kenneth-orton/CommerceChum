@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace DeskJockey
@@ -13,7 +14,6 @@ namespace DeskJockey
         private List<Customer> rsCustomer = null;
         private Customer selectedCustomer = null;
         private static string folder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        private string filePath = System.IO.Path.Combine(folder, "quote.xlsx");
         private string discountCalc;
         private string transFeeCalc;
         public MainForm()
@@ -37,10 +37,13 @@ namespace DeskJockey
             populateFormFromCombobox(cboCustomers, CBOBoxID.THREE);
             grpShipping.Enabled = false;
             grpDiscount.Enabled = false;
-            btnGenQuote.Enabled = false;
+            btnGenerate.Enabled = false;
+            txtTrackNum.Enabled = false;
             grpPayType.Enabled = false;
             btnMoveItemUp.Text = ((char)0x25B2).ToString();
             btnMoveItemDown.Text = ((char)0x25BC).ToString();
+            dteShipDate.Format = DateTimePickerFormat.Custom;
+            dteShipDate.CustomFormat = "MM/dd/yyyy";
         }
 
         private enum CBOBoxID { ONE, TWO, THREE, FOUR, FIVE, SIX };
@@ -245,7 +248,6 @@ namespace DeskJockey
             {
                 grpShipping.Enabled = false;
                 grpDiscount.Enabled = false;
-                btnGenQuote.Enabled = false;
                 mskTxtDiscount.Text = "0";
                 mskTxtDiscountTotal.Text = "0";
                 mskTxtShipCost.Text = "0";
@@ -254,6 +256,8 @@ namespace DeskJockey
                 mskTxtTotal.Text = "0";
                 chkDiscPercent.Checked = false;
                 grpPayType.Enabled = false;
+
+                btnGenerate.Enabled = rdoQuote.Checked ? false : true;
             }
 
             updateSubtotal();
@@ -378,42 +382,150 @@ namespace DeskJockey
             updateTransactionFee();
         }
 
-        private void btnGenQuote_Click(object sender, EventArgs e)
+        private void btnGenerate_Click(object sender, EventArgs e)
         {
-            if (rdoExcelSheet.Checked)
+            if (rdoQuote.Checked)
             {
-                if (fileClosed(filePath))
-                    exportQuoteToExcel();
-                else
-                    MessageBox.Show("Quote File is Currently Opened\n Close the file and try again", "Failed",
-                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string filePath = System.IO.Path.Combine(folder, "Quote.xlsx");
+                if (fileAvailable(filePath))
+                    exportQuoteToExcel(filePath);                    
             }
             else if (rdoInvoice.Checked)
             {
-
+                string filePath = System.IO.Path.Combine(folder, "InvoiceTemplate.xlsx");
+                if (fileAvailable(filePath) && checkUserInput())
+                    createExcelInvoice(filePath);
             }
             else if (rdoPackingList.Checked)
             {
-
+                string filePath = System.IO.Path.Combine(folder, "PackListTemplate.xlsx");
+                if (fileAvailable(filePath) && checkUserInput())
+                    createExcelPackList(filePath);
             }
         }
 
-        private bool fileClosed(string fileName)
+        private void createExcelPackList(string filePath)
         {
-            FileStream stream = null;
+            throw new NotImplementedException();
+        }
 
-            if (!File.Exists(filePath))
-                return true;
-            try
+        private bool checkUserInput()
+        {
+            string result = "";
+
+            if (cboCustomers.SelectedIndex <= 0)
+                result = "Customer ";
+            else if (string.IsNullOrWhiteSpace(txtPONum.Text))
+                result = "PO Number ";
+            else if (string.IsNullOrWhiteSpace(txtShipVia.Text))
+                result = "Ship Via ";
+            else if (string.IsNullOrWhiteSpace(txtTrackNum.Text))
+                result = "Tracking # ";
+            else if (lstVwQuote.Items.Count == 0)
+                result = "Parts List ";
+
+            if (result != "")
             {
-                stream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
-                stream.Close();
-                return true;
-            }
-            catch (Exception)
-            {
+                MessageBox.Show("  Error: " + result + "entry not valid. \n Re-enter information and try again.", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
+
+            return true;
+        }
+
+        private string buildBillAddressString(BillAddress address)
+        {
+            StringBuilder output = new StringBuilder();
+
+            output.Append(address.contactName + '\n');
+            output.Append(address.addr1 + '\n');
+            if (address.addr2.Trim() != "")
+                output.Append(address.addr2 + '\n');
+            output.Append(address.city + ", ");
+            output.Append(address.state + " ");
+            output.Append(address.zip + '\n');
+            output.Append(address.phoneNo);
+
+            return output.ToString();
+        }
+
+        private string buildShipAddressString(ShipAddress address)
+        {
+            StringBuilder output = new StringBuilder();
+
+            output.Append(address.contactName + '\n');
+            output.Append(address.addr1 + '\n');
+            if(address.addr2.Trim() != "")
+                output.Append(address.addr2 + '\n');
+            output.Append(address.city + ", ");
+            output.Append(address.state + " ");
+            output.Append(address.zip + '\n');
+            output.Append(address.phoneNo);
+
+            return output.ToString();
+        }
+
+        private void createExcelInvoice(string templateFilePath)
+        {
+            int nextInvoiceNum = DatabaseManager.getNextInvoiceNumber();
+            string companyName = cboCustomers.SelectedItem.ToString();
+
+            dteShipDate.Format = DateTimePickerFormat.Custom;
+            //dteShipDate.CustomFormat = "yyyy-MM-dd hh:mm:ss";
+
+            getSelectedCustomer(cboDBCustomers);
+            string billAddr = buildBillAddressString(selectedCustomer.billAddress);
+            string shipAddr = buildShipAddressString(selectedCustomer.shipAddress);
+
+            mskTxtCustomerID.Text = selectedCustomer.customerID.ToString();
+
+            InvoiceWorksheetBuilder invoiceWksht = new InvoiceWorksheetBuilder(templateFilePath);
+            invoiceWksht.insertCellData(lstVwQuote, dteShipDate.Text, txtShipVia.Text, txtTrackNum.Text, txtPONum.Text, nextInvoiceNum, selectedCustomer.payTerms, billAddr, shipAddr);
+
+            string outFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), companyName + "-" + nextInvoiceNum + ".xlsx");
+            invoiceWksht.saveExcelFile(outFileName);
+        }
+
+        private bool fileAvailable(string filePath)
+        {
+            bool result = true;
+            FileStream stream = null;
+
+            if (!File.Exists(filePath) && (rdoInvoice.Checked || rdoPackingList.Checked))
+                result = false;
+
+            if (!result && rdoInvoice.Checked)
+            {
+                MessageBox.Show("  Error: missing InvoiceTemplate.xlsx,\n Make sure file is in the proper directory", "Failed",
+                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (!result && rdoPackingList.Checked)
+            {
+                MessageBox.Show("  Error: missing PackListTemplate.xlsx,\n Make sure file is in the proper directory", "Failed",
+                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                if (!File.Exists(filePath))
+                    result = true;
+                else
+                {
+                    try
+                    {
+                        stream = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                        stream.Close();
+                        result = true;
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("  File is currently opened,\n close the file and try again", "Failed",
+                                         MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        result = false;
+                    }
+                }
+            }
+
+            return result;
         }
 
         private void mskTxtTotal_TextChanged(object sender, EventArgs e)
@@ -421,7 +533,7 @@ namespace DeskJockey
             double shipCost = 0;
             Double.TryParse(mskTxtShipCostTotal.Text.Replace("$", String.Empty), out shipCost);
             if (shipCost > 0)
-                btnGenQuote.Enabled = true;
+                btnGenerate.Enabled = true;
         }
 
         private void rdoPayPal_CheckedChanged(object sender, EventArgs e)
@@ -439,7 +551,7 @@ namespace DeskJockey
             updateTransactionFee();
         }
 
-        private void exportQuoteToExcel()
+        private void exportQuoteToExcel(string filePath)
         {
             QuoteWorksheetBuilder wsBuilder = new QuoteWorksheetBuilder(mskTxtDiscountTotal, mskTxtShipCostTotal, rdoPayBank, rdoPayPal);
 
@@ -637,18 +749,30 @@ namespace DeskJockey
         {
             txtPONum.Enabled = true;
             cboCustomers.Enabled = true;
+            dteShipDate.Enabled = true;
+            txtShipVia.Enabled = true;
+            btnGenerate.Enabled = true;
+            txtTrackNum.Enabled = true;
         }
 
         private void rdoPackingList_CheckedChanged(object sender, EventArgs e)
         {
             txtPONum.Enabled = true;
             cboCustomers.Enabled = true;
+            dteShipDate.Enabled = true;
+            txtShipVia.Enabled = true;
+            btnGenerate.Enabled = true;
+            txtTrackNum.Enabled = true;
         }
 
-        private void rdoExcelSheet_CheckedChanged(object sender, EventArgs e)
+        private void rdoQuote_CheckedChanged(object sender, EventArgs e)
         {
             txtPONum.Enabled = false;
             cboCustomers.Enabled = false;
+            dteShipDate.Enabled = false;
+            txtShipVia.Enabled = false;
+            btnGenerate.Enabled = false;
+            txtTrackNum.Enabled = false;
         }
 
         private void rdoDBRemove_CheckedChanged(object sender, EventArgs e)

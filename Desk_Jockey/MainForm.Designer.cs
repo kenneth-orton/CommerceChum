@@ -88,10 +88,16 @@ namespace DeskJockey
             this.cboProductsEdit = new System.Windows.Forms.ComboBox();
             this.tabQuote = new System.Windows.Forms.TabPage();
             this.grpOutputSelection = new System.Windows.Forms.GroupBox();
+            this.txtTrackNum = new System.Windows.Forms.TextBox();
+            this.lblTrackNum = new System.Windows.Forms.Label();
+            this.dteShipDate = new System.Windows.Forms.DateTimePicker();
+            this.lblShipDate = new System.Windows.Forms.Label();
+            this.txtShipVia = new System.Windows.Forms.TextBox();
+            this.lblShipVia = new System.Windows.Forms.Label();
             this.lblPONum = new System.Windows.Forms.Label();
             this.txtPONum = new System.Windows.Forms.TextBox();
             this.cboCustomers = new System.Windows.Forms.ComboBox();
-            this.rdoExcelSheet = new System.Windows.Forms.RadioButton();
+            this.rdoQuote = new System.Windows.Forms.RadioButton();
             this.rdoPackingList = new System.Windows.Forms.RadioButton();
             this.rdoInvoice = new System.Windows.Forms.RadioButton();
             this.btnMoveItemDown = new System.Windows.Forms.Button();
@@ -113,7 +119,7 @@ namespace DeskJockey
             this.rdoIntl = new System.Windows.Forms.RadioButton();
             this.rdoDomestic = new System.Windows.Forms.RadioButton();
             this.mskTxtShipCost = new System.Windows.Forms.MaskedTextBox();
-            this.btnGenQuote = new System.Windows.Forms.Button();
+            this.btnGenerate = new System.Windows.Forms.Button();
             this.lstVwQuote = new System.Windows.Forms.ListView();
             this.mskTxtTotal = new System.Windows.Forms.MaskedTextBox();
             this.mskTxtShipCostTotal = new System.Windows.Forms.MaskedTextBox();
@@ -149,7 +155,7 @@ namespace DeskJockey
             this.tabDatabase.Controls.Add(this.grpInventoryEdit);
             this.tabDatabase.Location = new System.Drawing.Point(4, 22);
             this.tabDatabase.Name = "tabDatabase";
-            this.tabDatabase.Size = new System.Drawing.Size(547, 560);
+            this.tabDatabase.Size = new System.Drawing.Size(547, 634);
             this.tabDatabase.TabIndex = 2;
             this.tabDatabase.Text = "Database";
             this.tabDatabase.UseVisualStyleBackColor = true;
@@ -708,7 +714,7 @@ namespace DeskJockey
             this.tabQuote.Controls.Add(this.grpDiscount);
             this.tabQuote.Controls.Add(this.grpProdSelect);
             this.tabQuote.Controls.Add(this.grpShipping);
-            this.tabQuote.Controls.Add(this.btnGenQuote);
+            this.tabQuote.Controls.Add(this.btnGenerate);
             this.tabQuote.Controls.Add(this.lstVwQuote);
             this.tabQuote.Controls.Add(this.mskTxtTotal);
             this.tabQuote.Controls.Add(this.mskTxtShipCostTotal);
@@ -723,25 +729,81 @@ namespace DeskJockey
             this.tabQuote.Location = new System.Drawing.Point(4, 22);
             this.tabQuote.Name = "tabQuote";
             this.tabQuote.Padding = new System.Windows.Forms.Padding(3);
-            this.tabQuote.Size = new System.Drawing.Size(547, 560);
+            this.tabQuote.Size = new System.Drawing.Size(547, 593);
             this.tabQuote.TabIndex = 0;
             this.tabQuote.Text = "Quote";
             this.tabQuote.UseVisualStyleBackColor = true;
             // 
             // grpOutputSelection
             // 
+            this.grpOutputSelection.Controls.Add(this.txtTrackNum);
+            this.grpOutputSelection.Controls.Add(this.lblTrackNum);
+            this.grpOutputSelection.Controls.Add(this.dteShipDate);
+            this.grpOutputSelection.Controls.Add(this.lblShipDate);
+            this.grpOutputSelection.Controls.Add(this.txtShipVia);
+            this.grpOutputSelection.Controls.Add(this.lblShipVia);
             this.grpOutputSelection.Controls.Add(this.lblPONum);
             this.grpOutputSelection.Controls.Add(this.txtPONum);
             this.grpOutputSelection.Controls.Add(this.cboCustomers);
-            this.grpOutputSelection.Controls.Add(this.rdoExcelSheet);
+            this.grpOutputSelection.Controls.Add(this.rdoQuote);
             this.grpOutputSelection.Controls.Add(this.rdoPackingList);
             this.grpOutputSelection.Controls.Add(this.rdoInvoice);
             this.grpOutputSelection.Location = new System.Drawing.Point(3, 126);
             this.grpOutputSelection.Name = "grpOutputSelection";
-            this.grpOutputSelection.Size = new System.Drawing.Size(538, 55);
+            this.grpOutputSelection.Size = new System.Drawing.Size(538, 89);
             this.grpOutputSelection.TabIndex = 73;
             this.grpOutputSelection.TabStop = false;
             this.grpOutputSelection.Text = "Customer";
+            // 
+            // txtTrackNum
+            // 
+            this.txtTrackNum.Location = new System.Drawing.Point(411, 56);
+            this.txtTrackNum.Name = "txtTrackNum";
+            this.txtTrackNum.Size = new System.Drawing.Size(121, 20);
+            this.txtTrackNum.TabIndex = 12;
+            // 
+            // lblTrackNum
+            // 
+            this.lblTrackNum.AutoSize = true;
+            this.lblTrackNum.Location = new System.Drawing.Point(343, 59);
+            this.lblTrackNum.Name = "lblTrackNum";
+            this.lblTrackNum.Size = new System.Drawing.Size(62, 13);
+            this.lblTrackNum.TabIndex = 11;
+            this.lblTrackNum.Text = "Tracking #:";
+            // 
+            // dteShipDate
+            // 
+            this.dteShipDate.Enabled = false;
+            this.dteShipDate.Location = new System.Drawing.Point(190, 56);
+            this.dteShipDate.Name = "dteShipDate";
+            this.dteShipDate.Size = new System.Drawing.Size(147, 20);
+            this.dteShipDate.TabIndex = 10;
+            // 
+            // lblShipDate
+            // 
+            this.lblShipDate.AutoSize = true;
+            this.lblShipDate.Location = new System.Drawing.Point(127, 59);
+            this.lblShipDate.Name = "lblShipDate";
+            this.lblShipDate.Size = new System.Drawing.Size(57, 13);
+            this.lblShipDate.TabIndex = 8;
+            this.lblShipDate.Text = "Ship Date:";
+            // 
+            // txtShipVia
+            // 
+            this.txtShipVia.Enabled = false;
+            this.txtShipVia.Location = new System.Drawing.Point(62, 56);
+            this.txtShipVia.Name = "txtShipVia";
+            this.txtShipVia.Size = new System.Drawing.Size(59, 20);
+            this.txtShipVia.TabIndex = 7;
+            // 
+            // lblShipVia
+            // 
+            this.lblShipVia.AutoSize = true;
+            this.lblShipVia.Location = new System.Drawing.Point(7, 59);
+            this.lblShipVia.Name = "lblShipVia";
+            this.lblShipVia.Size = new System.Drawing.Size(49, 13);
+            this.lblShipVia.TabIndex = 6;
+            this.lblShipVia.Text = "Ship Via:";
             // 
             // lblPONum
             // 
@@ -772,16 +834,16 @@ namespace DeskJockey
             // 
             // rdoExcelSheet
             // 
-            this.rdoExcelSheet.AutoSize = true;
-            this.rdoExcelSheet.Checked = true;
-            this.rdoExcelSheet.Location = new System.Drawing.Point(221, 20);
-            this.rdoExcelSheet.Name = "rdoExcelSheet";
-            this.rdoExcelSheet.Size = new System.Drawing.Size(54, 17);
-            this.rdoExcelSheet.TabIndex = 2;
-            this.rdoExcelSheet.TabStop = true;
-            this.rdoExcelSheet.Text = "Quote";
-            this.rdoExcelSheet.UseVisualStyleBackColor = true;
-            this.rdoExcelSheet.CheckedChanged += new System.EventHandler(this.rdoExcelSheet_CheckedChanged);
+            this.rdoQuote.AutoSize = true;
+            this.rdoQuote.Checked = true;
+            this.rdoQuote.Location = new System.Drawing.Point(221, 20);
+            this.rdoQuote.Name = "rdoExcelSheet";
+            this.rdoQuote.Size = new System.Drawing.Size(54, 17);
+            this.rdoQuote.TabIndex = 2;
+            this.rdoQuote.TabStop = true;
+            this.rdoQuote.Text = "Quote";
+            this.rdoQuote.UseVisualStyleBackColor = true;
+            this.rdoQuote.CheckedChanged += new System.EventHandler(this.rdoQuote_CheckedChanged);
             // 
             // rdoPackingList
             // 
@@ -808,7 +870,7 @@ namespace DeskJockey
             // btnMoveItemDown
             // 
             this.btnMoveItemDown.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMoveItemDown.Location = new System.Drawing.Point(503, 357);
+            this.btnMoveItemDown.Location = new System.Drawing.Point(503, 391);
             this.btnMoveItemDown.Name = "btnMoveItemDown";
             this.btnMoveItemDown.Size = new System.Drawing.Size(36, 38);
             this.btnMoveItemDown.TabIndex = 14;
@@ -818,7 +880,7 @@ namespace DeskJockey
             // btnMoveItemUp
             // 
             this.btnMoveItemUp.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMoveItemUp.Location = new System.Drawing.Point(503, 187);
+            this.btnMoveItemUp.Location = new System.Drawing.Point(503, 221);
             this.btnMoveItemUp.Name = "btnMoveItemUp";
             this.btnMoveItemUp.Size = new System.Drawing.Size(36, 38);
             this.btnMoveItemUp.TabIndex = 13;
@@ -1027,22 +1089,22 @@ namespace DeskJockey
             this.mskTxtShipCost.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mskTxtShipCost_MouseClick);
             this.mskTxtShipCost.TextChanged += new System.EventHandler(this.mskTxtShipCost_TextChanged);
             // 
-            // btnGenQuote
+            // btnGenerate
             // 
-            this.btnGenQuote.Location = new System.Drawing.Point(466, 531);
-            this.btnGenQuote.Name = "btnGenQuote";
-            this.btnGenQuote.Size = new System.Drawing.Size(75, 23);
-            this.btnGenQuote.TabIndex = 15;
-            this.btnGenQuote.Text = "Generate";
-            this.btnGenQuote.UseVisualStyleBackColor = true;
-            this.btnGenQuote.Click += new System.EventHandler(this.btnGenQuote_Click);
+            this.btnGenerate.Location = new System.Drawing.Point(466, 565);
+            this.btnGenerate.Name = "btnGenerate";
+            this.btnGenerate.Size = new System.Drawing.Size(75, 23);
+            this.btnGenerate.TabIndex = 15;
+            this.btnGenerate.Text = "Generate";
+            this.btnGenerate.UseVisualStyleBackColor = true;
+            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
             // lstVwQuote
             // 
             this.lstVwQuote.FullRowSelect = true;
             this.lstVwQuote.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lstVwQuote.HideSelection = false;
-            this.lstVwQuote.Location = new System.Drawing.Point(7, 187);
+            this.lstVwQuote.Location = new System.Drawing.Point(7, 221);
             this.lstVwQuote.MultiSelect = false;
             this.lstVwQuote.Name = "lstVwQuote";
             this.lstVwQuote.Scrollable = false;
@@ -1055,7 +1117,7 @@ namespace DeskJockey
             // 
             // mskTxtTotal
             // 
-            this.mskTxtTotal.Location = new System.Drawing.Point(477, 505);
+            this.mskTxtTotal.Location = new System.Drawing.Point(477, 539);
             this.mskTxtTotal.Mask = "$99999";
             this.mskTxtTotal.Name = "mskTxtTotal";
             this.mskTxtTotal.ReadOnly = true;
@@ -1067,7 +1129,7 @@ namespace DeskJockey
             // 
             // mskTxtShipCostTotal
             // 
-            this.mskTxtShipCostTotal.Location = new System.Drawing.Point(477, 453);
+            this.mskTxtShipCostTotal.Location = new System.Drawing.Point(477, 487);
             this.mskTxtShipCostTotal.Mask = "$99999";
             this.mskTxtShipCostTotal.Name = "mskTxtShipCostTotal";
             this.mskTxtShipCostTotal.ReadOnly = true;
@@ -1079,7 +1141,7 @@ namespace DeskJockey
             // 
             // mskTxtTransFee
             // 
-            this.mskTxtTransFee.Location = new System.Drawing.Point(477, 479);
+            this.mskTxtTransFee.Location = new System.Drawing.Point(477, 513);
             this.mskTxtTransFee.Mask = "$99999";
             this.mskTxtTransFee.Name = "mskTxtTransFee";
             this.mskTxtTransFee.ReadOnly = true;
@@ -1091,7 +1153,7 @@ namespace DeskJockey
             // mskTxtDiscountTotal
             // 
             this.mskTxtDiscountTotal.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.mskTxtDiscountTotal.Location = new System.Drawing.Point(477, 426);
+            this.mskTxtDiscountTotal.Location = new System.Drawing.Point(477, 460);
             this.mskTxtDiscountTotal.Mask = "$99999";
             this.mskTxtDiscountTotal.Name = "mskTxtDiscountTotal";
             this.mskTxtDiscountTotal.ReadOnly = true;
@@ -1104,7 +1166,7 @@ namespace DeskJockey
             // mskTxtSubtotal
             // 
             this.mskTxtSubtotal.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.mskTxtSubtotal.Location = new System.Drawing.Point(477, 400);
+            this.mskTxtSubtotal.Location = new System.Drawing.Point(477, 434);
             this.mskTxtSubtotal.Mask = "$99999";
             this.mskTxtSubtotal.Name = "mskTxtSubtotal";
             this.mskTxtSubtotal.ReadOnly = true;
@@ -1118,7 +1180,7 @@ namespace DeskJockey
             // 
             this.lblDiscount.AutoSize = true;
             this.lblDiscount.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDiscount.Location = new System.Drawing.Point(412, 430);
+            this.lblDiscount.Location = new System.Drawing.Point(412, 464);
             this.lblDiscount.Name = "lblDiscount";
             this.lblDiscount.Size = new System.Drawing.Size(61, 13);
             this.lblDiscount.TabIndex = 67;
@@ -1128,7 +1190,7 @@ namespace DeskJockey
             // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotal.Location = new System.Drawing.Point(433, 509);
+            this.lblTotal.Location = new System.Drawing.Point(433, 543);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(40, 13);
             this.lblTotal.TabIndex = 66;
@@ -1138,7 +1200,7 @@ namespace DeskJockey
             // 
             this.lblShippingCost.AutoSize = true;
             this.lblShippingCost.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblShippingCost.Location = new System.Drawing.Point(413, 456);
+            this.lblShippingCost.Location = new System.Drawing.Point(413, 490);
             this.lblShippingCost.Name = "lblShippingCost";
             this.lblShippingCost.Size = new System.Drawing.Size(60, 13);
             this.lblShippingCost.TabIndex = 65;
@@ -1148,7 +1210,7 @@ namespace DeskJockey
             // 
             this.lblTransFee.AutoSize = true;
             this.lblTransFee.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTransFee.Location = new System.Drawing.Point(399, 476);
+            this.lblTransFee.Location = new System.Drawing.Point(399, 510);
             this.lblTransFee.Name = "lblTransFee";
             this.lblTransFee.Size = new System.Drawing.Size(74, 26);
             this.lblTransFee.TabIndex = 64;
@@ -1159,7 +1221,7 @@ namespace DeskJockey
             // 
             this.lblSubTotal.AutoSize = true;
             this.lblSubTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSubTotal.Location = new System.Drawing.Point(415, 404);
+            this.lblSubTotal.Location = new System.Drawing.Point(415, 438);
             this.lblSubTotal.Name = "lblSubTotal";
             this.lblSubTotal.Size = new System.Drawing.Size(58, 13);
             this.lblSubTotal.TabIndex = 63;
@@ -1172,7 +1234,7 @@ namespace DeskJockey
             this.tabFrame.Location = new System.Drawing.Point(13, 7);
             this.tabFrame.Name = "tabFrame";
             this.tabFrame.SelectedIndex = 0;
-            this.tabFrame.Size = new System.Drawing.Size(555, 586);
+            this.tabFrame.Size = new System.Drawing.Size(555, 619);
             this.tabFrame.TabIndex = 0;
             this.tabFrame.TabStop = false;
             this.tabFrame.Tag = "";
@@ -1181,7 +1243,7 @@ namespace DeskJockey
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(580, 605);
+            this.ClientSize = new System.Drawing.Size(580, 631);
             this.Controls.Add(this.tabFrame);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -1260,11 +1322,11 @@ namespace DeskJockey
         private System.Windows.Forms.RadioButton rdoIntl;
         private System.Windows.Forms.RadioButton rdoDomestic;
         private System.Windows.Forms.MaskedTextBox mskTxtShipCost;
-        private System.Windows.Forms.Button btnGenQuote;
+        private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.ListView lstVwQuote;
         private System.Windows.Forms.TabControl tabFrame;
         private System.Windows.Forms.GroupBox grpOutputSelection;
-        private System.Windows.Forms.RadioButton rdoExcelSheet;
+        private System.Windows.Forms.RadioButton rdoQuote;
         private System.Windows.Forms.RadioButton rdoPackingList;
         private System.Windows.Forms.RadioButton rdoInvoice;
         private System.Windows.Forms.ComboBox cboCustomers;
@@ -1314,6 +1376,12 @@ namespace DeskJockey
         private System.Windows.Forms.TextBox txtBillPayTerms;
         private System.Windows.Forms.Label lblPONum;
         private System.Windows.Forms.TextBox txtPONum;
+        private System.Windows.Forms.DateTimePicker dteShipDate;
+        private System.Windows.Forms.Label lblShipDate;
+        private System.Windows.Forms.TextBox txtShipVia;
+        private System.Windows.Forms.Label lblShipVia;
+        private System.Windows.Forms.TextBox txtTrackNum;
+        private System.Windows.Forms.Label lblTrackNum;
     }
 }
 
