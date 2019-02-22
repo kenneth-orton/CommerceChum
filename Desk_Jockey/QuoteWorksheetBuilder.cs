@@ -10,44 +10,87 @@ namespace DeskJockey
     {
         private static ExcelPackage excelPkg; 
         private static ExcelWorksheet excelWs; 
-        private static string wkshtName = "Quote";
         private ExcelRange cell;
+
         private static int finalProductRow;
         private static int rowIndex;
         private static int colIndex;
-        private bool subtotalCellExists;
-        private double discountField;
-        private double shippingField;
-        private bool payByBank;
-        private bool payByPaypal;
+
         private int totalRow;
         private int transFeeRow;
         private int shippingRow;
         private int discountRow;
         private int subtotalRow;
 
-        public QuoteWorksheetBuilder(MaskedTextBox mskTxtDiscountTotal, MaskedTextBox mskTxtShipCostTotal, RadioButton rdoPayBank, RadioButton rdoPayPal)
+        private bool subtotalCellExists;
+        private bool payByBank;
+        private bool payByPaypal;
+
+        private double discountField;
+        private double shippingField;
+
+        private string transFeeCalc;
+        private string filePath;
+        private string discountCalc;
+        private static string wkshtName = "Quote";
+
+        private ListView lstVwQuote;
+        private CheckBox chkDiscPercent;
+        private RadioButton rdoPayCheck;
+
+        private Label lblTotal;
+        private Label lblShippingCost;
+        private Label lblSubTotal;
+        private Label lblDiscount;
+        private Label lblTransFee;
+
+        private MaskedTextBox mskTxtDiscountTotal;
+        private MaskedTextBox mskTxtShipCostTotal;
+        private MaskedTextBox mskTxtTransFee;
+
+        public QuoteWorksheetBuilder(MaskedTextBox mskTxtDiscountTotal, MaskedTextBox mskTxtShipCostTotal, RadioButton rdoPayBank, RadioButton rdoPayPal,
+                                     ListView lstVwQuote, Label lblSubTotal, Label lblDiscount, CheckBox chkDiscPercent, string discountCalc, string filePath,
+                                     Label lblShippingCost, RadioButton rdoPayCheck, Label lblTransFee, MaskedTextBox mskTxtTransFee, string transFeeCalc, Label lblTotal)
         {
             excelPkg = new ExcelPackage();
             excelPkg.Workbook.Worksheets.Add(wkshtName);
             excelWs = excelPkg.Workbook.Worksheets[1];
             excelWs.Name = wkshtName;
-            finalProductRow = 0;
-            rowIndex = 1;
-            colIndex = 1;
-            subtotalCellExists = false;
-            discountField = parseDiscountField(mskTxtDiscountTotal);
-            shippingField = parseShippingField(mskTxtShipCostTotal);
+
+            this.lstVwQuote = lstVwQuote;
+            this.lblSubTotal = lblSubTotal;
+            this.lblDiscount = lblDiscount;
+            this.mskTxtDiscountTotal = mskTxtDiscountTotal;
+            this.chkDiscPercent = chkDiscPercent;
+            this.discountCalc = discountCalc;
+            this.lblShippingCost = lblShippingCost;
+            this.mskTxtShipCostTotal = mskTxtShipCostTotal;
+            this.rdoPayCheck = rdoPayCheck;
+            this.lblTransFee = lblTransFee;
+            this.mskTxtTransFee = mskTxtTransFee;
+            this.transFeeCalc = transFeeCalc;
+            this.filePath = filePath;
+            this.lblTotal = lblTotal;
+
+            discountField = Double.Parse(mskTxtDiscountTotal.Text.Replace("$", ""));
+            shippingField = Double.Parse(mskTxtShipCostTotal.Text.Replace("$", ""));
+
             payByBank = rdoPayBank.Checked;
             payByPaypal = rdoPayPal.Checked;
+
             totalRow = 0;
             transFeeRow = 0;
             shippingRow = 0;
             discountRow = 0;
             subtotalRow = 0;
-    }
+            finalProductRow = 0;
+            rowIndex = 1;
+            colIndex = 1;
 
-        public void insertHeader(ListView lstVwQuote)
+            subtotalCellExists = false;
+        }
+
+        public void insertHeader()
         {
             foreach (ColumnHeader header in lstVwQuote.Columns)
             {
@@ -58,7 +101,7 @@ namespace DeskJockey
             }
         }
 
-        public void insertProductRows(ListView lstVwQuote)
+        public void insertProductRows()
         {
             double totalOfProducts = 0;
             rowIndex = 2;
@@ -95,7 +138,7 @@ namespace DeskJockey
             cell = excelWs.Cells[rowIndex, 4];
         }
 
-        public void insertSubtotalRow(Label lblSubTotal)
+        public void insertSubtotalRow()
         {
             if (discountField > 0 || shippingField > 0 || payByBank || payByPaypal)
             {
@@ -110,7 +153,7 @@ namespace DeskJockey
             }
         }
 
-        public void insertDiscountRow(Label lblDiscount, MaskedTextBox mskTxtDiscountTotal, CheckBox chkDiscPercent, string discountCalc)
+        public void insertDiscountRow()
         {
             if (discountField > 0)
             {
@@ -129,7 +172,7 @@ namespace DeskJockey
             }
         }
 
-        public void insertShippingRow(Label lblShippingCost, MaskedTextBox mskTxtShipCostTotal)
+        public void insertShippingRow()
         {
             if (shippingField > 0)
             {
@@ -144,7 +187,7 @@ namespace DeskJockey
             }
         }
 
-        public void insertTransactionFeeRow(RadioButton rdoPayCheck, Label lblTransFee, MaskedTextBox mskTxtTransFee, string transFeeCalc)
+        public void insertTransactionFeeRow()
         {
             if (!rdoPayCheck.Checked)
             {
@@ -172,7 +215,7 @@ namespace DeskJockey
             }
         }
 
-        public void insertTotalRow(Label lblTotal)
+        public void insertTotalRow()
         {
             totalRow = rowIndex;
             if (subtotalCellExists)
@@ -198,7 +241,7 @@ namespace DeskJockey
             }
         }
 
-        public void saveExcelFile(string filePath)
+        public void saveExcelFile()
         {
             excelWs.Cells[excelWs.Dimension.Address].AutoFitColumns();
 
@@ -215,19 +258,5 @@ namespace DeskJockey
                 MessageBox.Show("Export to Excel Failed: \n" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private double parseDiscountField(MaskedTextBox mskTxtDiscountTotal)
-        {
-            return Double.Parse(mskTxtDiscountTotal.Text.Replace("$", ""));
-        }
-
-        private double parseShippingField(MaskedTextBox mskTxtShipCostTotal)
-        {
-            double shipCost = 0.0;
-            if (Double.TryParse(mskTxtShipCostTotal.Text.Replace("$", ""), out shipCost))
-                shipCost = Double.Parse(mskTxtShipCostTotal.Text.Replace("$", ""));
-            return shipCost;
-        }
-
     }
 }

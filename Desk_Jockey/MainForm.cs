@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 
 namespace DeskJockey
@@ -86,7 +85,7 @@ namespace DeskJockey
             {
                 case CBOBoxID.ONE:
                     rsProduct = dbMngr.products;
-                    //getSelectedProduct(comboBox);
+
                     foreach (var product in rsProduct)
                     {
                         if (product.active)
@@ -98,7 +97,7 @@ namespace DeskJockey
                     break;
                 case CBOBoxID.TWO:
                     rsProduct = dbMngr.products;
-                    //getSelectedProduct(comboBox);
+
                     foreach (var product in rsProduct)
                     {
                         if (product.active)
@@ -115,7 +114,7 @@ namespace DeskJockey
                     break;
                 case CBOBoxID.THREE:
                     rsCustomer = dbMngr.customers;
-                    //getSelectedCustomer(comboBox);
+                    
                     foreach (var customer in rsCustomer)
                     {
                         if (customer.active)
@@ -256,10 +255,8 @@ namespace DeskJockey
                 mskTxtTotal.Text = "0";
                 chkDiscPercent.Checked = false;
                 grpPayType.Enabled = false;
-
                 btnGenerate.Enabled = rdoQuote.Checked ? false : true;
             }
-
             updateSubtotal();
         }
 
@@ -429,61 +426,22 @@ namespace DeskJockey
                 MessageBox.Show("  Error: " + result + "entry not valid. \n Re-enter information and try again.", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
-
             return true;
-        }
-
-        private string buildBillAddressString(BillAddress address)
-        {
-            StringBuilder output = new StringBuilder();
-
-            output.Append(address.contactName + '\n');
-            output.Append(address.addr1 + '\n');
-            if (address.addr2.Trim() != "")
-                output.Append(address.addr2 + '\n');
-            output.Append(address.city + ", ");
-            output.Append(address.state + " ");
-            output.Append(address.zip + '\n');
-            output.Append(address.phoneNo);
-
-            return output.ToString();
-        }
-
-        private string buildShipAddressString(ShipAddress address)
-        {
-            StringBuilder output = new StringBuilder();
-
-            output.Append(address.contactName + '\n');
-            output.Append(address.addr1 + '\n');
-            if(address.addr2.Trim() != "")
-                output.Append(address.addr2 + '\n');
-            output.Append(address.city + ", ");
-            output.Append(address.state + " ");
-            output.Append(address.zip + '\n');
-            output.Append(address.phoneNo);
-
-            return output.ToString();
         }
 
         private void createExcelInvoice(string templateFilePath)
         {
-            int nextInvoiceNum = DatabaseManager.getNextInvoiceNumber();
-            string companyName = cboCustomers.SelectedItem.ToString();
-
-            dteShipDate.Format = DateTimePickerFormat.Custom;
+            //dteShipDate.Format = DateTimePickerFormat.Custom;
             //dteShipDate.CustomFormat = "yyyy-MM-dd hh:mm:ss";
-
             getSelectedCustomer(cboDBCustomers);
-            string billAddr = buildBillAddressString(selectedCustomer.billAddress);
-            string shipAddr = buildShipAddressString(selectedCustomer.shipAddress);
 
-            mskTxtCustomerID.Text = selectedCustomer.customerID.ToString();
+            int nextInvoiceNum = DatabaseManager.getNextInvoiceNumber();
+            string outFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), selectedCustomer.companyName + "-" + nextInvoiceNum + ".xlsx");
 
-            InvoiceWorksheetBuilder invoiceWksht = new InvoiceWorksheetBuilder(templateFilePath);
-            invoiceWksht.insertCellData(lstVwQuote, dteShipDate.Text, txtShipVia.Text, txtTrackNum.Text, txtPONum.Text, nextInvoiceNum, selectedCustomer.payTerms, billAddr, shipAddr);
-
-            string outFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), companyName + "-" + nextInvoiceNum + ".xlsx");
-            invoiceWksht.saveExcelFile(outFileName);
+            InvoiceWorksheetBuilder invoiceWksht = new InvoiceWorksheetBuilder(templateFilePath, lstVwQuote, dteShipDate.Text, txtShipVia.Text, txtTrackNum.Text, 
+                                                                               txtPONum.Text, nextInvoiceNum, selectedCustomer, outFileName);
+            invoiceWksht.insertCellData();
+            invoiceWksht.saveExcelFile();
         }
 
         private bool fileAvailable(string filePath)
@@ -524,7 +482,6 @@ namespace DeskJockey
                     }
                 }
             }
-
             return result;
         }
 
@@ -553,16 +510,17 @@ namespace DeskJockey
 
         private void exportQuoteToExcel(string filePath)
         {
-            QuoteWorksheetBuilder wsBuilder = new QuoteWorksheetBuilder(mskTxtDiscountTotal, mskTxtShipCostTotal, rdoPayBank, rdoPayPal);
-
-            wsBuilder.insertHeader(lstVwQuote);
-            wsBuilder.insertProductRows(lstVwQuote);
-            wsBuilder.insertSubtotalRow(lblSubTotal);
-            wsBuilder.insertDiscountRow(lblDiscount, mskTxtDiscountTotal, chkDiscPercent, discountCalc);
-            wsBuilder.insertShippingRow(lblShippingCost, mskTxtShipCostTotal);
-            wsBuilder.insertTransactionFeeRow(rdoPayCheck, lblTransFee, mskTxtTransFee, transFeeCalc);
-            wsBuilder.insertTotalRow(lblTotal);
-            wsBuilder.saveExcelFile(filePath);
+            QuoteWorksheetBuilder wsBuilder = new QuoteWorksheetBuilder(mskTxtDiscountTotal, mskTxtShipCostTotal, rdoPayBank, rdoPayPal, lstVwQuote,
+                                                                        lblSubTotal, lblDiscount, chkDiscPercent, discountCalc, filePath, lblShippingCost,
+                                                                        rdoPayCheck, lblTransFee, mskTxtTransFee, transFeeCalc, lblTotal);
+            wsBuilder.insertHeader();
+            wsBuilder.insertProductRows();
+            wsBuilder.insertSubtotalRow();
+            wsBuilder.insertDiscountRow();
+            wsBuilder.insertShippingRow();
+            wsBuilder.insertTransactionFeeRow();
+            wsBuilder.insertTotalRow();
+            wsBuilder.saveExcelFile();
         }
 
         private void btnMoveItemUp_Click(object sender, EventArgs e)
@@ -789,7 +747,7 @@ namespace DeskJockey
         private void rdoAddCustomer_CheckedChanged(object sender, EventArgs e)
         {
             btnCustomerSubmit.Enabled = false;
-            customerInputChecks();
+            addressInputChecks();
         }
 
         private void rdoRemoveCustomer_CheckedChanged(object sender, EventArgs e)
@@ -803,7 +761,7 @@ namespace DeskJockey
             {
                 int customerID = 0;
                 Int32.TryParse(mskTxtCustomerID.Text, out customerID);
-                Customer newCustomer = new Customer(customerID, cboDBCustomers.Text, /*.SelectedItem.ToString()*/ txtBillPayTerms.Text, chkSameAsBilling.Checked);
+                Customer newCustomer = new Customer(customerID, cboDBCustomers.Text, txtBillPayTerms.Text, chkSameAsBilling.Checked);
                 newCustomer.billAddress = new BillAddress(customerID, txtBillCoName.Text, txtBillAddr1.Text, txtBillAddr2.Text, txtBillCity.Text, txtBillState.Text, txtBillZip.Text, txtBillCountry.Text, txtBillPhoneNumber.Text);
                 newCustomer.shipAddress = new ShipAddress(newCustomer.billAddress);
 
@@ -812,7 +770,6 @@ namespace DeskJockey
                     newCustomer.shipAddress = new ShipAddress(customerID, txtShipCoName.Text, txtShipAddr1.Text, txtShipAddr2.Text, txtShipCity.Text, txtShipState.Text, txtShipZip.Text, txtShipCountry.Text, txtShipPhoneNumber.Text);
                     newCustomer.addressSame = false;
                 }
-
                 dbMngr.insertCustomer(newCustomer);
             }
 
@@ -833,7 +790,7 @@ namespace DeskJockey
             initQuoteTab();
         }
 
-        private void customerInputChecks()
+        private void addressInputChecks()
         {
             btnCustomerSubmit.Enabled = false;
 
@@ -856,91 +813,91 @@ namespace DeskJockey
         private void txtBillCoName_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtBillAddr1_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtBillCity_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtBillState_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtBillZip_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtBillCountry_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtBillPhoneNumber_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtBillPayTerms_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtShipCoName_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtShipAddr1_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtShipCity_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtShipState_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtShipZip_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void txtShipCountry_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
 
         private void mskTxtCustomerID_TextChanged(object sender, EventArgs e)
         {
             if (rdoAddCustomer.Checked)
-                customerInputChecks();
+                addressInputChecks();
         }
     }
 }

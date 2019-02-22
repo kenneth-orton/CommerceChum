@@ -3,6 +3,7 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.Windows.Forms;
 using System.IO;
+using System.Text;
 
 namespace DeskJockey
 {
@@ -11,18 +12,72 @@ namespace DeskJockey
         private static ExcelPackage excelPkg; 
         private static ExcelWorksheet excelWs; 
         private ExcelRange cell;
+
         private static int startProductRow = 23;
         private static int finalProductRow;
+        private int nextInvoiceNum;
 
-        public InvoiceWorksheetBuilder(string templateFilePath)
+        private string shipDate;
+        private string shipVia;
+        private string trackNum;
+        private string poNum;
+        private string payTerms;
+        private string outputFile;
+
+        private ListView lstVwQuote;
+        private Customer customer;
+
+        public InvoiceWorksheetBuilder(string templateFilePath, ListView lstVwQuote, string shipDate, string shipVia, string trackNum, string poNum, 
+                                       int nextInvoiceNum, Customer customer, string outputFile)
         {                     
             FileInfo fileInfo = new FileInfo(templateFilePath);
             excelPkg = new ExcelPackage(fileInfo);
             excelWs = excelPkg.Workbook.Worksheets[1];
+
+            this.lstVwQuote = lstVwQuote;
+            this.shipDate = shipDate;
+            this.shipVia = shipVia;
+            this.trackNum = trackNum;
+            this.poNum = poNum;
+            this.nextInvoiceNum = nextInvoiceNum;
+            this.payTerms = customer.payTerms;
+            this.customer = customer;
+            this.outputFile = outputFile;
         }
 
-        public void insertCellData(ListView lstVwQuote, string shipDate, string shipVia, string trackNum, string poNum, int nextInvoiceNum, 
-                                   string payTerms, string billAddr, string shipAddr)
+        private string buildBillAddressString(BillAddress address)
+        {
+            StringBuilder output = new StringBuilder();
+
+            output.Append(address.contactName + '\n');
+            output.Append(address.addr1 + '\n');
+            if (address.addr2.Trim() != "")
+                output.Append(address.addr2 + '\n');
+            output.Append(address.city + ", ");
+            output.Append(address.state + " ");
+            output.Append(address.zip + '\n');
+            output.Append(address.phoneNo);
+
+            return output.ToString();
+        }
+
+        private string buildShipAddressString(ShipAddress address)
+        {
+            StringBuilder output = new StringBuilder();
+
+            output.Append(address.contactName + '\n');
+            output.Append(address.addr1 + '\n');
+            if (address.addr2.Trim() != "")
+                output.Append(address.addr2 + '\n');
+            output.Append(address.city + ", ");
+            output.Append(address.state + " ");
+            output.Append(address.zip + '\n');
+            output.Append(address.phoneNo);
+
+            return output.ToString();
+        }
+
+        public void insertCellData()
         {
             double totalOfProducts = 0;
             int rowIndex = startProductRow;
@@ -49,10 +104,10 @@ namespace DeskJockey
             sheetCell.Value = shipDate;
 
             sheetCell = excelWs.Cells[15, 1]; // bill addr
-            sheetCell.Value = billAddr;
-
+            sheetCell.Value = buildBillAddressString(customer.billAddress);
+ 
             sheetCell = excelWs.Cells[15, 16]; // ship addr
-            sheetCell.Value = shipAddr;
+            sheetCell.Value = buildShipAddressString(customer.shipAddress);
             
             sheetCell = excelWs.Cells[45, 24]; // subtotal cell
             sheetCell.Formula = "SUM(X23:X44)";
@@ -103,15 +158,15 @@ namespace DeskJockey
             cell = excelWs.Cells[rowIndex, 4];
         }
 
-        public void saveExcelFile(string filePath)
+        public void saveExcelFile()
         {
             // Save and open the Excel file
             try
             {
                 Byte[] bin = excelPkg.GetAsByteArray();
-                File.WriteAllBytes(filePath, bin);
+                File.WriteAllBytes(outputFile, bin);
                 MessageBox.Show("Export to Excel Success", "Process Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                System.Diagnostics.Process.Start(filePath);
+                System.Diagnostics.Process.Start(outputFile);
             }
             catch (Exception ex)
             {
