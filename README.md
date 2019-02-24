@@ -1,4 +1,4 @@
-# Desk_Jockey
+# CommerceChum
 
 <p align="center">
   <img src="/img/desk_jockey.PNG" width="500"/>
