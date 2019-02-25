@@ -48,7 +48,7 @@ namespace CommerceChum
             cboProducts.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
         }
 
-        private enum CBOBoxID { PRODUCTS, CUSTOMERS, ORDER_IDS, FOUR, FIVE };
+        private enum CBOBoxID { PRODUCTS, CUSTOMERS, ORDER_IDS, PRODUCTS_SP, FIVE };
         private void initDBTab()
         {
             populateFormCombobox(cboProductsEdit, CBOBoxID.PRODUCTS);
@@ -91,6 +91,18 @@ namespace CommerceChum
             {
                 case CBOBoxID.PRODUCTS:
                     rsProduct = dbMngr.products;
+
+                    foreach (var product in rsProduct)
+                    {
+                        if (product.active)
+                            comboBox.Items.Insert(i++, product.name);
+                    }
+
+                    if (comboBox.Items.Count > 0)
+                        comboBox.SelectedIndex = 1;
+                    break;
+                case CBOBoxID.PRODUCTS_SP:
+                    rsProduct = dbMngr.specialPriceProducts;
 
                     foreach (var product in rsProduct)
                     {
@@ -395,6 +407,7 @@ namespace CommerceChum
                 string filePath = System.IO.Path.Combine(folder, "InvoiceTemplate.xlsx");
                 if (fileAvailable(filePath) && checkUserInput())
                 {
+
                     createExcelInvoice(filePath);
 
                     if (chkInvAddToDB.Checked)
@@ -586,8 +599,8 @@ namespace CommerceChum
 
         private void cboProductsEdit_SelectedIndexChanged(object sender, EventArgs e)
         {
+            rdoQuote.Checked = true;
             getSelectedProduct(cboProductsEdit);
-            cboProducts.SelectedIndex = cboProductsEdit.SelectedIndex;
 
             txtDBPartName.Text = txtDBPartDesc.Text = mskTxtDBPrice.Text = txtPartName.Text = mskTextSpecialPrice.Text = "";
 
@@ -737,6 +750,11 @@ namespace CommerceChum
             btnGenerate.Enabled = true;
             txtTrackNum.Enabled = true;
             chkInvAddToDB.Enabled = true;
+
+            if (rdoInvoice.Checked && selectedCustomer.specialPricing)
+            {
+                populateFormCombobox(cboProducts, CBOBoxID.PRODUCTS_SP);
+            }
         }
 
         private void rdoPackingList_CheckedChanged(object sender, EventArgs e)
@@ -759,6 +777,9 @@ namespace CommerceChum
             btnGenerate.Enabled = false;
             txtTrackNum.Enabled = false;
             chkInvAddToDB.Enabled = false;
+
+            if (rdoQuote.Checked)
+                populateFormCombobox(cboProducts, CBOBoxID.PRODUCTS);
         }
 
         private void rdoDBRemove_CheckedChanged(object sender, EventArgs e)

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CommerceChum
 {
     [Table("product")]
-    public class Product
+    class Product
     {
         [Key]
         [Column("productID")]
@@ -17,6 +17,8 @@ namespace CommerceChum
         public double price { get; set; }
         [Column("active")]
         public bool active { get; set; }
+        //[ForeignKey("productID")]
+        //public virtual SpecialPrice specialPrice { get; set; }
 
         public Product()
         {

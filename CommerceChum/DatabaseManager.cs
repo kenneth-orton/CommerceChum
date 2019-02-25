@@ -58,6 +58,26 @@ namespace CommerceChum
             }
         }
 
+        public List<Product> specialPriceProducts
+        {
+            get
+            {
+                List<Product> products = new List<Product>();
+                using (var context = new dbContext())
+                {
+                    var result = (from p in context.Products
+                                  join sp in context.SpecialPrices on p.productID equals sp.productID
+                                  where p.active == true
+                                  select new { p.productID, p.name, p.description, sp.price, p.active }).ToList();
+
+                    foreach (var item in result)
+                        products.Add(new Product(item.productID, item.name, item.description, item.price));
+
+                    return products;
+                }
+            }
+        }
+
         public List<OrderHistory> orders
         {
             get
