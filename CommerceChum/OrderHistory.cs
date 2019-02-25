@@ -8,6 +8,7 @@ namespace CommerceChum
     class OrderHistory
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("orderID")]
         public int orderID { get; set; }
         [Column("customerID")]
@@ -20,9 +21,8 @@ namespace CommerceChum
         public string shipType { get; set; }
         [Column("shipDate")]
         public DateTime shipDate { get; set; }
-        [Required]
+        [ForeignKey("customerID")]
         public virtual Customer customer { get; set; }
-        public virtual Manifest manifest { get; set; }
 
         public OrderHistory()
         {

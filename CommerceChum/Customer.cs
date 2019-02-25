@@ -7,6 +7,7 @@ namespace CommerceChum
     class Customer
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("customerID")]
         public int customerID { get; set; }
         [Column("contactName")]

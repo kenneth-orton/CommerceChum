@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.SQLite;
 using System.Linq;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Text;
 
 namespace CommerceChum
 {
@@ -11,7 +12,6 @@ namespace CommerceChum
     {
         private static string folder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         private static string pathToDB = System.IO.Path.Combine(folder, "sales_manager.db");
-
         public dbContext() : base(new SQLiteConnection()
             {
                 ConnectionString = new SQLiteConnectionStringBuilder() {
@@ -38,6 +38,8 @@ namespace CommerceChum
 
     class DatabaseManager
     {
+        public int nextInvoiceNumber { get; set; }
+
         public List<Product> products
         {
             get
@@ -53,6 +55,15 @@ namespace CommerceChum
             {
                 using (var context = new dbContext())
                     return context.Customers.Include("BillAddress").Include("ShipAddress").Select(row => row).ToList();
+            }
+        }
+
+        public List<OrderHistory> orders
+        {
+            get
+            {
+                using (var context = new dbContext())
+                    return context.OrderHistory.Select(row => row).Distinct().OrderByDescending(x => x.shipDate).ToList();
             }
         }
 
@@ -84,7 +95,7 @@ namespace CommerceChum
             }
         }
 
-        public static void insertSpecialPrice(SpecialPrice specialPrice)
+        public void insertSpecialPrice(SpecialPrice specialPrice)
         {
             using (var context = new dbContext())
             {
@@ -100,7 +111,62 @@ namespace CommerceChum
             }
         }
 
-        public static int getProductID(string productName)
+        public void insertOrder(OrderHistory newOrder)
+        {
+            using (var context = new dbContext())
+            {
+                if (orderExists(newOrder.poNum))
+                {
+                    var order = context.OrderHistory.FirstOrDefault(o => o.poNum == newOrder.poNum);
+                    if (!order.Equals(newOrder))
+                    {
+                        order.customerID = newOrder.customerID;
+                        order.poNum = newOrder.poNum;
+                        order.trackNum = newOrder.trackNum;
+                        order.shipType = newOrder.shipType;
+                        order.shipDate = newOrder.shipDate;
+                    }
+                }
+                else
+                    context.OrderHistory.Add(newOrder);
+
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch
+                {
+                    throw new SQLiteException();
+                }
+            }
+        }
+
+        private void deleteOrderRecord(int orderID)
+        {
+            using (var context = new dbContext())
+            {
+                var order = context.OrderHistory.FirstOrDefault(o => o.orderID == orderID);
+                context.OrderHistory.Remove(order);
+                context.SaveChanges();
+            }
+        }
+
+        private int getOrderID(string poNum)
+        {
+            using (var context = new dbContext())
+            {
+                var orderID = context.OrderHistory.FirstOrDefault(o => o.poNum == poNum);
+                return orderID.orderID;
+            }
+        }
+
+        public bool orderExists(string poNum)
+        {
+            using (var context = new dbContext())
+                return context.OrderHistory.Where(o => o.poNum == poNum).Any();
+        }
+
+        public int getProductID(string productName)
         {
             if (!partExists(productName))
                 return -1;
@@ -118,12 +184,11 @@ namespace CommerceChum
                 return context.Products.Where(p => p.name == productName).Any();
         }
 
-        public static bool customerExists(int customerID)
+        public bool customerExists(int customerID)
         {
             using (var context = new dbContext())
                 return context.Customers.Where(c => c.customerID == customerID).Any();
         }
-
 
         public void removeCustomer(Customer selectedCustomer)
         {
@@ -144,12 +209,28 @@ namespace CommerceChum
                     var customer = context.Customers.Include("BillAddress").Include("ShipAddress").FirstOrDefault(c => c.companyName == newCustomer.companyName);
                     newCustomer.customerID = customer.customerID;
                     if (!customer.Equals(newCustomer))
-                        customer = newCustomer;
+                    {
+                        customer.customerID = newCustomer.customerID;
+                        customer.contactName = newCustomer.contactName;
+                        customer.companyName = newCustomer.companyName;
+                        customer.payTerms = newCustomer.payTerms;
+                        customer.addressSame = newCustomer.addressSame;
+                        customer.specialPricing = newCustomer.specialPricing;
+                        customer.billAddress = newCustomer.billAddress;
+                        customer.shipAddress = newCustomer.shipAddress;
+                    }
                 }
                 else
                     context.Customers.Add(newCustomer);
 
-                context.SaveChanges();
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch
+                {
+                    throw new SQLiteException();
+                }
             }
         }
 
@@ -159,23 +240,20 @@ namespace CommerceChum
                 return context.Customers.Where(c => c.companyName == companyName).Any();
         }
 
-        public static int getNextInvoiceNumber()
+        public int getNextInvoiceNumber()
         {
-            int lastOrderID = 0;
-
             using (var context = new dbContext())
             {
                 try
                 {
-                    lastOrderID = context.OrderHistory.Max(id => id.orderID);
+                    nextInvoiceNumber = context.OrderHistory.Max(id => id.orderID);
                 }
                 catch
                 {
-                    lastOrderID = 9995; // new customer invoices start at 10000
+                    nextInvoiceNumber = 9995; // new customer invoices start at 10000
                 }
             }
-
-            return lastOrderID + 5;
+            return nextInvoiceNumber + 5;
         }
     }
 }

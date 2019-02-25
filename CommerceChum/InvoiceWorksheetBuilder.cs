@@ -21,7 +21,6 @@ namespace CommerceChum
         private string shipVia;
         private string trackNum;
         private string poNum;
-        private string payTerms;
         private string outputFile;
 
         private ListView lstVwQuote;
@@ -40,7 +39,6 @@ namespace CommerceChum
             this.trackNum = trackNum;
             this.poNum = poNum;
             this.nextInvoiceNum = nextInvoiceNum;
-            this.payTerms = customer.payTerms;
             this.customer = customer;
             this.outputFile = outputFile;
         }
@@ -94,8 +92,14 @@ namespace CommerceChum
             sheetCell = excelWs.Cells[11, 22]; // tracking number
             sheetCell.Value = trackNum;
 
+            sheetCell = excelWs.Cells[11, 1]; // customer name 
+            sheetCell.Value = customer.contactName;
+
+            sheetCell = excelWs.Cells[11, 5]; // customer number
+            sheetCell.Value = customer.customerID;
+
             sheetCell = excelWs.Cells[11, 9]; // payment terms 
-            sheetCell.Value = payTerms;
+            sheetCell.Value = customer.payTerms;
 
             sheetCell = excelWs.Cells[11, 14]; // ship via
             sheetCell.Value = shipVia;

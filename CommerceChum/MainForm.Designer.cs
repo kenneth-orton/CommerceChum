@@ -31,6 +31,14 @@ namespace CommerceChum
         private void InitializeComponent()
         {
             this.tabDatabase = new System.Windows.Forms.TabPage();
+            this.grpSpecialPricing = new System.Windows.Forms.GroupBox();
+            this.btnSpecialPrice = new System.Windows.Forms.Button();
+            this.mskTextSpecialPrice = new System.Windows.Forms.MaskedTextBox();
+            this.lblSpecialPrice = new System.Windows.Forms.Label();
+            this.txtPartName = new System.Windows.Forms.TextBox();
+            this.lblPartName = new System.Windows.Forms.Label();
+            this.mskTxtCustIDSpecPrice = new System.Windows.Forms.MaskedTextBox();
+            this.lblCustIDSpecPrice = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.chkSameAsBilling = new System.Windows.Forms.CheckBox();
             this.lblShipPhoneNumber = new System.Windows.Forms.Label();
@@ -50,6 +58,7 @@ namespace CommerceChum
             this.lblShipAddr1 = new System.Windows.Forms.Label();
             this.txtShipAddr1 = new System.Windows.Forms.TextBox();
             this.grpBillAddr = new System.Windows.Forms.GroupBox();
+            this.chkSpecialPricing = new System.Windows.Forms.CheckBox();
             this.txtBillContact = new System.Windows.Forms.TextBox();
             this.lblBillContactName = new System.Windows.Forms.Label();
             this.lblBillPayTerms = new System.Windows.Forms.Label();
@@ -134,16 +143,18 @@ namespace CommerceChum
             this.lblTransFee = new System.Windows.Forms.Label();
             this.lblSubTotal = new System.Windows.Forms.Label();
             this.tabFrame = new System.Windows.Forms.TabControl();
-            this.chkSpecialPricing = new System.Windows.Forms.CheckBox();
-            this.grpSpecialPricing = new System.Windows.Forms.GroupBox();
-            this.lblCustIDSpecPrice = new System.Windows.Forms.Label();
-            this.mskTxtCustIDSpecPrice = new System.Windows.Forms.MaskedTextBox();
-            this.lblPartName = new System.Windows.Forms.Label();
-            this.txtPartName = new System.Windows.Forms.TextBox();
-            this.lblSpecialPrice = new System.Windows.Forms.Label();
-            this.mskTextSpecialPrice = new System.Windows.Forms.MaskedTextBox();
-            this.btnSpecialPrice = new System.Windows.Forms.Button();
+            this.grpSerialNumbers = new System.Windows.Forms.GroupBox();
+            this.rdoSNOrderID = new System.Windows.Forms.RadioButton();
+            this.rdoSNPONum = new System.Windows.Forms.RadioButton();
+            this.txtSNPartName = new System.Windows.Forms.TextBox();
+            this.lblSNPartName = new System.Windows.Forms.Label();
+            this.cboSNOrderID = new System.Windows.Forms.ComboBox();
+            this.lblSerialNumber = new System.Windows.Forms.Label();
+            this.txtSerialNumber = new System.Windows.Forms.TextBox();
+            this.btnSNSubmit = new System.Windows.Forms.Button();
+            this.chkInvAddToDB = new System.Windows.Forms.CheckBox();
             this.tabDatabase.SuspendLayout();
+            this.grpSpecialPricing.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.grpBillAddr.SuspendLayout();
             this.grpCustomers.SuspendLayout();
@@ -156,11 +167,12 @@ namespace CommerceChum
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown)).BeginInit();
             this.grpShipping.SuspendLayout();
             this.tabFrame.SuspendLayout();
-            this.grpSpecialPricing.SuspendLayout();
+            this.grpSerialNumbers.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabDatabase
             // 
+            this.tabDatabase.Controls.Add(this.grpSerialNumbers);
             this.tabDatabase.Controls.Add(this.grpSpecialPricing);
             this.tabDatabase.Controls.Add(this.groupBox1);
             this.tabDatabase.Controls.Add(this.grpBillAddr);
@@ -170,8 +182,88 @@ namespace CommerceChum
             this.tabDatabase.Name = "tabDatabase";
             this.tabDatabase.Size = new System.Drawing.Size(547, 593);
             this.tabDatabase.TabIndex = 2;
-            this.tabDatabase.Text = "Database";
+            this.tabDatabase.Text = "Database Editor";
             this.tabDatabase.UseVisualStyleBackColor = true;
+            // 
+            // grpSpecialPricing
+            // 
+            this.grpSpecialPricing.Controls.Add(this.btnSpecialPrice);
+            this.grpSpecialPricing.Controls.Add(this.mskTextSpecialPrice);
+            this.grpSpecialPricing.Controls.Add(this.lblSpecialPrice);
+            this.grpSpecialPricing.Controls.Add(this.txtPartName);
+            this.grpSpecialPricing.Controls.Add(this.lblPartName);
+            this.grpSpecialPricing.Controls.Add(this.mskTxtCustIDSpecPrice);
+            this.grpSpecialPricing.Controls.Add(this.lblCustIDSpecPrice);
+            this.grpSpecialPricing.Location = new System.Drawing.Point(3, 455);
+            this.grpSpecialPricing.Name = "grpSpecialPricing";
+            this.grpSpecialPricing.Size = new System.Drawing.Size(541, 55);
+            this.grpSpecialPricing.TabIndex = 3;
+            this.grpSpecialPricing.TabStop = false;
+            this.grpSpecialPricing.Text = "Special Pricing";
+            // 
+            // btnSpecialPrice
+            // 
+            this.btnSpecialPrice.Location = new System.Drawing.Point(413, 17);
+            this.btnSpecialPrice.Name = "btnSpecialPrice";
+            this.btnSpecialPrice.Size = new System.Drawing.Size(75, 23);
+            this.btnSpecialPrice.TabIndex = 22;
+            this.btnSpecialPrice.Text = "Submit";
+            this.btnSpecialPrice.UseVisualStyleBackColor = true;
+            this.btnSpecialPrice.Click += new System.EventHandler(this.btnSpecialPrice_Click);
+            // 
+            // mskTextSpecialPrice
+            // 
+            this.mskTextSpecialPrice.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.mskTextSpecialPrice.Location = new System.Drawing.Point(351, 19);
+            this.mskTextSpecialPrice.Mask = "$9999";
+            this.mskTextSpecialPrice.Name = "mskTextSpecialPrice";
+            this.mskTextSpecialPrice.PromptChar = ' ';
+            this.mskTextSpecialPrice.Size = new System.Drawing.Size(50, 20);
+            this.mskTextSpecialPrice.TabIndex = 21;
+            this.mskTextSpecialPrice.Text = "0";
+            // 
+            // lblSpecialPrice
+            // 
+            this.lblSpecialPrice.AutoSize = true;
+            this.lblSpecialPrice.Location = new System.Drawing.Point(316, 22);
+            this.lblSpecialPrice.Name = "lblSpecialPrice";
+            this.lblSpecialPrice.Size = new System.Drawing.Size(34, 13);
+            this.lblSpecialPrice.TabIndex = 20;
+            this.lblSpecialPrice.Text = "Price:";
+            // 
+            // txtPartName
+            // 
+            this.txtPartName.Location = new System.Drawing.Point(207, 19);
+            this.txtPartName.Name = "txtPartName";
+            this.txtPartName.Size = new System.Drawing.Size(100, 20);
+            this.txtPartName.TabIndex = 19;
+            // 
+            // lblPartName
+            // 
+            this.lblPartName.AutoSize = true;
+            this.lblPartName.Location = new System.Drawing.Point(144, 22);
+            this.lblPartName.Name = "lblPartName";
+            this.lblPartName.Size = new System.Drawing.Size(60, 13);
+            this.lblPartName.TabIndex = 18;
+            this.lblPartName.Text = "Part Name:";
+            // 
+            // mskTxtCustIDSpecPrice
+            // 
+            this.mskTxtCustIDSpecPrice.Location = new System.Drawing.Point(80, 19);
+            this.mskTxtCustIDSpecPrice.Mask = "99999";
+            this.mskTxtCustIDSpecPrice.Name = "mskTxtCustIDSpecPrice";
+            this.mskTxtCustIDSpecPrice.PromptChar = ' ';
+            this.mskTxtCustIDSpecPrice.Size = new System.Drawing.Size(58, 20);
+            this.mskTxtCustIDSpecPrice.TabIndex = 17;
+            // 
+            // lblCustIDSpecPrice
+            // 
+            this.lblCustIDSpecPrice.AutoSize = true;
+            this.lblCustIDSpecPrice.Location = new System.Drawing.Point(6, 22);
+            this.lblCustIDSpecPrice.Name = "lblCustIDSpecPrice";
+            this.lblCustIDSpecPrice.Size = new System.Drawing.Size(68, 13);
+            this.lblCustIDSpecPrice.TabIndex = 0;
+            this.lblCustIDSpecPrice.Text = "Customer ID:";
             // 
             // groupBox1
             // 
@@ -375,6 +467,16 @@ namespace CommerceChum
             this.grpBillAddr.TabIndex = 2;
             this.grpBillAddr.TabStop = false;
             this.grpBillAddr.Text = "Billing Address";
+            // 
+            // chkSpecialPricing
+            // 
+            this.chkSpecialPricing.AutoSize = true;
+            this.chkSpecialPricing.Location = new System.Drawing.Point(440, 42);
+            this.chkSpecialPricing.Name = "chkSpecialPricing";
+            this.chkSpecialPricing.Size = new System.Drawing.Size(96, 17);
+            this.chkSpecialPricing.TabIndex = 26;
+            this.chkSpecialPricing.Text = "Special Pricing";
+            this.chkSpecialPricing.UseVisualStyleBackColor = true;
             // 
             // txtBillContact
             // 
@@ -768,6 +870,7 @@ namespace CommerceChum
             // 
             // grpOutputSelection
             // 
+            this.grpOutputSelection.Controls.Add(this.chkInvAddToDB);
             this.grpOutputSelection.Controls.Add(this.txtTrackNum);
             this.grpOutputSelection.Controls.Add(this.lblTrackNum);
             this.grpOutputSelection.Controls.Add(this.dteShipDate);
@@ -789,32 +892,32 @@ namespace CommerceChum
             // 
             // txtTrackNum
             // 
-            this.txtTrackNum.Location = new System.Drawing.Point(411, 56);
+            this.txtTrackNum.Location = new System.Drawing.Point(336, 56);
             this.txtTrackNum.Name = "txtTrackNum";
-            this.txtTrackNum.Size = new System.Drawing.Size(121, 20);
+            this.txtTrackNum.Size = new System.Drawing.Size(119, 20);
             this.txtTrackNum.TabIndex = 12;
             // 
             // lblTrackNum
             // 
             this.lblTrackNum.AutoSize = true;
-            this.lblTrackNum.Location = new System.Drawing.Point(343, 59);
+            this.lblTrackNum.Location = new System.Drawing.Point(285, 59);
             this.lblTrackNum.Name = "lblTrackNum";
-            this.lblTrackNum.Size = new System.Drawing.Size(62, 13);
+            this.lblTrackNum.Size = new System.Drawing.Size(45, 13);
             this.lblTrackNum.TabIndex = 11;
-            this.lblTrackNum.Text = "Tracking #:";
+            this.lblTrackNum.Text = "Track#:";
             // 
             // dteShipDate
             // 
             this.dteShipDate.Enabled = false;
-            this.dteShipDate.Location = new System.Drawing.Point(190, 56);
+            this.dteShipDate.Location = new System.Drawing.Point(189, 56);
             this.dteShipDate.Name = "dteShipDate";
-            this.dteShipDate.Size = new System.Drawing.Size(147, 20);
+            this.dteShipDate.Size = new System.Drawing.Size(91, 20);
             this.dteShipDate.TabIndex = 10;
             // 
             // lblShipDate
             // 
             this.lblShipDate.AutoSize = true;
-            this.lblShipDate.Location = new System.Drawing.Point(127, 59);
+            this.lblShipDate.Location = new System.Drawing.Point(126, 59);
             this.lblShipDate.Name = "lblShipDate";
             this.lblShipDate.Size = new System.Drawing.Size(57, 13);
             this.lblShipDate.TabIndex = 8;
@@ -823,7 +926,7 @@ namespace CommerceChum
             // txtShipVia
             // 
             this.txtShipVia.Enabled = false;
-            this.txtShipVia.Location = new System.Drawing.Point(62, 56);
+            this.txtShipVia.Location = new System.Drawing.Point(61, 56);
             this.txtShipVia.Name = "txtShipVia";
             this.txtShipVia.Size = new System.Drawing.Size(59, 20);
             this.txtShipVia.TabIndex = 7;
@@ -831,7 +934,7 @@ namespace CommerceChum
             // lblShipVia
             // 
             this.lblShipVia.AutoSize = true;
-            this.lblShipVia.Location = new System.Drawing.Point(7, 59);
+            this.lblShipVia.Location = new System.Drawing.Point(6, 59);
             this.lblShipVia.Name = "lblShipVia";
             this.lblShipVia.Size = new System.Drawing.Size(49, 13);
             this.lblShipVia.TabIndex = 6;
@@ -1271,95 +1374,107 @@ namespace CommerceChum
             this.tabFrame.TabStop = false;
             this.tabFrame.Tag = "";
             // 
-            // chkSpecialPricing
+            // grpSerialNumbers
             // 
-            this.chkSpecialPricing.AutoSize = true;
-            this.chkSpecialPricing.Location = new System.Drawing.Point(440, 42);
-            this.chkSpecialPricing.Name = "chkSpecialPricing";
-            this.chkSpecialPricing.Size = new System.Drawing.Size(96, 17);
-            this.chkSpecialPricing.TabIndex = 26;
-            this.chkSpecialPricing.Text = "Special Pricing";
-            this.chkSpecialPricing.UseVisualStyleBackColor = true;
+            this.grpSerialNumbers.Controls.Add(this.btnSNSubmit);
+            this.grpSerialNumbers.Controls.Add(this.txtSerialNumber);
+            this.grpSerialNumbers.Controls.Add(this.lblSerialNumber);
+            this.grpSerialNumbers.Controls.Add(this.cboSNOrderID);
+            this.grpSerialNumbers.Controls.Add(this.txtSNPartName);
+            this.grpSerialNumbers.Controls.Add(this.lblSNPartName);
+            this.grpSerialNumbers.Controls.Add(this.rdoSNPONum);
+            this.grpSerialNumbers.Controls.Add(this.rdoSNOrderID);
+            this.grpSerialNumbers.Location = new System.Drawing.Point(0, 516);
+            this.grpSerialNumbers.Name = "grpSerialNumbers";
+            this.grpSerialNumbers.Size = new System.Drawing.Size(544, 74);
+            this.grpSerialNumbers.TabIndex = 4;
+            this.grpSerialNumbers.TabStop = false;
+            this.grpSerialNumbers.Text = "Serial Numbers";
             // 
-            // grpSpecialPricing
+            // rdoSNOrderID
             // 
-            this.grpSpecialPricing.Controls.Add(this.btnSpecialPrice);
-            this.grpSpecialPricing.Controls.Add(this.mskTextSpecialPrice);
-            this.grpSpecialPricing.Controls.Add(this.lblSpecialPrice);
-            this.grpSpecialPricing.Controls.Add(this.txtPartName);
-            this.grpSpecialPricing.Controls.Add(this.lblPartName);
-            this.grpSpecialPricing.Controls.Add(this.mskTxtCustIDSpecPrice);
-            this.grpSpecialPricing.Controls.Add(this.lblCustIDSpecPrice);
-            this.grpSpecialPricing.Location = new System.Drawing.Point(3, 455);
-            this.grpSpecialPricing.Name = "grpSpecialPricing";
-            this.grpSpecialPricing.Size = new System.Drawing.Size(541, 55);
-            this.grpSpecialPricing.TabIndex = 3;
-            this.grpSpecialPricing.TabStop = false;
-            this.grpSpecialPricing.Text = "Special Pricing";
+            this.rdoSNOrderID.AutoSize = true;
+            this.rdoSNOrderID.Checked = true;
+            this.rdoSNOrderID.Location = new System.Drawing.Point(9, 21);
+            this.rdoSNOrderID.Name = "rdoSNOrderID";
+            this.rdoSNOrderID.Size = new System.Drawing.Size(65, 17);
+            this.rdoSNOrderID.TabIndex = 0;
+            this.rdoSNOrderID.TabStop = true;
+            this.rdoSNOrderID.Text = "Order ID";
+            this.rdoSNOrderID.UseVisualStyleBackColor = true;
+            this.rdoSNOrderID.CheckedChanged += new System.EventHandler(this.rdoSNOrderID_CheckedChanged);
             // 
-            // lblCustIDSpecPrice
+            // rdoSNPONum
             // 
-            this.lblCustIDSpecPrice.AutoSize = true;
-            this.lblCustIDSpecPrice.Location = new System.Drawing.Point(6, 22);
-            this.lblCustIDSpecPrice.Name = "lblCustIDSpecPrice";
-            this.lblCustIDSpecPrice.Size = new System.Drawing.Size(68, 13);
-            this.lblCustIDSpecPrice.TabIndex = 0;
-            this.lblCustIDSpecPrice.Text = "Customer ID:";
+            this.rdoSNPONum.AutoSize = true;
+            this.rdoSNPONum.Location = new System.Drawing.Point(81, 21);
+            this.rdoSNPONum.Name = "rdoSNPONum";
+            this.rdoSNPONum.Size = new System.Drawing.Size(80, 17);
+            this.rdoSNPONum.TabIndex = 1;
+            this.rdoSNPONum.Text = "PO Number";
+            this.rdoSNPONum.UseVisualStyleBackColor = true;
+            this.rdoSNPONum.CheckedChanged += new System.EventHandler(this.rdoSNPONum_CheckedChanged);
             // 
-            // mskTxtCustIDSpecPrice
+            // txtSNPartName
             // 
-            this.mskTxtCustIDSpecPrice.Location = new System.Drawing.Point(80, 19);
-            this.mskTxtCustIDSpecPrice.Mask = "99999";
-            this.mskTxtCustIDSpecPrice.Name = "mskTxtCustIDSpecPrice";
-            this.mskTxtCustIDSpecPrice.PromptChar = ' ';
-            this.mskTxtCustIDSpecPrice.Size = new System.Drawing.Size(58, 20);
-            this.mskTxtCustIDSpecPrice.TabIndex = 17;
+            this.txtSNPartName.Location = new System.Drawing.Point(237, 31);
+            this.txtSNPartName.Name = "txtSNPartName";
+            this.txtSNPartName.Size = new System.Drawing.Size(73, 20);
+            this.txtSNPartName.TabIndex = 21;
             // 
-            // lblPartName
+            // lblSNPartName
             // 
-            this.lblPartName.AutoSize = true;
-            this.lblPartName.Location = new System.Drawing.Point(144, 22);
-            this.lblPartName.Name = "lblPartName";
-            this.lblPartName.Size = new System.Drawing.Size(60, 13);
-            this.lblPartName.TabIndex = 18;
-            this.lblPartName.Text = "Part Name:";
+            this.lblSNPartName.AutoSize = true;
+            this.lblSNPartName.Location = new System.Drawing.Point(174, 34);
+            this.lblSNPartName.Name = "lblSNPartName";
+            this.lblSNPartName.Size = new System.Drawing.Size(60, 13);
+            this.lblSNPartName.TabIndex = 20;
+            this.lblSNPartName.Text = "Part Name:";
             // 
-            // txtPartName
+            // cboSNOrderID
             // 
-            this.txtPartName.Location = new System.Drawing.Point(207, 19);
-            this.txtPartName.Name = "txtPartName";
-            this.txtPartName.Size = new System.Drawing.Size(100, 20);
-            this.txtPartName.TabIndex = 19;
+            this.cboSNOrderID.FormattingEnabled = true;
+            this.cboSNOrderID.Location = new System.Drawing.Point(6, 44);
+            this.cboSNOrderID.Name = "cboSNOrderID";
+            this.cboSNOrderID.Size = new System.Drawing.Size(155, 21);
+            this.cboSNOrderID.TabIndex = 22;
             // 
-            // lblSpecialPrice
+            // lblSerialNumber
             // 
-            this.lblSpecialPrice.AutoSize = true;
-            this.lblSpecialPrice.Location = new System.Drawing.Point(316, 22);
-            this.lblSpecialPrice.Name = "lblSpecialPrice";
-            this.lblSpecialPrice.Size = new System.Drawing.Size(34, 13);
-            this.lblSpecialPrice.TabIndex = 20;
-            this.lblSpecialPrice.Text = "Price:";
+            this.lblSerialNumber.AutoSize = true;
+            this.lblSerialNumber.Location = new System.Drawing.Point(319, 34);
+            this.lblSerialNumber.Name = "lblSerialNumber";
+            this.lblSerialNumber.Size = new System.Drawing.Size(25, 13);
+            this.lblSerialNumber.TabIndex = 23;
+            this.lblSerialNumber.Text = "SN:";
             // 
-            // mskTextSpecialPrice
+            // txtSerialNumber
             // 
-            this.mskTextSpecialPrice.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.mskTextSpecialPrice.Location = new System.Drawing.Point(351, 19);
-            this.mskTextSpecialPrice.Mask = "$9999";
-            this.mskTextSpecialPrice.Name = "mskTextSpecialPrice";
-            this.mskTextSpecialPrice.PromptChar = ' ';
-            this.mskTextSpecialPrice.Size = new System.Drawing.Size(50, 20);
-            this.mskTextSpecialPrice.TabIndex = 21;
-            this.mskTextSpecialPrice.Text = "0";
+            this.txtSerialNumber.Location = new System.Drawing.Point(350, 31);
+            this.txtSerialNumber.Name = "txtSerialNumber";
+            this.txtSerialNumber.Size = new System.Drawing.Size(84, 20);
+            this.txtSerialNumber.TabIndex = 24;
             // 
-            // btnSpecialPrice
+            // btnSNSubmit
             // 
-            this.btnSpecialPrice.Location = new System.Drawing.Point(413, 17);
-            this.btnSpecialPrice.Name = "btnSpecialPrice";
-            this.btnSpecialPrice.Size = new System.Drawing.Size(75, 23);
-            this.btnSpecialPrice.TabIndex = 22;
-            this.btnSpecialPrice.Text = "Submit";
-            this.btnSpecialPrice.UseVisualStyleBackColor = true;
-            this.btnSpecialPrice.Click += new System.EventHandler(this.btnSpecialPrice_Click);
+            this.btnSNSubmit.Location = new System.Drawing.Point(446, 30);
+            this.btnSNSubmit.Name = "btnSNSubmit";
+            this.btnSNSubmit.Size = new System.Drawing.Size(75, 23);
+            this.btnSNSubmit.TabIndex = 25;
+            this.btnSNSubmit.Text = "Submit";
+            this.btnSNSubmit.UseVisualStyleBackColor = true;
+            // 
+            // chkInvAddToDB
+            // 
+            this.chkInvAddToDB.AutoSize = true;
+            this.chkInvAddToDB.Checked = true;
+            this.chkInvAddToDB.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkInvAddToDB.Location = new System.Drawing.Point(461, 58);
+            this.chkInvAddToDB.Name = "chkInvAddToDB";
+            this.chkInvAddToDB.Size = new System.Drawing.Size(75, 17);
+            this.chkInvAddToDB.TabIndex = 13;
+            this.chkInvAddToDB.Text = "Add to DB";
+            this.chkInvAddToDB.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -1371,9 +1486,11 @@ namespace CommerceChum
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Desk Jockey";
+            this.Text = "Commerce Chum";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabDatabase.ResumeLayout(false);
+            this.grpSpecialPricing.ResumeLayout(false);
+            this.grpSpecialPricing.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.grpBillAddr.ResumeLayout(false);
@@ -1396,8 +1513,8 @@ namespace CommerceChum
             this.grpShipping.ResumeLayout(false);
             this.grpShipping.PerformLayout();
             this.tabFrame.ResumeLayout(false);
-            this.grpSpecialPricing.ResumeLayout(false);
-            this.grpSpecialPricing.PerformLayout();
+            this.grpSerialNumbers.ResumeLayout(false);
+            this.grpSerialNumbers.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1517,6 +1634,16 @@ namespace CommerceChum
         private System.Windows.Forms.Button btnSpecialPrice;
         private System.Windows.Forms.MaskedTextBox mskTextSpecialPrice;
         private System.Windows.Forms.Label lblSpecialPrice;
+        private System.Windows.Forms.GroupBox grpSerialNumbers;
+        private System.Windows.Forms.ComboBox cboSNOrderID;
+        private System.Windows.Forms.TextBox txtSNPartName;
+        private System.Windows.Forms.Label lblSNPartName;
+        private System.Windows.Forms.RadioButton rdoSNPONum;
+        private System.Windows.Forms.RadioButton rdoSNOrderID;
+        private System.Windows.Forms.Button btnSNSubmit;
+        private System.Windows.Forms.TextBox txtSerialNumber;
+        private System.Windows.Forms.Label lblSerialNumber;
+        private System.Windows.Forms.CheckBox chkInvAddToDB;
     }
 }
 

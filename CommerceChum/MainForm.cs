@@ -13,14 +13,14 @@ namespace CommerceChum
         private Product selectedProduct = null;
         private List<Customer> rsCustomer = null;
         private Customer selectedCustomer = null;
+        private List<OrderHistory> rsOrders = null;
         private static string folder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         private string discountCalc;
         private string transFeeCalc;
+
         public MainForm()
         {
             InitializeComponent();
-            cboProducts.AutoCompleteSource = AutoCompleteSource.ListItems;
-            cboProducts.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -32,25 +32,30 @@ namespace CommerceChum
 
         private void initQuoteTab()
         {
-            //dbMngr = new DatabaseManager();
-            populateFormFromCombobox(cboProducts, CBOBoxID.ONE);
-            populateFormFromCombobox(cboCustomers, CBOBoxID.THREE);
+            populateFormCombobox(cboProducts, CBOBoxID.PRODUCTS);
+            populateFormCombobox(cboCustomers, CBOBoxID.CUSTOMERS);
             grpShipping.Enabled = false;
             grpDiscount.Enabled = false;
             btnGenerate.Enabled = false;
             txtTrackNum.Enabled = false;
             grpPayType.Enabled = false;
+            chkInvAddToDB.Enabled = false;
             btnMoveItemUp.Text = ((char)0x25B2).ToString();
             btnMoveItemDown.Text = ((char)0x25BC).ToString();
             dteShipDate.Format = DateTimePickerFormat.Custom;
             dteShipDate.CustomFormat = "MM/dd/yyyy";
+            cboProducts.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cboProducts.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
         }
 
-        private enum CBOBoxID { ONE, TWO, THREE, FOUR, FIVE, SIX };
+        private enum CBOBoxID { PRODUCTS, CUSTOMERS, ORDER_IDS, FOUR, FIVE };
         private void initDBTab()
         {
-            populateFormFromCombobox(cboProductsEdit, CBOBoxID.TWO);
-            populateFormFromCombobox(cboDBCustomers, CBOBoxID.THREE);
+            populateFormCombobox(cboProductsEdit, CBOBoxID.PRODUCTS);
+            populateFormCombobox(cboDBCustomers, CBOBoxID.CUSTOMERS);
+            populateFormCombobox(cboSNOrderID, CBOBoxID.ORDER_IDS);
+            cboProductsEdit.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cboProductsEdit.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             enableShippingInput();
         }
 
@@ -76,7 +81,7 @@ namespace CommerceChum
             selectedProduct = rsProduct.Find(product => product.name == comboBox.SelectedItem.ToString());
         }
 
-        private void populateFormFromCombobox(ComboBox comboBox, CBOBoxID cboID)
+        private void populateFormCombobox(ComboBox comboBox, CBOBoxID cboID)
         {
             int i = 0;
             comboBox.Items.Clear();
@@ -84,7 +89,7 @@ namespace CommerceChum
 
             switch (cboID)
             {
-                case CBOBoxID.ONE:
+                case CBOBoxID.PRODUCTS:
                     rsProduct = dbMngr.products;
 
                     foreach (var product in rsProduct)
@@ -96,30 +101,27 @@ namespace CommerceChum
                     if (comboBox.Items.Count > 0)
                         comboBox.SelectedIndex = 1;
                     break;
-                case CBOBoxID.TWO:
-                    rsProduct = dbMngr.products;
-
-                    foreach (var product in rsProduct)
-                    {
-                        if (product.active)
-                            comboBox.Items.Insert(i++, product.name);
-                    }
-
-                    if (cboProductsEdit.Items.Count > 0)
-                    {
-                        comboBox.SelectedIndex = 1;
-                        txtDBPartName.Text = selectedProduct.name;
-                        txtDBPartDesc.Text = selectedProduct.description;
-                        mskTxtDBPrice.Text = selectedProduct.price.ToString();
-                    }
-                    break;
-                case CBOBoxID.THREE:
+                case CBOBoxID.CUSTOMERS:
                     rsCustomer = dbMngr.customers;
                     
                     foreach (var customer in rsCustomer)
                     {
                         if (customer.active)
                             comboBox.Items.Insert(i++, customer.companyName);
+                    }
+
+                    if (comboBox.Items.Count > 0)
+                        comboBox.SelectedIndex = 1;
+                    break;
+                case CBOBoxID.ORDER_IDS:
+                    rsOrders = dbMngr.orders;
+
+                    foreach (var order in rsOrders)
+                    {
+                        if (rdoSNOrderID.Checked)
+                            comboBox.Items.Insert(i++, order.orderID);
+                        else
+                            comboBox.Items.Insert(i++, order.poNum);
                     }
 
                     if (comboBox.Items.Count > 0)
@@ -392,7 +394,12 @@ namespace CommerceChum
             {
                 string filePath = System.IO.Path.Combine(folder, "InvoiceTemplate.xlsx");
                 if (fileAvailable(filePath) && checkUserInput())
+                {
                     createExcelInvoice(filePath);
+
+                    if (chkInvAddToDB.Checked)
+                        addOrderToDB();
+                }
             }
             else if (rdoPackingList.Checked)
             {
@@ -400,6 +407,19 @@ namespace CommerceChum
                 if (fileAvailable(filePath) && checkUserInput())
                     createExcelPackList(filePath);
             }
+        }
+
+        private void addOrderToDB()
+        {
+            StringBuilder shipDate = new StringBuilder();
+            shipDate.Append(dteShipDate.Value.Year);
+            shipDate.Append("-");
+            shipDate.Append(dteShipDate.Value.Month);
+            shipDate.Append("-");
+            shipDate.Append(dteShipDate.Value.Day);
+
+            OrderHistory newOrder = new OrderHistory(dbMngr.nextInvoiceNumber, selectedCustomer.customerID, txtPONum.Text, txtTrackNum.Text, txtShipVia.Text, Convert.ToDateTime(shipDate.ToString()));
+            dbMngr.insertOrder(newOrder);
         }
 
         private void createExcelPackList(string filePath)
@@ -432,24 +452,13 @@ namespace CommerceChum
 
         private void createExcelInvoice(string templateFilePath)
         {
-            StringBuilder shipDate = new StringBuilder();
-            shipDate.Append(dteShipDate.Value.Year);
-            shipDate.Append("-");
-            shipDate.Append(dteShipDate.Value.Month);
-            shipDate.Append("-");
-            shipDate.Append(dteShipDate.Value.Day);
-
-            //DateTime shipDate = dteShipDate.Value.Date;
-            //dteShipDate.Format = DateTimePickerFormat.Custom;
-            //dteShipDate.CustomFormat = "yyyy-MM-dd";
-
             getSelectedCustomer(cboDBCustomers);
 
-            int nextInvoiceNum = DatabaseManager.getNextInvoiceNumber();
-            string outFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), selectedCustomer.companyName + "-" + nextInvoiceNum + ".xlsx");
+            dbMngr.nextInvoiceNumber = dbMngr.getNextInvoiceNumber();
+            string outFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), selectedCustomer.companyName + "-" + dbMngr.nextInvoiceNumber + ".xlsx");
 
             InvoiceWorksheetBuilder invoiceWksht = new InvoiceWorksheetBuilder(templateFilePath, lstVwQuote, dteShipDate.Text, txtShipVia.Text, txtTrackNum.Text, 
-                                                                               txtPONum.Text, nextInvoiceNum, selectedCustomer, outFileName);
+                                                                               txtPONum.Text, dbMngr.nextInvoiceNumber, selectedCustomer, outFileName);
             invoiceWksht.insertCellData();
             invoiceWksht.saveExcelFile();
         }
@@ -587,7 +596,7 @@ namespace CommerceChum
                 txtDBPartName.Text = txtPartName.Text = selectedProduct.name;
                 txtDBPartDesc.Text = selectedProduct.description;
                 mskTxtDBPrice.Text = mskTextSpecialPrice.Text = selectedProduct.price.ToString();
-            }
+           }
         }
 
         private void btnDBActions_Click(object sender, EventArgs e)
@@ -727,6 +736,7 @@ namespace CommerceChum
             txtShipVia.Enabled = true;
             btnGenerate.Enabled = true;
             txtTrackNum.Enabled = true;
+            chkInvAddToDB.Enabled = true;
         }
 
         private void rdoPackingList_CheckedChanged(object sender, EventArgs e)
@@ -737,6 +747,7 @@ namespace CommerceChum
             txtShipVia.Enabled = true;
             btnGenerate.Enabled = true;
             txtTrackNum.Enabled = true;
+            chkInvAddToDB.Enabled = false;
         }
 
         private void rdoQuote_CheckedChanged(object sender, EventArgs e)
@@ -747,6 +758,7 @@ namespace CommerceChum
             txtShipVia.Enabled = false;
             btnGenerate.Enabled = false;
             txtTrackNum.Enabled = false;
+            chkInvAddToDB.Enabled = false;
         }
 
         private void rdoDBRemove_CheckedChanged(object sender, EventArgs e)
@@ -777,7 +789,7 @@ namespace CommerceChum
             {
                 int customerID = 0;
                 Int32.TryParse(mskTxtCustomerID.Text, out customerID);
-                Customer newCustomer = new Customer(customerID, cboDBCustomers.Text, txtBillContact.Text, txtBillPayTerms.Text, chkSameAsBilling.Checked, chkSpecialPricing.Checked);
+                Customer newCustomer = new Customer(customerID, txtBillContact.Text, cboDBCustomers.Text, txtBillPayTerms.Text, chkSameAsBilling.Checked, chkSpecialPricing.Checked);
                 newCustomer.billAddress = new BillAddress(customerID, txtBillCoName.Text, txtBillAddr1.Text, txtBillAddr2.Text, txtBillCity.Text, txtBillState.Text, txtBillZip.Text, txtBillCountry.Text, txtBillPhoneNumber.Text);
                 newCustomer.shipAddress = new ShipAddress(newCustomer.billAddress);
 
@@ -921,14 +933,14 @@ namespace CommerceChum
             int customerID = 0;
             Int32.TryParse(mskTxtCustIDSpecPrice.Text, out customerID);
 
-            if (!DatabaseManager.customerExists(customerID))
+            if (!dbMngr.customerExists(customerID))
             {
                 string msg = "Customer does not exist. Add the customer to the \n database before editing special pricing.";
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
                 return;
             }
 
-            int productID = DatabaseManager.getProductID(txtPartName.Text);
+            int productID = dbMngr.getProductID(txtPartName.Text);
 
             if (productID < 0)
             {
@@ -941,7 +953,17 @@ namespace CommerceChum
             Double.TryParse(mskTextSpecialPrice.Text.Replace("$", String.Empty), out specialPrice);
 
             SpecialPrice obj = new SpecialPrice(customerID, productID, specialPrice);
-            DatabaseManager.insertSpecialPrice(obj);
+            dbMngr.insertSpecialPrice(obj);
+        }
+
+        private void rdoSNOrderID_CheckedChanged(object sender, EventArgs e)
+        {
+            populateFormCombobox(cboSNOrderID, CBOBoxID.ORDER_IDS);
+        }
+
+        private void rdoSNPONum_CheckedChanged(object sender, EventArgs e)
+        {
+            populateFormCombobox(cboSNOrderID, CBOBoxID.ORDER_IDS);
         }
     }
 }
