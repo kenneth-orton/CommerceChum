@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Text;
 
-namespace DeskJockey
+namespace CommerceChum
 {
     class InvoiceWorksheetBuilder
     {
@@ -49,7 +49,7 @@ namespace DeskJockey
         {
             StringBuilder output = new StringBuilder();
 
-            output.Append(address.contactName + '\n');
+            output.Append(address.coName + '\n');
             output.Append(address.addr1 + '\n');
             if (address.addr2.Trim() != "")
                 output.Append(address.addr2 + '\n');
@@ -65,7 +65,7 @@ namespace DeskJockey
         {
             StringBuilder output = new StringBuilder();
 
-            output.Append(address.contactName + '\n');
+            output.Append(address.coName + '\n');
             output.Append(address.addr1 + '\n');
             if (address.addr2.Trim() != "")
                 output.Append(address.addr2 + '\n');

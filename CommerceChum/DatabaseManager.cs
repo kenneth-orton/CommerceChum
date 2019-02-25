@@ -5,7 +5,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
-namespace DeskJockey
+namespace CommerceChum
 {
     class dbContext : DbContext
     {
@@ -22,13 +22,14 @@ namespace DeskJockey
             Database.SetInitializer<dbContext>(null);
         }
 
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<BillAddress> BillAddresses { get; set; }
-        public DbSet<ShipAddress> ShipAddresses { get; set; }
-        public DbSet<OrderHistory> OrderHistory { get; set; }
-        public DbSet<Manifest> Manifest { get; set; }
-
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<BillAddress> BillAddresses { get; set; }
+        public virtual DbSet<ShipAddress> ShipAddresses { get; set; }
+        public virtual DbSet<OrderHistory> OrderHistory { get; set; }
+        public virtual DbSet<Manifest> Manifest { get; set; }
+        public virtual DbSet<SpecialPrice> SpecialPrices { get; set; } 
+        
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -83,11 +84,46 @@ namespace DeskJockey
             }
         }
 
-        private bool partExists(string productName)
+        public static void insertSpecialPrice(SpecialPrice specialPrice)
+        {
+            using (var context = new dbContext())
+            {
+                context.SpecialPrices.Add(specialPrice);
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch
+                {
+                    throw new SQLiteException();
+                }
+            }
+        }
+
+        public static int getProductID(string productName)
+        {
+            if (!partExists(productName))
+                return -1;
+
+            using (var context = new dbContext())
+            {
+                var product = context.Products.FirstOrDefault(p => p.name == productName);
+                return product.productID;
+            }
+        }
+
+        private static bool partExists(string productName)
         {
             using (var context = new dbContext())
                 return context.Products.Where(p => p.name == productName).Any();
         }
+
+        public static bool customerExists(int customerID)
+        {
+            using (var context = new dbContext())
+                return context.Customers.Where(c => c.customerID == customerID).Any();
+        }
+
 
         public void removeCustomer(Customer selectedCustomer)
         {

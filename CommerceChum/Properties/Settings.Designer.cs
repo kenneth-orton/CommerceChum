@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DeskJockey.Properties {
+namespace CommerceChum.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

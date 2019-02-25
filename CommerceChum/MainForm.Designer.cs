@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DeskJockey
+namespace CommerceChum
 {
     partial class MainForm
     {
@@ -50,6 +50,8 @@ namespace DeskJockey
             this.lblShipAddr1 = new System.Windows.Forms.Label();
             this.txtShipAddr1 = new System.Windows.Forms.TextBox();
             this.grpBillAddr = new System.Windows.Forms.GroupBox();
+            this.txtBillContact = new System.Windows.Forms.TextBox();
+            this.lblBillContactName = new System.Windows.Forms.Label();
             this.lblBillPayTerms = new System.Windows.Forms.Label();
             this.txtBillPayTerms = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -132,6 +134,15 @@ namespace DeskJockey
             this.lblTransFee = new System.Windows.Forms.Label();
             this.lblSubTotal = new System.Windows.Forms.Label();
             this.tabFrame = new System.Windows.Forms.TabControl();
+            this.chkSpecialPricing = new System.Windows.Forms.CheckBox();
+            this.grpSpecialPricing = new System.Windows.Forms.GroupBox();
+            this.lblCustIDSpecPrice = new System.Windows.Forms.Label();
+            this.mskTxtCustIDSpecPrice = new System.Windows.Forms.MaskedTextBox();
+            this.lblPartName = new System.Windows.Forms.Label();
+            this.txtPartName = new System.Windows.Forms.TextBox();
+            this.lblSpecialPrice = new System.Windows.Forms.Label();
+            this.mskTextSpecialPrice = new System.Windows.Forms.MaskedTextBox();
+            this.btnSpecialPrice = new System.Windows.Forms.Button();
             this.tabDatabase.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.grpBillAddr.SuspendLayout();
@@ -145,17 +156,19 @@ namespace DeskJockey
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown)).BeginInit();
             this.grpShipping.SuspendLayout();
             this.tabFrame.SuspendLayout();
+            this.grpSpecialPricing.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabDatabase
             // 
+            this.tabDatabase.Controls.Add(this.grpSpecialPricing);
             this.tabDatabase.Controls.Add(this.groupBox1);
             this.tabDatabase.Controls.Add(this.grpBillAddr);
             this.tabDatabase.Controls.Add(this.grpCustomers);
             this.tabDatabase.Controls.Add(this.grpInventoryEdit);
             this.tabDatabase.Location = new System.Drawing.Point(4, 22);
             this.tabDatabase.Name = "tabDatabase";
-            this.tabDatabase.Size = new System.Drawing.Size(547, 634);
+            this.tabDatabase.Size = new System.Drawing.Size(547, 593);
             this.tabDatabase.TabIndex = 2;
             this.tabDatabase.Text = "Database";
             this.tabDatabase.UseVisualStyleBackColor = true;
@@ -179,7 +192,7 @@ namespace DeskJockey
             this.groupBox1.Controls.Add(this.txtShipAddr2);
             this.groupBox1.Controls.Add(this.lblShipAddr1);
             this.groupBox1.Controls.Add(this.txtShipAddr1);
-            this.groupBox1.Location = new System.Drawing.Point(3, 277);
+            this.groupBox1.Location = new System.Drawing.Point(3, 317);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(541, 132);
             this.groupBox1.TabIndex = 2;
@@ -220,9 +233,9 @@ namespace DeskJockey
             this.lblShipCoName.AutoSize = true;
             this.lblShipCoName.Location = new System.Drawing.Point(9, 44);
             this.lblShipCoName.Name = "lblShipCoName";
-            this.lblShipCoName.Size = new System.Drawing.Size(78, 13);
+            this.lblShipCoName.Size = new System.Drawing.Size(85, 13);
             this.lblShipCoName.TabIndex = 21;
-            this.lblShipCoName.Text = "Contact Name:";
+            this.lblShipCoName.Text = "Company Name:";
             // 
             // txtShipCoName
             // 
@@ -335,6 +348,9 @@ namespace DeskJockey
             // 
             // grpBillAddr
             // 
+            this.grpBillAddr.Controls.Add(this.chkSpecialPricing);
+            this.grpBillAddr.Controls.Add(this.txtBillContact);
+            this.grpBillAddr.Controls.Add(this.lblBillContactName);
             this.grpBillAddr.Controls.Add(this.lblBillPayTerms);
             this.grpBillAddr.Controls.Add(this.txtBillPayTerms);
             this.grpBillAddr.Controls.Add(this.label4);
@@ -353,17 +369,33 @@ namespace DeskJockey
             this.grpBillAddr.Controls.Add(this.txtBillAddr2);
             this.grpBillAddr.Controls.Add(this.lblBillAddr1);
             this.grpBillAddr.Controls.Add(this.txtBillAddr1);
-            this.grpBillAddr.Location = new System.Drawing.Point(3, 163);
+            this.grpBillAddr.Location = new System.Drawing.Point(3, 161);
             this.grpBillAddr.Name = "grpBillAddr";
-            this.grpBillAddr.Size = new System.Drawing.Size(541, 108);
+            this.grpBillAddr.Size = new System.Drawing.Size(541, 150);
             this.grpBillAddr.TabIndex = 2;
             this.grpBillAddr.TabStop = false;
             this.grpBillAddr.Text = "Billing Address";
             // 
+            // txtBillContact
+            // 
+            this.txtBillContact.Location = new System.Drawing.Point(7, 40);
+            this.txtBillContact.Name = "txtBillContact";
+            this.txtBillContact.Size = new System.Drawing.Size(162, 20);
+            this.txtBillContact.TabIndex = 25;
+            // 
+            // lblBillContactName
+            // 
+            this.lblBillContactName.AutoSize = true;
+            this.lblBillContactName.Location = new System.Drawing.Point(7, 24);
+            this.lblBillContactName.Name = "lblBillContactName";
+            this.lblBillContactName.Size = new System.Drawing.Size(78, 13);
+            this.lblBillContactName.TabIndex = 24;
+            this.lblBillContactName.Text = "Contact Name:";
+            // 
             // lblBillPayTerms
             // 
             this.lblBillPayTerms.AutoSize = true;
-            this.lblBillPayTerms.Location = new System.Drawing.Point(457, 59);
+            this.lblBillPayTerms.Location = new System.Drawing.Point(352, 24);
             this.lblBillPayTerms.Name = "lblBillPayTerms";
             this.lblBillPayTerms.Size = new System.Drawing.Size(60, 13);
             this.lblBillPayTerms.TabIndex = 23;
@@ -371,7 +403,7 @@ namespace DeskJockey
             // 
             // txtBillPayTerms
             // 
-            this.txtBillPayTerms.Location = new System.Drawing.Point(450, 75);
+            this.txtBillPayTerms.Location = new System.Drawing.Point(345, 40);
             this.txtBillPayTerms.Name = "txtBillPayTerms";
             this.txtBillPayTerms.Size = new System.Drawing.Size(86, 20);
             this.txtBillPayTerms.TabIndex = 22;
@@ -380,7 +412,7 @@ namespace DeskJockey
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(358, 59);
+            this.label4.Location = new System.Drawing.Point(358, 105);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(41, 13);
             this.label4.TabIndex = 23;
@@ -388,7 +420,7 @@ namespace DeskJockey
             // 
             // txtBillPhoneNumber
             // 
-            this.txtBillPhoneNumber.Location = new System.Drawing.Point(351, 75);
+            this.txtBillPhoneNumber.Location = new System.Drawing.Point(351, 121);
             this.txtBillPhoneNumber.Name = "txtBillPhoneNumber";
             this.txtBillPhoneNumber.Size = new System.Drawing.Size(94, 20);
             this.txtBillPhoneNumber.TabIndex = 22;
@@ -397,15 +429,15 @@ namespace DeskJockey
             // lblCoName1
             // 
             this.lblCoName1.AutoSize = true;
-            this.lblCoName1.Location = new System.Drawing.Point(9, 20);
+            this.lblCoName1.Location = new System.Drawing.Point(179, 24);
             this.lblCoName1.Name = "lblCoName1";
-            this.lblCoName1.Size = new System.Drawing.Size(78, 13);
+            this.lblCoName1.Size = new System.Drawing.Size(85, 13);
             this.lblCoName1.TabIndex = 21;
-            this.lblCoName1.Text = "Contact Name:";
+            this.lblCoName1.Text = "Company Name:";
             // 
             // txtBillCoName
             // 
-            this.txtBillCoName.Location = new System.Drawing.Point(6, 36);
+            this.txtBillCoName.Location = new System.Drawing.Point(176, 40);
             this.txtBillCoName.Name = "txtBillCoName";
             this.txtBillCoName.Size = new System.Drawing.Size(162, 20);
             this.txtBillCoName.TabIndex = 20;
@@ -414,7 +446,7 @@ namespace DeskJockey
             // lblBillZip
             // 
             this.lblBillZip.AutoSize = true;
-            this.lblBillZip.Location = new System.Drawing.Point(177, 59);
+            this.lblBillZip.Location = new System.Drawing.Point(177, 105);
             this.lblBillZip.Name = "lblBillZip";
             this.lblBillZip.Size = new System.Drawing.Size(25, 13);
             this.lblBillZip.TabIndex = 14;
@@ -423,7 +455,7 @@ namespace DeskJockey
             // lblBillState
             // 
             this.lblBillState.AutoSize = true;
-            this.lblBillState.Location = new System.Drawing.Point(93, 59);
+            this.lblBillState.Location = new System.Drawing.Point(93, 105);
             this.lblBillState.Name = "lblBillState";
             this.lblBillState.Size = new System.Drawing.Size(35, 13);
             this.lblBillState.TabIndex = 15;
@@ -432,7 +464,7 @@ namespace DeskJockey
             // lblBillCountry
             // 
             this.lblBillCountry.AutoSize = true;
-            this.lblBillCountry.Location = new System.Drawing.Point(243, 59);
+            this.lblBillCountry.Location = new System.Drawing.Point(243, 105);
             this.lblBillCountry.Name = "lblBillCountry";
             this.lblBillCountry.Size = new System.Drawing.Size(46, 13);
             this.lblBillCountry.TabIndex = 16;
@@ -441,7 +473,7 @@ namespace DeskJockey
             // lblBillCity
             // 
             this.lblBillCity.AutoSize = true;
-            this.lblBillCity.Location = new System.Drawing.Point(9, 59);
+            this.lblBillCity.Location = new System.Drawing.Point(9, 105);
             this.lblBillCity.Name = "lblBillCity";
             this.lblBillCity.Size = new System.Drawing.Size(27, 13);
             this.lblBillCity.TabIndex = 17;
@@ -449,7 +481,7 @@ namespace DeskJockey
             // 
             // txtBillZip
             // 
-            this.txtBillZip.Location = new System.Drawing.Point(174, 75);
+            this.txtBillZip.Location = new System.Drawing.Point(174, 121);
             this.txtBillZip.Name = "txtBillZip";
             this.txtBillZip.Size = new System.Drawing.Size(60, 20);
             this.txtBillZip.TabIndex = 8;
@@ -457,7 +489,7 @@ namespace DeskJockey
             // 
             // txtBillState
             // 
-            this.txtBillState.Location = new System.Drawing.Point(90, 75);
+            this.txtBillState.Location = new System.Drawing.Point(90, 121);
             this.txtBillState.Name = "txtBillState";
             this.txtBillState.Size = new System.Drawing.Size(78, 20);
             this.txtBillState.TabIndex = 9;
@@ -465,7 +497,7 @@ namespace DeskJockey
             // 
             // txtBillCountry
             // 
-            this.txtBillCountry.Location = new System.Drawing.Point(240, 75);
+            this.txtBillCountry.Location = new System.Drawing.Point(240, 121);
             this.txtBillCountry.Name = "txtBillCountry";
             this.txtBillCountry.Size = new System.Drawing.Size(106, 20);
             this.txtBillCountry.TabIndex = 10;
@@ -473,7 +505,7 @@ namespace DeskJockey
             // 
             // txtBillCity
             // 
-            this.txtBillCity.Location = new System.Drawing.Point(6, 75);
+            this.txtBillCity.Location = new System.Drawing.Point(6, 121);
             this.txtBillCity.Name = "txtBillCity";
             this.txtBillCity.Size = new System.Drawing.Size(78, 20);
             this.txtBillCity.TabIndex = 11;
@@ -482,7 +514,7 @@ namespace DeskJockey
             // lblBillAddr2
             // 
             this.lblBillAddr2.AutoSize = true;
-            this.lblBillAddr2.Location = new System.Drawing.Point(354, 20);
+            this.lblBillAddr2.Location = new System.Drawing.Point(187, 65);
             this.lblBillAddr2.Name = "lblBillAddr2";
             this.lblBillAddr2.Size = new System.Drawing.Size(57, 13);
             this.lblBillAddr2.TabIndex = 18;
@@ -490,7 +522,7 @@ namespace DeskJockey
             // 
             // txtBillAddr2
             // 
-            this.txtBillAddr2.Location = new System.Drawing.Point(351, 36);
+            this.txtBillAddr2.Location = new System.Drawing.Point(184, 81);
             this.txtBillAddr2.Name = "txtBillAddr2";
             this.txtBillAddr2.Size = new System.Drawing.Size(184, 20);
             this.txtBillAddr2.TabIndex = 12;
@@ -498,7 +530,7 @@ namespace DeskJockey
             // lblBillAddr1
             // 
             this.lblBillAddr1.AutoSize = true;
-            this.lblBillAddr1.Location = new System.Drawing.Point(177, 20);
+            this.lblBillAddr1.Location = new System.Drawing.Point(10, 65);
             this.lblBillAddr1.Name = "lblBillAddr1";
             this.lblBillAddr1.Size = new System.Drawing.Size(57, 13);
             this.lblBillAddr1.TabIndex = 19;
@@ -506,7 +538,7 @@ namespace DeskJockey
             // 
             // txtBillAddr1
             // 
-            this.txtBillAddr1.Location = new System.Drawing.Point(174, 36);
+            this.txtBillAddr1.Location = new System.Drawing.Point(7, 81);
             this.txtBillAddr1.Name = "txtBillAddr1";
             this.txtBillAddr1.Size = new System.Drawing.Size(171, 20);
             this.txtBillAddr1.TabIndex = 13;
@@ -832,12 +864,12 @@ namespace DeskJockey
             this.cboCustomers.TabIndex = 3;
             this.cboCustomers.SelectedIndexChanged += new System.EventHandler(this.cboCustomers_SelectedIndexChanged);
             // 
-            // rdoExcelSheet
+            // rdoQuote
             // 
             this.rdoQuote.AutoSize = true;
             this.rdoQuote.Checked = true;
             this.rdoQuote.Location = new System.Drawing.Point(221, 20);
-            this.rdoQuote.Name = "rdoExcelSheet";
+            this.rdoQuote.Name = "rdoQuote";
             this.rdoQuote.Size = new System.Drawing.Size(54, 17);
             this.rdoQuote.TabIndex = 2;
             this.rdoQuote.TabStop = true;
@@ -1239,6 +1271,96 @@ namespace DeskJockey
             this.tabFrame.TabStop = false;
             this.tabFrame.Tag = "";
             // 
+            // chkSpecialPricing
+            // 
+            this.chkSpecialPricing.AutoSize = true;
+            this.chkSpecialPricing.Location = new System.Drawing.Point(440, 42);
+            this.chkSpecialPricing.Name = "chkSpecialPricing";
+            this.chkSpecialPricing.Size = new System.Drawing.Size(96, 17);
+            this.chkSpecialPricing.TabIndex = 26;
+            this.chkSpecialPricing.Text = "Special Pricing";
+            this.chkSpecialPricing.UseVisualStyleBackColor = true;
+            // 
+            // grpSpecialPricing
+            // 
+            this.grpSpecialPricing.Controls.Add(this.btnSpecialPrice);
+            this.grpSpecialPricing.Controls.Add(this.mskTextSpecialPrice);
+            this.grpSpecialPricing.Controls.Add(this.lblSpecialPrice);
+            this.grpSpecialPricing.Controls.Add(this.txtPartName);
+            this.grpSpecialPricing.Controls.Add(this.lblPartName);
+            this.grpSpecialPricing.Controls.Add(this.mskTxtCustIDSpecPrice);
+            this.grpSpecialPricing.Controls.Add(this.lblCustIDSpecPrice);
+            this.grpSpecialPricing.Location = new System.Drawing.Point(3, 455);
+            this.grpSpecialPricing.Name = "grpSpecialPricing";
+            this.grpSpecialPricing.Size = new System.Drawing.Size(541, 55);
+            this.grpSpecialPricing.TabIndex = 3;
+            this.grpSpecialPricing.TabStop = false;
+            this.grpSpecialPricing.Text = "Special Pricing";
+            // 
+            // lblCustIDSpecPrice
+            // 
+            this.lblCustIDSpecPrice.AutoSize = true;
+            this.lblCustIDSpecPrice.Location = new System.Drawing.Point(6, 22);
+            this.lblCustIDSpecPrice.Name = "lblCustIDSpecPrice";
+            this.lblCustIDSpecPrice.Size = new System.Drawing.Size(68, 13);
+            this.lblCustIDSpecPrice.TabIndex = 0;
+            this.lblCustIDSpecPrice.Text = "Customer ID:";
+            // 
+            // mskTxtCustIDSpecPrice
+            // 
+            this.mskTxtCustIDSpecPrice.Location = new System.Drawing.Point(80, 19);
+            this.mskTxtCustIDSpecPrice.Mask = "99999";
+            this.mskTxtCustIDSpecPrice.Name = "mskTxtCustIDSpecPrice";
+            this.mskTxtCustIDSpecPrice.PromptChar = ' ';
+            this.mskTxtCustIDSpecPrice.Size = new System.Drawing.Size(58, 20);
+            this.mskTxtCustIDSpecPrice.TabIndex = 17;
+            // 
+            // lblPartName
+            // 
+            this.lblPartName.AutoSize = true;
+            this.lblPartName.Location = new System.Drawing.Point(144, 22);
+            this.lblPartName.Name = "lblPartName";
+            this.lblPartName.Size = new System.Drawing.Size(60, 13);
+            this.lblPartName.TabIndex = 18;
+            this.lblPartName.Text = "Part Name:";
+            // 
+            // txtPartName
+            // 
+            this.txtPartName.Location = new System.Drawing.Point(207, 19);
+            this.txtPartName.Name = "txtPartName";
+            this.txtPartName.Size = new System.Drawing.Size(100, 20);
+            this.txtPartName.TabIndex = 19;
+            // 
+            // lblSpecialPrice
+            // 
+            this.lblSpecialPrice.AutoSize = true;
+            this.lblSpecialPrice.Location = new System.Drawing.Point(316, 22);
+            this.lblSpecialPrice.Name = "lblSpecialPrice";
+            this.lblSpecialPrice.Size = new System.Drawing.Size(34, 13);
+            this.lblSpecialPrice.TabIndex = 20;
+            this.lblSpecialPrice.Text = "Price:";
+            // 
+            // mskTextSpecialPrice
+            // 
+            this.mskTextSpecialPrice.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.mskTextSpecialPrice.Location = new System.Drawing.Point(351, 19);
+            this.mskTextSpecialPrice.Mask = "$9999";
+            this.mskTextSpecialPrice.Name = "mskTextSpecialPrice";
+            this.mskTextSpecialPrice.PromptChar = ' ';
+            this.mskTextSpecialPrice.Size = new System.Drawing.Size(50, 20);
+            this.mskTextSpecialPrice.TabIndex = 21;
+            this.mskTextSpecialPrice.Text = "0";
+            // 
+            // btnSpecialPrice
+            // 
+            this.btnSpecialPrice.Location = new System.Drawing.Point(413, 17);
+            this.btnSpecialPrice.Name = "btnSpecialPrice";
+            this.btnSpecialPrice.Size = new System.Drawing.Size(75, 23);
+            this.btnSpecialPrice.TabIndex = 22;
+            this.btnSpecialPrice.Text = "Submit";
+            this.btnSpecialPrice.UseVisualStyleBackColor = true;
+            this.btnSpecialPrice.Click += new System.EventHandler(this.btnSpecialPrice_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1274,6 +1396,8 @@ namespace DeskJockey
             this.grpShipping.ResumeLayout(false);
             this.grpShipping.PerformLayout();
             this.tabFrame.ResumeLayout(false);
+            this.grpSpecialPricing.ResumeLayout(false);
+            this.grpSpecialPricing.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1382,6 +1506,17 @@ namespace DeskJockey
         private System.Windows.Forms.Label lblShipVia;
         private System.Windows.Forms.TextBox txtTrackNum;
         private System.Windows.Forms.Label lblTrackNum;
+        private System.Windows.Forms.TextBox txtBillContact;
+        private System.Windows.Forms.Label lblBillContactName;
+        private System.Windows.Forms.CheckBox chkSpecialPricing;
+        private System.Windows.Forms.GroupBox grpSpecialPricing;
+        private System.Windows.Forms.MaskedTextBox mskTxtCustIDSpecPrice;
+        private System.Windows.Forms.Label lblCustIDSpecPrice;
+        private System.Windows.Forms.TextBox txtPartName;
+        private System.Windows.Forms.Label lblPartName;
+        private System.Windows.Forms.Button btnSpecialPrice;
+        private System.Windows.Forms.MaskedTextBox mskTextSpecialPrice;
+        private System.Windows.Forms.Label lblSpecialPrice;
     }
 }
 

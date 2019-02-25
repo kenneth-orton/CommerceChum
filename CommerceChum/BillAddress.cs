@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DeskJockey
+namespace CommerceChum
 {
     [Table("billAddress")]
     class BillAddress
@@ -9,8 +9,8 @@ namespace DeskJockey
         [Key]
         [Column("customerID")]
         public int customerID { get; set; }
-        [Column("billContactName")]
-        public string contactName { get; set; }
+        [Column("billCoName")]
+        public string coName { get; set; }
         [Column("billAddr1")]
         public string addr1 { get; set; }
         [Column("billAddr2")]
@@ -31,7 +31,7 @@ namespace DeskJockey
         public BillAddress()
         {
             this.customerID = 0;
-            this.contactName = "";
+            this.coName = "";
             this.addr1 = "";
             this.addr2 = "";
             this.city = "";
@@ -44,7 +44,7 @@ namespace DeskJockey
         public BillAddress(int id, string name, string addr1, string addr2, string city, string state, string zip, string country, string phone)
         {
             this.customerID = id;
-            this.contactName = name;
+            this.coName = name;
             this.addr1 = addr1;
             this.addr2 = addr2;
             this.city = city;
@@ -60,14 +60,14 @@ namespace DeskJockey
                 return false;
 
             BillAddress billAddr = obj as BillAddress;
-            return (this.customerID == billAddr.customerID && this.contactName == billAddr.contactName && this.addr1 == billAddr.addr1
+            return (this.customerID == billAddr.customerID && this.coName == billAddr.coName && this.addr1 == billAddr.addr1
                     && this.addr2 == billAddr.addr2 && this.city == billAddr.city && this.state == billAddr.state && this.zip == billAddr.zip
                     && this.country == billAddr.country && this.phoneNo == billAddr.phoneNo);
         }
 
         public override int GetHashCode()
         {
-            return (customerID.GetHashCode() + contactName.GetHashCode() + addr1.GetHashCode() + addr2.GetHashCode() + city.GetHashCode()
+            return (customerID.GetHashCode() + coName.GetHashCode() + addr1.GetHashCode() + addr2.GetHashCode() + city.GetHashCode()
                     + state.GetHashCode() + zip.GetHashCode() + country.GetHashCode() + phoneNo.GetHashCode());
         }
     }

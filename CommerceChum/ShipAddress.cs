@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DeskJockey
+namespace CommerceChum
 {
     [Table("shipAddress")]
     class ShipAddress
@@ -10,8 +10,8 @@ namespace DeskJockey
         [Key]
         [Column("customerID")]
         public int customerID { get; set; }
-        [Column("shipContactName")]
-        public string contactName { get; set; }
+        [Column("shipCoName")]
+        public string coName { get; set; }
         [Column("shipAddr1")]
         public string addr1 { get; set; }
         [Column("shipAddr2")]
@@ -32,7 +32,7 @@ namespace DeskJockey
         public ShipAddress()
         {
             this.customerID = 0;
-            this.contactName = "";
+            this.coName = "";
             this.addr1 = "";
             this.addr2 = "";
             this.city = "";
@@ -45,7 +45,7 @@ namespace DeskJockey
         public ShipAddress(int id, string name, string addr1, string addr2, string city, string state, string zip, string country, string phone)
         {
             this.customerID = id;
-            this.contactName = name;
+            this.coName = name;
             this.addr1 = addr1;
             this.addr2 = addr2;
             this.city = city;
@@ -58,7 +58,7 @@ namespace DeskJockey
         public ShipAddress(BillAddress billAddr)
         {
             this.customerID = billAddr.customerID;
-            this.contactName = billAddr.contactName;
+            this.coName = billAddr.coName;
             this.addr1 = billAddr.addr1;
             this.addr2 = billAddr.addr2;
             this.city = billAddr.city;
@@ -74,14 +74,14 @@ namespace DeskJockey
                 return false;
 
             ShipAddress shipAddr = obj as ShipAddress;
-            return (this.customerID == shipAddr.customerID && this.contactName == shipAddr.contactName && this.addr1 == shipAddr.addr1
+            return (this.customerID == shipAddr.customerID && this.coName == shipAddr.coName && this.addr1 == shipAddr.addr1
                     && this.addr2 == shipAddr.addr2 && this.city == shipAddr.city && this.state == shipAddr.state && this.zip == shipAddr.zip
                     && this.country == shipAddr.country && this.phoneNo == shipAddr.phoneNo);
         }
 
         public override int GetHashCode()
         {
-            return (customerID.GetHashCode() + contactName.GetHashCode() + addr1.GetHashCode() + addr2.GetHashCode() + city.GetHashCode()
+            return (customerID.GetHashCode() + coName.GetHashCode() + addr1.GetHashCode() + addr2.GetHashCode() + city.GetHashCode()
                     + state.GetHashCode() + zip.GetHashCode() + country.GetHashCode() + phoneNo.GetHashCode());
         }
     }

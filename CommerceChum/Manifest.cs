@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DeskJockey
+namespace CommerceChum
 {
     [Table("manifest")]
     class Manifest

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DeskJockey
+namespace CommerceChum
 {
     [Table("product")]
     public class Product

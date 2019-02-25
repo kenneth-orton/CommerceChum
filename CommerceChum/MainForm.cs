@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
-namespace DeskJockey
+namespace CommerceChum
 {
     public partial class MainForm : Form
     {
@@ -431,8 +432,17 @@ namespace DeskJockey
 
         private void createExcelInvoice(string templateFilePath)
         {
+            StringBuilder shipDate = new StringBuilder();
+            shipDate.Append(dteShipDate.Value.Year);
+            shipDate.Append("-");
+            shipDate.Append(dteShipDate.Value.Month);
+            shipDate.Append("-");
+            shipDate.Append(dteShipDate.Value.Day);
+
+            //DateTime shipDate = dteShipDate.Value.Date;
             //dteShipDate.Format = DateTimePickerFormat.Custom;
-            //dteShipDate.CustomFormat = "yyyy-MM-dd hh:mm:ss";
+            //dteShipDate.CustomFormat = "yyyy-MM-dd";
+
             getSelectedCustomer(cboDBCustomers);
 
             int nextInvoiceNum = DatabaseManager.getNextInvoiceNumber();
@@ -570,11 +580,13 @@ namespace DeskJockey
             getSelectedProduct(cboProductsEdit);
             cboProducts.SelectedIndex = cboProductsEdit.SelectedIndex;
 
+            txtDBPartName.Text = txtDBPartDesc.Text = mskTxtDBPrice.Text = txtPartName.Text = mskTextSpecialPrice.Text = "";
+
             if (cboProductsEdit.SelectedIndex > 0)
             {
-                txtDBPartName.Text = selectedProduct.name;
+                txtDBPartName.Text = txtPartName.Text = selectedProduct.name;
                 txtDBPartDesc.Text = selectedProduct.description;
-                mskTxtDBPrice.Text = selectedProduct.price.ToString();
+                mskTxtDBPrice.Text = mskTextSpecialPrice.Text = selectedProduct.price.ToString();
             }
         }
 
@@ -661,7 +673,7 @@ namespace DeskJockey
 
         private void addShippingAddrInfo()
         {
-            txtShipCoName.Text = selectedCustomer.shipAddress.contactName;
+            txtShipCoName.Text = selectedCustomer.shipAddress.coName;
             txtShipAddr1.Text = selectedCustomer.shipAddress.addr1;
             txtShipAddr2.Text = selectedCustomer.shipAddress.addr2;
             txtShipCity.Text = selectedCustomer.shipAddress.city;
@@ -675,8 +687,10 @@ namespace DeskJockey
         {
             getSelectedCustomer(cboDBCustomers);
             mskTxtCustomerID.Text = selectedCustomer.customerID.ToString();
+            mskTxtCustIDSpecPrice.Text = selectedCustomer.customerID.ToString();
 
-            txtBillCoName.Text = selectedCustomer.billAddress.contactName;
+            txtBillContact.Text = selectedCustomer.contactName;
+            txtBillCoName.Text = selectedCustomer.billAddress.coName;
             txtBillAddr1.Text = selectedCustomer.billAddress.addr1;
             txtBillAddr2.Text = selectedCustomer.billAddress.addr2;
             txtBillCity.Text = selectedCustomer.billAddress.city;
@@ -685,6 +699,7 @@ namespace DeskJockey
             txtBillCountry.Text = selectedCustomer.billAddress.country;
             txtBillPhoneNumber.Text = selectedCustomer.billAddress.phoneNo;
             txtBillPayTerms.Text = selectedCustomer.payTerms;
+            chkSpecialPricing.Checked = selectedCustomer.specialPricing;
 
             if (selectedCustomer.addressSame)
             {
@@ -701,6 +716,7 @@ namespace DeskJockey
         private void cboCustomers_SelectedIndexChanged(object sender, EventArgs e)
         {
             getSelectedCustomer(cboCustomers);
+            lstVwQuote.Items.Clear();
         }
 
         private void rdoInvoice_CheckedChanged(object sender, EventArgs e)
@@ -761,7 +777,7 @@ namespace DeskJockey
             {
                 int customerID = 0;
                 Int32.TryParse(mskTxtCustomerID.Text, out customerID);
-                Customer newCustomer = new Customer(customerID, cboDBCustomers.Text, txtBillPayTerms.Text, chkSameAsBilling.Checked);
+                Customer newCustomer = new Customer(customerID, cboDBCustomers.Text, txtBillContact.Text, txtBillPayTerms.Text, chkSameAsBilling.Checked, chkSpecialPricing.Checked);
                 newCustomer.billAddress = new BillAddress(customerID, txtBillCoName.Text, txtBillAddr1.Text, txtBillAddr2.Text, txtBillCity.Text, txtBillState.Text, txtBillZip.Text, txtBillCountry.Text, txtBillPhoneNumber.Text);
                 newCustomer.shipAddress = new ShipAddress(newCustomer.billAddress);
 
@@ -898,6 +914,34 @@ namespace DeskJockey
         {
             if (rdoAddCustomer.Checked)
                 addressInputChecks();
+        }
+
+        private void btnSpecialPrice_Click(object sender, EventArgs e)
+        {
+            int customerID = 0;
+            Int32.TryParse(mskTxtCustIDSpecPrice.Text, out customerID);
+
+            if (!DatabaseManager.customerExists(customerID))
+            {
+                string msg = "Customer does not exist. Add the customer to the \n database before editing special pricing.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                return;
+            }
+
+            int productID = DatabaseManager.getProductID(txtPartName.Text);
+
+            if (productID < 0)
+            {
+                string msg = "Product does not exist. Add the product to the \n database before editing special pricing.";
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                return;
+            }
+
+            double specialPrice = 0.0;
+            Double.TryParse(mskTextSpecialPrice.Text.Replace("$", String.Empty), out specialPrice);
+
+            SpecialPrice obj = new SpecialPrice(customerID, productID, specialPrice);
+            DatabaseManager.insertSpecialPrice(obj);
         }
     }
 }
