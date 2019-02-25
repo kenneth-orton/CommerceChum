@@ -102,6 +102,9 @@ namespace CommerceChum
                         comboBox.SelectedIndex = 1;
                     break;
                 case CBOBoxID.PRODUCTS_SP:
+                    if (selectedCustomer.customerID == 0)
+                        break;
+                    dbMngr.selectedCustomer = selectedCustomer;
                     rsProduct = dbMngr.specialPriceProducts;
 
                     foreach (var product in rsProduct)
@@ -712,6 +715,10 @@ namespace CommerceChum
             mskTxtCustIDSpecPrice.Text = selectedCustomer.customerID.ToString();
 
             txtBillContact.Text = selectedCustomer.contactName;
+
+            if (selectedCustomer.billAddress == null)
+                selectedCustomer.billAddress = new BillAddress();
+                            
             txtBillCoName.Text = selectedCustomer.billAddress.coName;
             txtBillAddr1.Text = selectedCustomer.billAddress.addr1;
             txtBillAddr2.Text = selectedCustomer.billAddress.addr2;
@@ -720,6 +727,7 @@ namespace CommerceChum
             txtBillZip.Text = selectedCustomer.billAddress.zip;
             txtBillCountry.Text = selectedCustomer.billAddress.country;
             txtBillPhoneNumber.Text = selectedCustomer.billAddress.phoneNo;
+        
             txtBillPayTerms.Text = selectedCustomer.payTerms;
             chkSpecialPricing.Checked = selectedCustomer.specialPricing;
 
@@ -731,6 +739,10 @@ namespace CommerceChum
             else
             {
                 chkSameAsBilling.Checked = false;
+
+                if (selectedCustomer.shipAddress == null)
+                    selectedCustomer.shipAddress = new ShipAddress();
+
                 addShippingAddrInfo();
             }
         }
@@ -739,6 +751,11 @@ namespace CommerceChum
         {
             getSelectedCustomer(cboCustomers);
             lstVwQuote.Items.Clear();
+
+            if (rdoInvoice.Checked && cboCustomers.SelectedIndex > 0 && selectedCustomer.specialPricing)
+                populateFormCombobox(cboProducts, CBOBoxID.PRODUCTS_SP);
+            else
+                populateFormCombobox(cboProducts, CBOBoxID.PRODUCTS);
         }
 
         private void rdoInvoice_CheckedChanged(object sender, EventArgs e)

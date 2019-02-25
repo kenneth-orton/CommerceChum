@@ -39,6 +39,7 @@ namespace CommerceChum
     class DatabaseManager
     {
         public int nextInvoiceNumber { get; set; }
+        public Customer selectedCustomer { get; set; }
 
         public List<Product> products
         {
@@ -67,7 +68,7 @@ namespace CommerceChum
                 {
                     var result = (from p in context.Products
                                   join sp in context.SpecialPrices on p.productID equals sp.productID
-                                  where p.active == true
+                                  where p.active == true && sp.customerID == selectedCustomer.customerID
                                   select new { p.productID, p.name, p.description, sp.price, p.active }).ToList();
 
                     foreach (var item in result)
@@ -227,6 +228,12 @@ namespace CommerceChum
                 if (customerExists(newCustomer.companyName))
                 {
                     var customer = context.Customers.Include("BillAddress").Include("ShipAddress").FirstOrDefault(c => c.companyName == newCustomer.companyName);
+
+                    if (customer.billAddress == null)
+                        customer.billAddress = new BillAddress();
+                    if (customer.shipAddress == null)
+                        customer.shipAddress = new ShipAddress();
+
                     newCustomer.customerID = customer.customerID;
                     if (!customer.Equals(newCustomer))
                     {
