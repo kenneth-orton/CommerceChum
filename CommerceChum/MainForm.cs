@@ -13,7 +13,8 @@ namespace CommerceChum
         private Product selectedProduct = null;
         private List<Customer> rsCustomer = null;
         private Customer selectedCustomer = null;
-        private List<OrderHistory> rsOrders = null;
+        private List<Product> snProduct = null;
+        //private List<OrderHistory> rsOrders = null;
         private static string folder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         private string discountCalc;
         private string transFeeCalc;
@@ -26,36 +27,39 @@ namespace CommerceChum
         private void MainForm_Load(object sender, EventArgs e)
         {
             InitQuoteListView();
-            initQuoteTab();
-            initDBTab();
+            initTabs();
+
+            cboProducts.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cboProducts.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cboProductsEdit.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cboProductsEdit.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cboSNParts.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cboSNParts.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
         }
 
-        private void initQuoteTab()
+
+        private enum CBOBoxID { PRODUCTS, CUSTOMERS, ORDER_IDS, PRODUCTS_SP, PRODUCTS_SN };
+
+        private void initTabs()
         {
             populateFormCombobox(cboProducts, CBOBoxID.PRODUCTS);
             populateFormCombobox(cboCustomers, CBOBoxID.CUSTOMERS);
+            populateFormCombobox(cboProductsEdit, CBOBoxID.PRODUCTS);
+            populateFormCombobox(cboDBCustomers, CBOBoxID.CUSTOMERS);
+            populateFormCombobox(cboSNParts, CBOBoxID.PRODUCTS_SN);
+
             grpShipping.Enabled = false;
             grpDiscount.Enabled = false;
             btnGenerate.Enabled = false;
             txtTrackNum.Enabled = false;
             grpPayType.Enabled = false;
             chkInvAddToDB.Enabled = false;
+
             btnMoveItemUp.Text = ((char)0x25B2).ToString();
             btnMoveItemDown.Text = ((char)0x25BC).ToString();
             dteShipDate.Format = DateTimePickerFormat.Custom;
             dteShipDate.CustomFormat = "MM/dd/yyyy";
-            cboProducts.AutoCompleteSource = AutoCompleteSource.ListItems;
-            cboProducts.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-        }
 
-        private enum CBOBoxID { PRODUCTS, CUSTOMERS, ORDER_IDS, PRODUCTS_SP, FIVE };
-        private void initDBTab()
-        {
-            populateFormCombobox(cboProductsEdit, CBOBoxID.PRODUCTS);
-            populateFormCombobox(cboDBCustomers, CBOBoxID.CUSTOMERS);
-            populateFormCombobox(cboSNOrderID, CBOBoxID.ORDER_IDS);
-            cboProductsEdit.AutoCompleteSource = AutoCompleteSource.ListItems;
-            cboProductsEdit.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             enableShippingInput();
         }
 
@@ -116,6 +120,18 @@ namespace CommerceChum
                     if (comboBox.Items.Count > 0)
                         comboBox.SelectedIndex = 1;
                     break;
+                case CBOBoxID.PRODUCTS_SN:
+                    snProduct = dbMngr.productsWithSN;
+
+                    foreach (var product in snProduct)
+                    {
+                        if (product.active)
+                            comboBox.Items.Insert(i++, product.name);
+                    }
+
+                    if (comboBox.Items.Count > 0)
+                        comboBox.SelectedIndex = 1;
+                    break;
                 case CBOBoxID.CUSTOMERS:
                     rsCustomer = dbMngr.customers;
                     
@@ -128,20 +144,20 @@ namespace CommerceChum
                     if (comboBox.Items.Count > 0)
                         comboBox.SelectedIndex = 1;
                     break;
-                case CBOBoxID.ORDER_IDS:
-                    rsOrders = dbMngr.orders;
+                //case CBOBoxID.ORDER_IDS:
+                //    rsOrders = dbMngr.orders;
 
-                    foreach (var order in rsOrders)
-                    {
-                        if (rdoSNOrderID.Checked)
-                            comboBox.Items.Insert(i++, order.orderID);
-                        else
-                            comboBox.Items.Insert(i++, order.poNum);
-                    }
+                //    foreach (var order in rsOrders)
+                //    {
+                //        if (rdoSNOrderID.Checked)
+                //            comboBox.Items.Insert(i++, order.orderID);
+                //        else
+                //            comboBox.Items.Insert(i++, order.poNum);
+                //    }
 
-                    if (comboBox.Items.Count > 0)
-                        comboBox.SelectedIndex = 1;
-                    break;
+                //    if (comboBox.Items.Count > 0)
+                //        comboBox.SelectedIndex = 1;
+                //    break;
             }
         }
 
@@ -438,9 +454,16 @@ namespace CommerceChum
             dbMngr.insertOrder(newOrder);
         }
 
-        private void createExcelPackList(string filePath)
+        private void createExcelPackList(string templateFilePath)
         {
-            throw new NotImplementedException();
+            getSelectedCustomer(cboCustomers);
+
+            string outFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), selectedCustomer.companyName + "-" + txtPONum.Text + ".xlsx");
+
+            PackListWorksheetBuilder invoiceWksht = new PackListWorksheetBuilder(templateFilePath, lstVwQuote, dteShipDate.Text, txtShipVia.Text, txtTrackNum.Text,
+                                                                               txtPONum.Text, selectedCustomer, outFileName);
+            invoiceWksht.insertCellData();
+            invoiceWksht.saveExcelFile();
         }
 
         private bool checkUserInput()
@@ -468,9 +491,9 @@ namespace CommerceChum
 
         private void createExcelInvoice(string templateFilePath)
         {
-            getSelectedCustomer(cboDBCustomers);
+            getSelectedCustomer(cboCustomers);
 
-            dbMngr.nextInvoiceNumber = dbMngr.getNextInvoiceNumber();
+            dbMngr.nextInvoiceNumber = dbMngr.getNextInvoiceNumber(selectedCustomer);
             string outFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), selectedCustomer.companyName + "-" + dbMngr.nextInvoiceNumber + ".xlsx");
 
             InvoiceWorksheetBuilder invoiceWksht = new InvoiceWorksheetBuilder(templateFilePath, lstVwQuote, dteShipDate.Text, txtShipVia.Text, txtTrackNum.Text, 
@@ -641,8 +664,7 @@ namespace CommerceChum
                     return;
             }
 
-            initDBTab();
-            initQuoteTab();
+            initTabs();
         }
 
         private void partInputChecks()
@@ -752,7 +774,7 @@ namespace CommerceChum
             getSelectedCustomer(cboCustomers);
             lstVwQuote.Items.Clear();
 
-            if (rdoInvoice.Checked && cboCustomers.SelectedIndex > 0 && selectedCustomer.specialPricing)
+            if ((rdoInvoice.Checked || rdoPackingList.Checked) && cboCustomers.SelectedIndex > 0 && selectedCustomer.specialPricing)
                 populateFormCombobox(cboProducts, CBOBoxID.PRODUCTS_SP);
             else
                 populateFormCombobox(cboProducts, CBOBoxID.PRODUCTS);
@@ -783,6 +805,11 @@ namespace CommerceChum
             btnGenerate.Enabled = true;
             txtTrackNum.Enabled = true;
             chkInvAddToDB.Enabled = false;
+
+            if (rdoPackingList.Checked && selectedCustomer.specialPricing)
+            {
+                populateFormCombobox(cboProducts, CBOBoxID.PRODUCTS_SP);
+            }
         }
 
         private void rdoQuote_CheckedChanged(object sender, EventArgs e)
@@ -852,8 +879,7 @@ namespace CommerceChum
                     return;
             }
 
-            initDBTab();
-            initQuoteTab();
+            initTabs();
         }
 
         private void addressInputChecks()
@@ -994,14 +1020,33 @@ namespace CommerceChum
             dbMngr.insertSpecialPrice(obj);
         }
 
-        private void rdoSNOrderID_CheckedChanged(object sender, EventArgs e)
+        private void btnSNAdd_Click(object sender, EventArgs e)
         {
-            populateFormCombobox(cboSNOrderID, CBOBoxID.ORDER_IDS);
+            string result = "";
+            long snNumber = 0;
+            bool isTwelveChars = txtSerialNumber.TextLength == 12 ? true : false;
+            bool isHex = long.TryParse(txtSerialNumber.Text, System.Globalization.NumberStyles.AllowHexSpecifier, null, out snNumber);
+
+            if (!(isTwelveChars && isHex))
+                result = "serial number";
+            else if ((cboSNParts.SelectedItem == null) || (!snProduct.Exists(product => product.name == cboSNParts.SelectedItem.ToString())))
+                result = "part name";
+            else if (cboSNOrderID.Text == "")
+                result = "order id/po number";
+
+            if (result != "")
+            {
+                MessageBox.Show("  Error: " + result + " entry not valid. \n Re-enter information and try again.", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            selectedProduct = snProduct.Find(product => product.name == cboSNParts.SelectedItem.ToString());
+
+            SerialNumber snNum = new SerialNumber(snNumber, cboSNOrderID.Text, selectedProduct.productID, chkClosedLoop.Checked, chkAnaInp.Checked, chkRigidTap.Checked,
+                                                  chkTHC.Checked, chkMacroProg.Checked, chkThreading.Checked);
+            dbMngr.insertSN(snNum);
         }
 
-        private void rdoSNPONum_CheckedChanged(object sender, EventArgs e)
-        {
-            populateFormCombobox(cboSNOrderID, CBOBoxID.ORDER_IDS);
-        }
+
     }
 }

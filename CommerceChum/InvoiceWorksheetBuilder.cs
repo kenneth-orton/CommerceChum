@@ -14,7 +14,6 @@ namespace CommerceChum
         private ExcelRange cell;
 
         private static int startProductRow = 23;
-        private static int finalProductRow;
         private int nextInvoiceNum;
 
         private string shipDate;
@@ -155,7 +154,6 @@ namespace CommerceChum
                     }
 
                 }
-                finalProductRow = rowIndex;
                 rowIndex += 1;
             }
             rowIndex += 1;

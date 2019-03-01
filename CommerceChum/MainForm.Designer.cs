@@ -99,6 +99,7 @@ namespace CommerceChum
             this.cboProductsEdit = new System.Windows.Forms.ComboBox();
             this.tabQuote = new System.Windows.Forms.TabPage();
             this.grpOutputSelection = new System.Windows.Forms.GroupBox();
+            this.chkInvAddToDB = new System.Windows.Forms.CheckBox();
             this.txtTrackNum = new System.Windows.Forms.TextBox();
             this.lblTrackNum = new System.Windows.Forms.Label();
             this.dteShipDate = new System.Windows.Forms.DateTimePicker();
@@ -143,16 +144,24 @@ namespace CommerceChum
             this.lblTransFee = new System.Windows.Forms.Label();
             this.lblSubTotal = new System.Windows.Forms.Label();
             this.tabFrame = new System.Windows.Forms.TabControl();
+            this.tabSerialNumbers = new System.Windows.Forms.TabPage();
             this.grpSerialNumbers = new System.Windows.Forms.GroupBox();
-            this.rdoSNOrderID = new System.Windows.Forms.RadioButton();
-            this.rdoSNPONum = new System.Windows.Forms.RadioButton();
-            this.txtSNPartName = new System.Windows.Forms.TextBox();
-            this.lblSNPartName = new System.Windows.Forms.Label();
-            this.cboSNOrderID = new System.Windows.Forms.ComboBox();
-            this.lblSerialNumber = new System.Windows.Forms.Label();
+            this.btnSNRemove = new System.Windows.Forms.Button();
+            this.btnSNAdd = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.chkThreading = new System.Windows.Forms.CheckBox();
+            this.chkTHC = new System.Windows.Forms.CheckBox();
+            this.chkRigidTap = new System.Windows.Forms.CheckBox();
+            this.chkAnaInp = new System.Windows.Forms.CheckBox();
+            this.chkExtIO = new System.Windows.Forms.CheckBox();
+            this.chkClosedLoop = new System.Windows.Forms.CheckBox();
+            this.chkMacroProg = new System.Windows.Forms.CheckBox();
+            this.lblActivations = new System.Windows.Forms.Label();
+            this.cboSNParts = new System.Windows.Forms.ComboBox();
             this.txtSerialNumber = new System.Windows.Forms.TextBox();
-            this.btnSNSubmit = new System.Windows.Forms.Button();
-            this.chkInvAddToDB = new System.Windows.Forms.CheckBox();
+            this.lblSerialNumber = new System.Windows.Forms.Label();
+            this.cboSNOrderID = new System.Windows.Forms.ComboBox();
+            this.lblSNPartName = new System.Windows.Forms.Label();
             this.tabDatabase.SuspendLayout();
             this.grpSpecialPricing.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -167,12 +176,12 @@ namespace CommerceChum
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown)).BeginInit();
             this.grpShipping.SuspendLayout();
             this.tabFrame.SuspendLayout();
+            this.tabSerialNumbers.SuspendLayout();
             this.grpSerialNumbers.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabDatabase
             // 
-            this.tabDatabase.Controls.Add(this.grpSerialNumbers);
             this.tabDatabase.Controls.Add(this.grpSpecialPricing);
             this.tabDatabase.Controls.Add(this.groupBox1);
             this.tabDatabase.Controls.Add(this.grpBillAddr);
@@ -182,7 +191,7 @@ namespace CommerceChum
             this.tabDatabase.Name = "tabDatabase";
             this.tabDatabase.Size = new System.Drawing.Size(547, 593);
             this.tabDatabase.TabIndex = 2;
-            this.tabDatabase.Text = "Database Editor";
+            this.tabDatabase.Text = "Parts & Customers";
             this.tabDatabase.UseVisualStyleBackColor = true;
             // 
             // grpSpecialPricing
@@ -890,6 +899,18 @@ namespace CommerceChum
             this.grpOutputSelection.TabStop = false;
             this.grpOutputSelection.Text = "Customer";
             // 
+            // chkInvAddToDB
+            // 
+            this.chkInvAddToDB.AutoSize = true;
+            this.chkInvAddToDB.Checked = true;
+            this.chkInvAddToDB.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkInvAddToDB.Location = new System.Drawing.Point(461, 58);
+            this.chkInvAddToDB.Name = "chkInvAddToDB";
+            this.chkInvAddToDB.Size = new System.Drawing.Size(75, 17);
+            this.chkInvAddToDB.TabIndex = 13;
+            this.chkInvAddToDB.Text = "Add to DB";
+            this.chkInvAddToDB.UseVisualStyleBackColor = true;
+            // 
             // txtTrackNum
             // 
             this.txtTrackNum.Location = new System.Drawing.Point(336, 56);
@@ -1366,6 +1387,7 @@ namespace CommerceChum
             // 
             this.tabFrame.Controls.Add(this.tabQuote);
             this.tabFrame.Controls.Add(this.tabDatabase);
+            this.tabFrame.Controls.Add(this.tabSerialNumbers);
             this.tabFrame.Location = new System.Drawing.Point(13, 7);
             this.tabFrame.Name = "tabFrame";
             this.tabFrame.SelectedIndex = 0;
@@ -1374,62 +1396,171 @@ namespace CommerceChum
             this.tabFrame.TabStop = false;
             this.tabFrame.Tag = "";
             // 
+            // tabSerialNumbers
+            // 
+            this.tabSerialNumbers.Controls.Add(this.grpSerialNumbers);
+            this.tabSerialNumbers.Location = new System.Drawing.Point(4, 22);
+            this.tabSerialNumbers.Name = "tabSerialNumbers";
+            this.tabSerialNumbers.Size = new System.Drawing.Size(547, 593);
+            this.tabSerialNumbers.TabIndex = 3;
+            this.tabSerialNumbers.Text = "Serial Numbers";
+            this.tabSerialNumbers.UseVisualStyleBackColor = true;
+            // 
             // grpSerialNumbers
             // 
-            this.grpSerialNumbers.Controls.Add(this.btnSNSubmit);
+            this.grpSerialNumbers.Controls.Add(this.btnSNRemove);
+            this.grpSerialNumbers.Controls.Add(this.btnSNAdd);
+            this.grpSerialNumbers.Controls.Add(this.label5);
+            this.grpSerialNumbers.Controls.Add(this.chkThreading);
+            this.grpSerialNumbers.Controls.Add(this.chkTHC);
+            this.grpSerialNumbers.Controls.Add(this.chkRigidTap);
+            this.grpSerialNumbers.Controls.Add(this.chkAnaInp);
+            this.grpSerialNumbers.Controls.Add(this.chkExtIO);
+            this.grpSerialNumbers.Controls.Add(this.chkClosedLoop);
+            this.grpSerialNumbers.Controls.Add(this.chkMacroProg);
+            this.grpSerialNumbers.Controls.Add(this.lblActivations);
+            this.grpSerialNumbers.Controls.Add(this.cboSNParts);
             this.grpSerialNumbers.Controls.Add(this.txtSerialNumber);
             this.grpSerialNumbers.Controls.Add(this.lblSerialNumber);
             this.grpSerialNumbers.Controls.Add(this.cboSNOrderID);
-            this.grpSerialNumbers.Controls.Add(this.txtSNPartName);
             this.grpSerialNumbers.Controls.Add(this.lblSNPartName);
-            this.grpSerialNumbers.Controls.Add(this.rdoSNPONum);
-            this.grpSerialNumbers.Controls.Add(this.rdoSNOrderID);
-            this.grpSerialNumbers.Location = new System.Drawing.Point(0, 516);
+            this.grpSerialNumbers.Location = new System.Drawing.Point(7, 3);
             this.grpSerialNumbers.Name = "grpSerialNumbers";
-            this.grpSerialNumbers.Size = new System.Drawing.Size(544, 74);
-            this.grpSerialNumbers.TabIndex = 4;
+            this.grpSerialNumbers.Size = new System.Drawing.Size(537, 171);
+            this.grpSerialNumbers.TabIndex = 5;
             this.grpSerialNumbers.TabStop = false;
             this.grpSerialNumbers.Text = "Serial Numbers";
             // 
-            // rdoSNOrderID
+            // btnSNRemove
             // 
-            this.rdoSNOrderID.AutoSize = true;
-            this.rdoSNOrderID.Checked = true;
-            this.rdoSNOrderID.Location = new System.Drawing.Point(9, 21);
-            this.rdoSNOrderID.Name = "rdoSNOrderID";
-            this.rdoSNOrderID.Size = new System.Drawing.Size(65, 17);
-            this.rdoSNOrderID.TabIndex = 0;
-            this.rdoSNOrderID.TabStop = true;
-            this.rdoSNOrderID.Text = "Order ID";
-            this.rdoSNOrderID.UseVisualStyleBackColor = true;
-            this.rdoSNOrderID.CheckedChanged += new System.EventHandler(this.rdoSNOrderID_CheckedChanged);
+            this.btnSNRemove.Location = new System.Drawing.Point(456, 70);
+            this.btnSNRemove.Name = "btnSNRemove";
+            this.btnSNRemove.Size = new System.Drawing.Size(75, 23);
+            this.btnSNRemove.TabIndex = 38;
+            this.btnSNRemove.Text = "Remove";
+            this.btnSNRemove.UseVisualStyleBackColor = true;
             // 
-            // rdoSNPONum
+            // btnSNAdd
             // 
-            this.rdoSNPONum.AutoSize = true;
-            this.rdoSNPONum.Location = new System.Drawing.Point(81, 21);
-            this.rdoSNPONum.Name = "rdoSNPONum";
-            this.rdoSNPONum.Size = new System.Drawing.Size(80, 17);
-            this.rdoSNPONum.TabIndex = 1;
-            this.rdoSNPONum.Text = "PO Number";
-            this.rdoSNPONum.UseVisualStyleBackColor = true;
-            this.rdoSNPONum.CheckedChanged += new System.EventHandler(this.rdoSNPONum_CheckedChanged);
+            this.btnSNAdd.Location = new System.Drawing.Point(375, 70);
+            this.btnSNAdd.Name = "btnSNAdd";
+            this.btnSNAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnSNAdd.TabIndex = 37;
+            this.btnSNAdd.Text = "Add";
+            this.btnSNAdd.UseVisualStyleBackColor = true;
+            this.btnSNAdd.Click += new System.EventHandler(this.btnSNAdd_Click);
             // 
-            // txtSNPartName
+            // label5
             // 
-            this.txtSNPartName.Location = new System.Drawing.Point(237, 31);
-            this.txtSNPartName.Name = "txtSNPartName";
-            this.txtSNPartName.Size = new System.Drawing.Size(73, 20);
-            this.txtSNPartName.TabIndex = 21;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 25);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(110, 13);
+            this.label5.TabIndex = 36;
+            this.label5.Text = "Order ID/PO Number:";
             // 
-            // lblSNPartName
+            // chkThreading
             // 
-            this.lblSNPartName.AutoSize = true;
-            this.lblSNPartName.Location = new System.Drawing.Point(174, 34);
-            this.lblSNPartName.Name = "lblSNPartName";
-            this.lblSNPartName.Size = new System.Drawing.Size(60, 13);
-            this.lblSNPartName.TabIndex = 20;
-            this.lblSNPartName.Text = "Part Name:";
+            this.chkThreading.AutoSize = true;
+            this.chkThreading.Location = new System.Drawing.Point(330, 132);
+            this.chkThreading.Name = "chkThreading";
+            this.chkThreading.Size = new System.Drawing.Size(74, 17);
+            this.chkThreading.TabIndex = 35;
+            this.chkThreading.Text = "Threading";
+            this.chkThreading.UseVisualStyleBackColor = true;
+            // 
+            // chkTHC
+            // 
+            this.chkTHC.AutoSize = true;
+            this.chkTHC.Location = new System.Drawing.Point(204, 106);
+            this.chkTHC.Name = "chkTHC";
+            this.chkTHC.Size = new System.Drawing.Size(48, 17);
+            this.chkTHC.TabIndex = 34;
+            this.chkTHC.Text = "THC";
+            this.chkTHC.UseVisualStyleBackColor = true;
+            // 
+            // chkRigidTap
+            // 
+            this.chkRigidTap.AutoSize = true;
+            this.chkRigidTap.Location = new System.Drawing.Point(107, 132);
+            this.chkRigidTap.Name = "chkRigidTap";
+            this.chkRigidTap.Size = new System.Drawing.Size(72, 17);
+            this.chkRigidTap.TabIndex = 33;
+            this.chkRigidTap.Text = "Rigid Tap";
+            this.chkRigidTap.UseVisualStyleBackColor = true;
+            // 
+            // chkAnaInp
+            // 
+            this.chkAnaInp.AutoSize = true;
+            this.chkAnaInp.Location = new System.Drawing.Point(107, 106);
+            this.chkAnaInp.Name = "chkAnaInp";
+            this.chkAnaInp.Size = new System.Drawing.Size(91, 17);
+            this.chkAnaInp.TabIndex = 32;
+            this.chkAnaInp.Text = "Analog Inputs";
+            this.chkAnaInp.UseVisualStyleBackColor = true;
+            // 
+            // chkExtIO
+            // 
+            this.chkExtIO.AutoSize = true;
+            this.chkExtIO.Location = new System.Drawing.Point(9, 132);
+            this.chkExtIO.Name = "chkExtIO";
+            this.chkExtIO.Size = new System.Drawing.Size(90, 17);
+            this.chkExtIO.TabIndex = 31;
+            this.chkExtIO.Text = "Extended I/O";
+            this.chkExtIO.UseVisualStyleBackColor = true;
+            // 
+            // chkClosedLoop
+            // 
+            this.chkClosedLoop.AutoSize = true;
+            this.chkClosedLoop.Location = new System.Drawing.Point(9, 106);
+            this.chkClosedLoop.Name = "chkClosedLoop";
+            this.chkClosedLoop.Size = new System.Drawing.Size(85, 17);
+            this.chkClosedLoop.TabIndex = 30;
+            this.chkClosedLoop.Text = "Closed Loop";
+            this.chkClosedLoop.UseVisualStyleBackColor = true;
+            // 
+            // chkMacroProg
+            // 
+            this.chkMacroProg.AutoSize = true;
+            this.chkMacroProg.Location = new System.Drawing.Point(204, 132);
+            this.chkMacroProg.Name = "chkMacroProg";
+            this.chkMacroProg.Size = new System.Drawing.Size(120, 17);
+            this.chkMacroProg.TabIndex = 29;
+            this.chkMacroProg.Text = "Macro Programming";
+            this.chkMacroProg.UseVisualStyleBackColor = true;
+            // 
+            // lblActivations
+            // 
+            this.lblActivations.AutoSize = true;
+            this.lblActivations.Location = new System.Drawing.Point(6, 80);
+            this.lblActivations.Name = "lblActivations";
+            this.lblActivations.Size = new System.Drawing.Size(62, 13);
+            this.lblActivations.TabIndex = 28;
+            this.lblActivations.Text = "Activations:";
+            // 
+            // cboSNParts
+            // 
+            this.cboSNParts.FormattingEnabled = true;
+            this.cboSNParts.Location = new System.Drawing.Point(177, 44);
+            this.cboSNParts.Name = "cboSNParts";
+            this.cboSNParts.Size = new System.Drawing.Size(172, 21);
+            this.cboSNParts.TabIndex = 27;
+            // 
+            // txtSerialNumber
+            // 
+            this.txtSerialNumber.Location = new System.Drawing.Point(366, 44);
+            this.txtSerialNumber.Name = "txtSerialNumber";
+            this.txtSerialNumber.Size = new System.Drawing.Size(112, 20);
+            this.txtSerialNumber.TabIndex = 24;
+            // 
+            // lblSerialNumber
+            // 
+            this.lblSerialNumber.AutoSize = true;
+            this.lblSerialNumber.Location = new System.Drawing.Point(365, 25);
+            this.lblSerialNumber.Name = "lblSerialNumber";
+            this.lblSerialNumber.Size = new System.Drawing.Size(76, 13);
+            this.lblSerialNumber.TabIndex = 23;
+            this.lblSerialNumber.Text = "Serial Number:";
             // 
             // cboSNOrderID
             // 
@@ -1439,42 +1570,14 @@ namespace CommerceChum
             this.cboSNOrderID.Size = new System.Drawing.Size(155, 21);
             this.cboSNOrderID.TabIndex = 22;
             // 
-            // lblSerialNumber
+            // lblSNPartName
             // 
-            this.lblSerialNumber.AutoSize = true;
-            this.lblSerialNumber.Location = new System.Drawing.Point(319, 34);
-            this.lblSerialNumber.Name = "lblSerialNumber";
-            this.lblSerialNumber.Size = new System.Drawing.Size(25, 13);
-            this.lblSerialNumber.TabIndex = 23;
-            this.lblSerialNumber.Text = "SN:";
-            // 
-            // txtSerialNumber
-            // 
-            this.txtSerialNumber.Location = new System.Drawing.Point(350, 31);
-            this.txtSerialNumber.Name = "txtSerialNumber";
-            this.txtSerialNumber.Size = new System.Drawing.Size(84, 20);
-            this.txtSerialNumber.TabIndex = 24;
-            // 
-            // btnSNSubmit
-            // 
-            this.btnSNSubmit.Location = new System.Drawing.Point(446, 30);
-            this.btnSNSubmit.Name = "btnSNSubmit";
-            this.btnSNSubmit.Size = new System.Drawing.Size(75, 23);
-            this.btnSNSubmit.TabIndex = 25;
-            this.btnSNSubmit.Text = "Submit";
-            this.btnSNSubmit.UseVisualStyleBackColor = true;
-            // 
-            // chkInvAddToDB
-            // 
-            this.chkInvAddToDB.AutoSize = true;
-            this.chkInvAddToDB.Checked = true;
-            this.chkInvAddToDB.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkInvAddToDB.Location = new System.Drawing.Point(461, 58);
-            this.chkInvAddToDB.Name = "chkInvAddToDB";
-            this.chkInvAddToDB.Size = new System.Drawing.Size(75, 17);
-            this.chkInvAddToDB.TabIndex = 13;
-            this.chkInvAddToDB.Text = "Add to DB";
-            this.chkInvAddToDB.UseVisualStyleBackColor = true;
+            this.lblSNPartName.AutoSize = true;
+            this.lblSNPartName.Location = new System.Drawing.Point(174, 23);
+            this.lblSNPartName.Name = "lblSNPartName";
+            this.lblSNPartName.Size = new System.Drawing.Size(60, 13);
+            this.lblSNPartName.TabIndex = 20;
+            this.lblSNPartName.Text = "Part Name:";
             // 
             // MainForm
             // 
@@ -1513,6 +1616,7 @@ namespace CommerceChum
             this.grpShipping.ResumeLayout(false);
             this.grpShipping.PerformLayout();
             this.tabFrame.ResumeLayout(false);
+            this.tabSerialNumbers.ResumeLayout(false);
             this.grpSerialNumbers.ResumeLayout(false);
             this.grpSerialNumbers.PerformLayout();
             this.ResumeLayout(false);
@@ -1634,16 +1738,25 @@ namespace CommerceChum
         private System.Windows.Forms.Button btnSpecialPrice;
         private System.Windows.Forms.MaskedTextBox mskTextSpecialPrice;
         private System.Windows.Forms.Label lblSpecialPrice;
+        private System.Windows.Forms.CheckBox chkInvAddToDB;
+        private System.Windows.Forms.TabPage tabSerialNumbers;
         private System.Windows.Forms.GroupBox grpSerialNumbers;
-        private System.Windows.Forms.ComboBox cboSNOrderID;
-        private System.Windows.Forms.TextBox txtSNPartName;
-        private System.Windows.Forms.Label lblSNPartName;
-        private System.Windows.Forms.RadioButton rdoSNPONum;
-        private System.Windows.Forms.RadioButton rdoSNOrderID;
-        private System.Windows.Forms.Button btnSNSubmit;
         private System.Windows.Forms.TextBox txtSerialNumber;
         private System.Windows.Forms.Label lblSerialNumber;
-        private System.Windows.Forms.CheckBox chkInvAddToDB;
+        private System.Windows.Forms.ComboBox cboSNOrderID;
+        private System.Windows.Forms.Label lblSNPartName;
+        private System.Windows.Forms.ComboBox cboSNParts;
+        private System.Windows.Forms.Button btnSNRemove;
+        private System.Windows.Forms.Button btnSNAdd;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox chkThreading;
+        private System.Windows.Forms.CheckBox chkTHC;
+        private System.Windows.Forms.CheckBox chkRigidTap;
+        private System.Windows.Forms.CheckBox chkAnaInp;
+        private System.Windows.Forms.CheckBox chkExtIO;
+        private System.Windows.Forms.CheckBox chkClosedLoop;
+        private System.Windows.Forms.CheckBox chkMacroProg;
+        private System.Windows.Forms.Label lblActivations;
     }
 }
 

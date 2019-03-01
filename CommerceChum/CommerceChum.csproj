@@ -132,6 +132,7 @@
     <Compile Include="DatabaseManager.cs" />
     <Compile Include="Manifest.cs" />
     <Compile Include="OrderHistory.cs" />
+    <Compile Include="PackListWorksheetBuilder.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="InvoiceWorksheetBuilder.cs" />
     <Compile Include="QuoteWorksheetBuilder.cs" />
@@ -143,6 +144,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerialNumber.cs" />
     <Compile Include="ShipAddress.cs" />
     <Compile Include="SpecialPrice.cs" />
     <EmbeddedResource Include="MainForm.resx">

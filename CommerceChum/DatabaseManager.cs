@@ -29,6 +29,7 @@ namespace CommerceChum
         public virtual DbSet<OrderHistory> OrderHistory { get; set; }
         public virtual DbSet<Manifest> Manifest { get; set; }
         public virtual DbSet<SpecialPrice> SpecialPrices { get; set; } 
+        public virtual DbSet<SerialNumber> SerialNumbers { get; set; }
         
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -74,6 +75,33 @@ namespace CommerceChum
                     foreach (var item in result)
                         products.Add(new Product(item.productID, item.name, item.description, item.price));
 
+                    return products;
+                }
+            }
+        }
+
+        public List<Product> productsWithSN
+        {
+            get
+            {
+                List<Product> products = new List<Product>();
+                using (var context = new dbContext())
+                {
+                    var result = context.Products.Select(row => row).Where(p => p.active == true).ToList();
+                    
+                    foreach (Product product in result)
+                    {
+                        switch (product.productID)
+                        {
+                            case 3:
+                            case 4:
+                            case 8:
+                            case 9:
+                            case 10:
+                                products.Add(product);
+                                break;
+                        }
+                    }
                     return products;
                 }
             }
@@ -267,20 +295,87 @@ namespace CommerceChum
                 return context.Customers.Where(c => c.companyName == companyName).Any();
         }
 
-        public int getNextInvoiceNumber()
+        public int getNextInvoiceNumber(Customer selectedCustomer)
         {
             using (var context = new dbContext())
             {
                 try
                 {
-                    nextInvoiceNumber = context.OrderHistory.Max(id => id.orderID);
+                    nextInvoiceNumber = context.OrderHistory.Where(c => c.customerID == selectedCustomer.customerID).Max(id => id.orderID);
                 }
                 catch
                 {
-                    nextInvoiceNumber = 9995; // new customer invoices start at 10000
+                    switch(selectedCustomer.customerID)
+                    {
+                        case 9121:
+                            nextInvoiceNumber = 9995; 
+                            break;
+                        case 1250: 
+                            nextInvoiceNumber = 9405;
+                            break;
+                        case 48922: 
+                            nextInvoiceNumber = 3925;
+                            break;
+                        case 3105:
+                            nextInvoiceNumber = 1160;
+                            break;
+                        case 7712:
+                            nextInvoiceNumber = 10770;
+                            break;
+                        case 94568:
+                            nextInvoiceNumber = 21995;
+                            break;
+                        case 3174:
+                            nextInvoiceNumber = 33000;
+                            break;
+                        default:
+                            nextInvoiceNumber = 5000; 
+                            break;
+                    }                   
                 }
             }
             return nextInvoiceNumber + 5;
+        }
+
+        public void insertSN(SerialNumber serialNumber)
+        { 
+            using (var context = new dbContext())
+            {
+                if (snExists(serialNumber))
+                {
+                    var sNumber = context.SerialNumbers.FirstOrDefault(sn => sn.serialNum == serialNumber.serialNum);
+                    if (!sNumber.Equals(serialNumber))
+                    {
+                        sNumber.serialNum = serialNumber.serialNum;
+                        sNumber.orderID = serialNumber.orderID;
+                        sNumber.productID = serialNumber.productID;
+                        sNumber.closedLoop = serialNumber.closedLoop;
+                        sNumber.extIO = serialNumber.extIO;
+                        sNumber.anaInputs = serialNumber.anaInputs;
+                        sNumber.rigidTap = serialNumber.rigidTap;
+                        sNumber.thc = serialNumber.thc;
+                        sNumber.macroProg = serialNumber.macroProg;
+                        sNumber.threading = serialNumber.threading;
+                    }
+                }
+                else
+                    context.SerialNumbers.Add(serialNumber);
+
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch
+                {
+                    throw new SQLiteException();
+                }
+            }
+        }
+
+        private bool snExists(SerialNumber serialNumber)
+        {
+            using (var context = new dbContext())
+                return context.SerialNumbers.Where(sn => sn.serialNum == serialNumber.serialNum).Any();
         }
     }
 }
