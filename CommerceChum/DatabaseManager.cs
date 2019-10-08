@@ -4,13 +4,12 @@ using System.Data.Entity;
 using System.Data.SQLite;
 using System.Linq;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Text;
 
 namespace CommerceChum
 {
     class dbContext : DbContext
     {
-        private static string folder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        private static string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         private static string pathToDB = System.IO.Path.Combine(folder, "sales_manager.db");
         public dbContext() : base(new SQLiteConnection()
             {
@@ -87,22 +86,7 @@ namespace CommerceChum
                 List<Product> products = new List<Product>();
                 using (var context = new dbContext())
                 {
-                    var result = context.Products.Select(row => row).Where(p => p.active == true).ToList();
-                    
-                    foreach (Product product in result)
-                    {
-                        switch (product.productID)
-                        {
-                            case 3:
-                            case 4:
-                            case 8:
-                            case 9:
-                            case 10:
-                                products.Add(product);
-                                break;
-                        }
-                    }
-                    return products;
+                    return context.Products.Select(row => row).Where(p => p.active == true && p.hasSN == true).ToList();
                 }
             }
         }
@@ -112,7 +96,9 @@ namespace CommerceChum
             get
             {
                 using (var context = new dbContext())
+                {
                     return context.OrderHistory.Select(row => row).Distinct().OrderByDescending(x => x.shipDate).ToList();
+                }
             }
         }
 
@@ -305,33 +291,7 @@ namespace CommerceChum
                 }
                 catch
                 {
-                    switch(selectedCustomer.customerID)
-                    {
-                        case 9121:
-                            nextInvoiceNumber = 9995; 
-                            break;
-                        case 1250: 
-                            nextInvoiceNumber = 9405;
-                            break;
-                        case 48922: 
-                            nextInvoiceNumber = 3925;
-                            break;
-                        case 3105:
-                            nextInvoiceNumber = 1160;
-                            break;
-                        case 7712:
-                            nextInvoiceNumber = 10770;
-                            break;
-                        case 94568:
-                            nextInvoiceNumber = 21995;
-                            break;
-                        case 3174:
-                            nextInvoiceNumber = 33000;
-                            break;
-                        default:
-                            nextInvoiceNumber = 5000; 
-                            break;
-                    }                   
+                    nextInvoiceNumber = 5735; // default start number for invoices
                 }
             }
             return nextInvoiceNumber + 5;

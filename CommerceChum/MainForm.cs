@@ -14,8 +14,8 @@ namespace CommerceChum
         private List<Customer> rsCustomer = null;
         private Customer selectedCustomer = null;
         private List<Product> snProduct = null;
-        //private List<OrderHistory> rsOrders = null;
-        private static string folder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        private List<OrderHistory> rsOrders = null;
+        private static string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         private string discountCalc;
         private string transFeeCalc;
 
@@ -35,6 +35,8 @@ namespace CommerceChum
             cboProductsEdit.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             cboSNParts.AutoCompleteSource = AutoCompleteSource.ListItems;
             cboSNParts.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cboSNOrderID.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cboSNOrderID.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
         }
 
 
@@ -47,6 +49,7 @@ namespace CommerceChum
             populateFormCombobox(cboProductsEdit, CBOBoxID.PRODUCTS);
             populateFormCombobox(cboDBCustomers, CBOBoxID.CUSTOMERS);
             populateFormCombobox(cboSNParts, CBOBoxID.PRODUCTS_SN);
+            populateFormCombobox(cboSNOrderID, CBOBoxID.ORDER_IDS);
 
             grpShipping.Enabled = false;
             grpDiscount.Enabled = false;
@@ -124,10 +127,7 @@ namespace CommerceChum
                     snProduct = dbMngr.productsWithSN;
 
                     foreach (var product in snProduct)
-                    {
-                        if (product.active)
-                            comboBox.Items.Insert(i++, product.name);
-                    }
+                        comboBox.Items.Insert(i++, product.name);
 
                     if (comboBox.Items.Count > 0)
                         comboBox.SelectedIndex = 1;
@@ -144,20 +144,15 @@ namespace CommerceChum
                     if (comboBox.Items.Count > 0)
                         comboBox.SelectedIndex = 1;
                     break;
-                //case CBOBoxID.ORDER_IDS:
-                //    rsOrders = dbMngr.orders;
+                case CBOBoxID.ORDER_IDS:
+                    rsOrders = dbMngr.orders;
 
-                //    foreach (var order in rsOrders)
-                //    {
-                //        if (rdoSNOrderID.Checked)
-                //            comboBox.Items.Insert(i++, order.orderID);
-                //        else
-                //            comboBox.Items.Insert(i++, order.poNum);
-                //    }
+                    foreach (var order in rsOrders)
+                        comboBox.Items.Insert(i++, order.orderID);
 
-                //    if (comboBox.Items.Count > 0)
-                //        comboBox.SelectedIndex = 1;
-                //    break;
+                    if (comboBox.Items.Count > 0)
+                        comboBox.SelectedIndex = 1;
+                    break;
             }
         }
 
@@ -426,11 +421,10 @@ namespace CommerceChum
                 string filePath = System.IO.Path.Combine(folder, "InvoiceTemplate.xlsx");
                 if (fileAvailable(filePath) && checkUserInput())
                 {
-
                     createExcelInvoice(filePath);
 
                     if (chkInvAddToDB.Checked)
-                        addOrderToDB();
+                        addOrderToDB(-1);
                 }
             }
             else if (rdoPackingList.Checked)
@@ -441,7 +435,7 @@ namespace CommerceChum
             }
         }
 
-        private void addOrderToDB()
+        private void addOrderToDB(int orderID)
         {
             StringBuilder shipDate = new StringBuilder();
             shipDate.Append(dteShipDate.Value.Year);
@@ -450,7 +444,8 @@ namespace CommerceChum
             shipDate.Append("-");
             shipDate.Append(dteShipDate.Value.Day);
 
-            OrderHistory newOrder = new OrderHistory(dbMngr.nextInvoiceNumber, selectedCustomer.customerID, txtPONum.Text, txtTrackNum.Text, txtShipVia.Text, Convert.ToDateTime(shipDate.ToString()));
+            int invoiceNum = orderID == -1 ? dbMngr.nextInvoiceNumber : orderID;
+            OrderHistory newOrder = new OrderHistory(invoiceNum, selectedCustomer.customerID, txtPONum.Text, txtTrackNum.Text, txtShipVia.Text, Convert.ToDateTime(shipDate.ToString()));
             dbMngr.insertOrder(newOrder);
         }
 
@@ -458,7 +453,7 @@ namespace CommerceChum
         {
             getSelectedCustomer(cboCustomers);
 
-            string outFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), selectedCustomer.companyName + "-" + txtPONum.Text + ".xlsx");
+            string outFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), selectedCustomer.companyName + "-" + txtPONum.Text + ".xlsx");
 
             PackListWorksheetBuilder invoiceWksht = new PackListWorksheetBuilder(templateFilePath, lstVwQuote, dteShipDate.Text, txtShipVia.Text, txtTrackNum.Text,
                                                                                txtPONum.Text, selectedCustomer, outFileName);
@@ -494,7 +489,7 @@ namespace CommerceChum
             getSelectedCustomer(cboCustomers);
 
             dbMngr.nextInvoiceNumber = dbMngr.getNextInvoiceNumber(selectedCustomer);
-            string outFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), selectedCustomer.companyName + "-" + dbMngr.nextInvoiceNumber + ".xlsx");
+            string outFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), selectedCustomer.companyName + "-" + dbMngr.nextInvoiceNumber + ".xlsx");
 
             InvoiceWorksheetBuilder invoiceWksht = new InvoiceWorksheetBuilder(templateFilePath, lstVwQuote, dteShipDate.Text, txtShipVia.Text, txtTrackNum.Text, 
                                                                                txtPONum.Text, dbMngr.nextInvoiceNumber, selectedCustomer, outFileName);
@@ -1023,9 +1018,8 @@ namespace CommerceChum
         private void btnSNAdd_Click(object sender, EventArgs e)
         {
             string result = "";
-            long snNumber = 0;
             bool isTwelveChars = txtSerialNumber.TextLength == 12 ? true : false;
-            bool isHex = long.TryParse(txtSerialNumber.Text, System.Globalization.NumberStyles.AllowHexSpecifier, null, out snNumber);
+            bool isHex = System.Text.RegularExpressions.Regex.IsMatch(txtSerialNumber.Text, @"\A\b[0-9a-fA-F]+\b\Z");
 
             if (!(isTwelveChars && isHex))
                 result = "serial number";
@@ -1033,6 +1027,9 @@ namespace CommerceChum
                 result = "part name";
             else if (cboSNOrderID.Text == "")
                 result = "order id/po number";
+
+            int orderID = 0; 
+            Int32.TryParse(cboSNOrderID.Text, out orderID);
 
             if (result != "")
             {
@@ -1042,11 +1039,9 @@ namespace CommerceChum
 
             selectedProduct = snProduct.Find(product => product.name == cboSNParts.SelectedItem.ToString());
 
-            SerialNumber snNum = new SerialNumber(snNumber, cboSNOrderID.Text, selectedProduct.productID, chkClosedLoop.Checked, chkAnaInp.Checked, chkRigidTap.Checked,
+            SerialNumber snNum = new SerialNumber(txtSerialNumber.Text, orderID, selectedProduct.productID, chkClosedLoop.Checked, chkAnaInp.Checked, chkRigidTap.Checked,
                                                   chkTHC.Checked, chkMacroProg.Checked, chkThreading.Checked);
             dbMngr.insertSN(snNum);
         }
-
-
     }
 }

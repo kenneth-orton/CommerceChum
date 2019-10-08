@@ -6,13 +6,12 @@ namespace CommerceChum
     [Table("serialNumbers")]
     class SerialNumber
     {
-        [Key]
-        [Column("serialNum")]
-        public long serialNum { get; set; }
-        [Column("orderID")]
-        public string orderID { get; set; }
-        [Column("productID")]
+        [Key, Column(Order = 0)]
+        public int orderID { get; set; }
+        [Key, Column(Order = 1)]
         public int productID { get; set; }
+        [Column("serialNum")]
+        public string serialNum { get; set; }
         [Column("closedLoop")]
         public bool closedLoop { get; set; }
         [Column("extIO")]
@@ -27,11 +26,15 @@ namespace CommerceChum
         public bool macroProg { get; set; }
         [Column("threading")]
         public bool threading { get; set; }
+        [ForeignKey("orderID")]
+        public virtual OrderHistory orderHistory { get; set; }
+        [ForeignKey("productID")]
+        public virtual Product product { get; set; }
 
-        public SerialNumber()
+    public SerialNumber()
         {
-            this.serialNum = 0;
-            this.orderID = "";
+            this.serialNum = "";
+            this.orderID = 0;
             this.productID = 0;
             this.closedLoop = false;
             this.extIO = false;
@@ -42,7 +45,7 @@ namespace CommerceChum
             this.threading = false;
         }
 
-        public SerialNumber(long sn, string ordID, int prodID, bool cl = false, bool exIO = false, bool anInps = false, 
+        public SerialNumber(string sn, int ordID, int prodID, bool cl = false, bool exIO = false, bool anInps = false, 
                             bool rTap = false, bool thc = false, bool macro = false, bool thrd = false)
         {
             this.serialNum = sn;

@@ -1403,7 +1403,7 @@ namespace CommerceChum
             this.tabSerialNumbers.Name = "tabSerialNumbers";
             this.tabSerialNumbers.Size = new System.Drawing.Size(547, 593);
             this.tabSerialNumbers.TabIndex = 3;
-            this.tabSerialNumbers.Text = "Serial Numbers";
+            this.tabSerialNumbers.Text = "Invoice & Serial Numbers";
             this.tabSerialNumbers.UseVisualStyleBackColor = true;
             // 
             // grpSerialNumbers
@@ -1433,6 +1433,7 @@ namespace CommerceChum
             // 
             // btnSNRemove
             // 
+            this.btnSNRemove.Enabled = false;
             this.btnSNRemove.Location = new System.Drawing.Point(456, 70);
             this.btnSNRemove.Name = "btnSNRemove";
             this.btnSNRemove.Size = new System.Drawing.Size(75, 23);

@@ -24,7 +24,6 @@ namespace CommerceChum
         public bool specialPricing { get; set; }
         public virtual BillAddress billAddress { get; set; }
         public virtual ShipAddress shipAddress { get; set; }
-        //[ForeignKey("customerID")]
         //public virtual SpecialPrice specialPrice { get; set; }
 
         public Customer()
