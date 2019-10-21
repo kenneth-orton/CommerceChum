@@ -1056,7 +1056,7 @@ namespace CommerceChum
         {
             int orderID = 0;
             if (Int32.TryParse(cboSNOrderID.GetItemText(cboSNOrderID.SelectedItem), out orderID))
-                dbMngr.displayOrderSerials(orderID, dtgvOrderSerials);
+                dbMngr.displaySerialNumbers(orderID, dtgvOrderSerials);
             else
             {
                 dtgvOrderSerials.DataSource = null;

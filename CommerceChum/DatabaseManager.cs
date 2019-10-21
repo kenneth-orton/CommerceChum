@@ -349,26 +349,40 @@ namespace CommerceChum
             }
         }
 
-        internal void displayOrderSerials(int orderID, DataGridView dtgvOrderSerials)
+        public void displaySerialNumbers(int orderID, DataGridView dtgvOrderSerials, bool customer=false)
         {
             using (var context = new dbContext())
             {
-                var custID = context.OrderHistory.FirstOrDefault(o => o.orderID == orderID); 
-                var orderHistory = from o in context.OrderHistory
-                                   where o.customerID == custID.customerID
-                                   orderby o.shipDate descending
-                                   select new { o.orderID, o.shipDate };
+                if (customer) 
+                {
+                    var custID = context.OrderHistory.FirstOrDefault(o => o.orderID == orderID);
+                    var orderHistory = from o in context.OrderHistory
+                                       where o.customerID == custID.customerID
+                                       orderby o.shipDate descending
+                                       select new { o.orderID, o.shipDate };
 
-                var serialNumbers = from s in context.SerialNumbers
-                                    join o in orderHistory on s.orderID equals o.orderID
-                                    orderby o.shipDate descending
-                                    select new { s.orderID, s.productID, o.shipDate, s.serialNum, s.closedLoop, s.extIO, s.anaInputs, s.rigidTap, s.thc, s.macroProg, s.threading };
+                    var serialNumbers = from s in context.SerialNumbers
+                                        join o in orderHistory on s.orderID equals o.orderID
+                                        orderby o.shipDate descending
+                                        select new { s.orderID, s.productID, o.shipDate, s.serialNum, s.closedLoop, s.extIO, s.anaInputs, s.rigidTap, s.thc, s.macroProg, s.threading };
 
-                var result = (from s in serialNumbers
-                              join p in context.Products on s.productID equals p.productID
-                              select new { s.orderID, p.name, s.shipDate, s.serialNum, s.closedLoop, s.extIO, s.anaInputs, s.rigidTap, s.thc, s.macroProg, s.threading }).ToList();
+                    var result = (from s in serialNumbers
+                                  join p in context.Products on s.productID equals p.productID
+                                  select new { s.orderID, p.name, s.shipDate, s.serialNum, s.closedLoop, s.extIO, s.anaInputs, s.rigidTap, s.thc, s.macroProg, s.threading }).ToList();
 
-                dtgvOrderSerials.DataSource = result;
+                    dtgvOrderSerials.DataSource = result;
+                }
+                else
+                {
+                    var result = (from s in context.SerialNumbers
+                                  join p in context.Products on s.productID equals p.productID
+                                  join o in context.OrderHistory on s.orderID equals o.orderID
+                                  where s.orderID == orderID
+                                  select new { s.orderID, p.name, o.shipDate, s.serialNum, s.closedLoop, s.extIO, s.anaInputs, s.rigidTap, s.thc, s.macroProg, s.threading }).ToList();
+
+                    dtgvOrderSerials.DataSource = result;
+                }
+
                 dtgvOrderSerials.Columns[0].HeaderCell.Value = "Order ID";
                 dtgvOrderSerials.Columns[1].HeaderCell.Value = "Part Name";
                 dtgvOrderSerials.Columns[2].HeaderCell.Value = "Ship Date";
