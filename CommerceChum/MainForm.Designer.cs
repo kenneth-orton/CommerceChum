@@ -1406,7 +1406,7 @@ namespace CommerceChum
             this.tabSerialNumbers.Name = "tabSerialNumbers";
             this.tabSerialNumbers.Size = new System.Drawing.Size(547, 593);
             this.tabSerialNumbers.TabIndex = 3;
-            this.tabSerialNumbers.Text = "Invoice & Serial Numbers";
+            this.tabSerialNumbers.Text = "Serial Numbers";
             this.tabSerialNumbers.UseVisualStyleBackColor = true;
             // 
             // dtgvOrderSerials
