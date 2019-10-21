@@ -145,6 +145,7 @@ namespace CommerceChum
             this.lblSubTotal = new System.Windows.Forms.Label();
             this.tabFrame = new System.Windows.Forms.TabControl();
             this.tabSerialNumbers = new System.Windows.Forms.TabPage();
+            this.dtgvOrderSerials = new System.Windows.Forms.DataGridView();
             this.grpSerialNumbers = new System.Windows.Forms.GroupBox();
             this.btnSNRemove = new System.Windows.Forms.Button();
             this.btnSNAdd = new System.Windows.Forms.Button();
@@ -177,6 +178,7 @@ namespace CommerceChum
             this.grpShipping.SuspendLayout();
             this.tabFrame.SuspendLayout();
             this.tabSerialNumbers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtgvOrderSerials)).BeginInit();
             this.grpSerialNumbers.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -1398,6 +1400,7 @@ namespace CommerceChum
             // 
             // tabSerialNumbers
             // 
+            this.tabSerialNumbers.Controls.Add(this.dtgvOrderSerials);
             this.tabSerialNumbers.Controls.Add(this.grpSerialNumbers);
             this.tabSerialNumbers.Location = new System.Drawing.Point(4, 22);
             this.tabSerialNumbers.Name = "tabSerialNumbers";
@@ -1405,6 +1408,19 @@ namespace CommerceChum
             this.tabSerialNumbers.TabIndex = 3;
             this.tabSerialNumbers.Text = "Invoice & Serial Numbers";
             this.tabSerialNumbers.UseVisualStyleBackColor = true;
+            // 
+            // dtgvOrderSerials
+            // 
+            this.dtgvOrderSerials.AllowUserToAddRows = false;
+            this.dtgvOrderSerials.AllowUserToDeleteRows = false;
+            this.dtgvOrderSerials.AllowUserToOrderColumns = true;
+            this.dtgvOrderSerials.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtgvOrderSerials.Location = new System.Drawing.Point(7, 180);
+            this.dtgvOrderSerials.Name = "dtgvOrderSerials";
+            this.dtgvOrderSerials.ReadOnly = true;
+            this.dtgvOrderSerials.Size = new System.Drawing.Size(531, 154);
+            this.dtgvOrderSerials.TabIndex = 6;
+            this.dtgvOrderSerials.SelectionChanged += new System.EventHandler(this.dtgvOrderSerials_SelectionChanged);
             // 
             // grpSerialNumbers
             // 
@@ -1433,13 +1449,13 @@ namespace CommerceChum
             // 
             // btnSNRemove
             // 
-            this.btnSNRemove.Enabled = false;
             this.btnSNRemove.Location = new System.Drawing.Point(456, 70);
             this.btnSNRemove.Name = "btnSNRemove";
             this.btnSNRemove.Size = new System.Drawing.Size(75, 23);
             this.btnSNRemove.TabIndex = 38;
             this.btnSNRemove.Text = "Remove";
             this.btnSNRemove.UseVisualStyleBackColor = true;
+            this.btnSNRemove.Click += new System.EventHandler(this.btnSNRemove_Click);
             // 
             // btnSNAdd
             // 
@@ -1570,6 +1586,7 @@ namespace CommerceChum
             this.cboSNOrderID.Name = "cboSNOrderID";
             this.cboSNOrderID.Size = new System.Drawing.Size(155, 21);
             this.cboSNOrderID.TabIndex = 22;
+            this.cboSNOrderID.SelectedIndexChanged += new System.EventHandler(this.cboSNOrderID_SelectedIndexChanged);
             // 
             // lblSNPartName
             // 
@@ -1618,6 +1635,7 @@ namespace CommerceChum
             this.grpShipping.PerformLayout();
             this.tabFrame.ResumeLayout(false);
             this.tabSerialNumbers.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dtgvOrderSerials)).EndInit();
             this.grpSerialNumbers.ResumeLayout(false);
             this.grpSerialNumbers.PerformLayout();
             this.ResumeLayout(false);
@@ -1758,6 +1776,7 @@ namespace CommerceChum
         private System.Windows.Forms.CheckBox chkClosedLoop;
         private System.Windows.Forms.CheckBox chkMacroProg;
         private System.Windows.Forms.Label lblActivations;
+        private System.Windows.Forms.DataGridView dtgvOrderSerials;
     }
 }
 

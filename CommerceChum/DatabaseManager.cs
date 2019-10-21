@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.SQLite;
 using System.Linq;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Windows.Forms;
 
 namespace CommerceChum
 {
@@ -46,7 +47,7 @@ namespace CommerceChum
             get
             {
                 using (var context = new dbContext())
-                    return context.Products.Select(row => row).Where(p => p.active == true).ToList(); 
+                    return context.Products.Select(row => row).Where(p => p.active == true).ToList();
             }
         }
 
@@ -113,7 +114,7 @@ namespace CommerceChum
         }
 
         public void insertPart(Product newProduct)
-        { 
+        {
             using (var context = new dbContext())
             {
                 if (partExists(newProduct.name))
@@ -298,7 +299,7 @@ namespace CommerceChum
         }
 
         public void insertSN(SerialNumber serialNumber)
-        { 
+        {
             using (var context = new dbContext())
             {
                 if (snExists(serialNumber))
@@ -336,6 +337,50 @@ namespace CommerceChum
         {
             using (var context = new dbContext())
                 return context.SerialNumbers.Where(sn => sn.serialNum == serialNumber.serialNum).Any();
+        }
+
+        public void removeSerialNumber(string serialNum)
+        {
+            using (var context = new dbContext())
+            {
+                var sNum = context.SerialNumbers.FirstOrDefault(s => s.serialNum == serialNum);
+                context.SerialNumbers.Remove(sNum);
+                context.SaveChanges();
+            }
+        }
+
+        internal void displayOrderSerials(int orderID, DataGridView dtgvOrderSerials)
+        {
+            using (var context = new dbContext())
+            {
+                var custID = context.OrderHistory.FirstOrDefault(o => o.orderID == orderID); 
+                var orderHistory = from o in context.OrderHistory
+                                   where o.customerID == custID.customerID
+                                   orderby o.shipDate descending
+                                   select new { o.orderID, o.shipDate };
+
+                var serialNumbers = from s in context.SerialNumbers
+                                    join o in orderHistory on s.orderID equals o.orderID
+                                    orderby o.shipDate descending
+                                    select new { s.orderID, s.productID, o.shipDate, s.serialNum, s.closedLoop, s.extIO, s.anaInputs, s.rigidTap, s.thc, s.macroProg, s.threading };
+
+                var result = (from s in serialNumbers
+                              join p in context.Products on s.productID equals p.productID
+                              select new { s.orderID, p.name, s.shipDate, s.serialNum, s.closedLoop, s.extIO, s.anaInputs, s.rigidTap, s.thc, s.macroProg, s.threading }).ToList();
+
+                dtgvOrderSerials.DataSource = result;
+                dtgvOrderSerials.Columns[0].HeaderCell.Value = "Order ID";
+                dtgvOrderSerials.Columns[1].HeaderCell.Value = "Part Name";
+                dtgvOrderSerials.Columns[2].HeaderCell.Value = "Ship Date";
+                dtgvOrderSerials.Columns[3].HeaderCell.Value = "Serial Number";
+                dtgvOrderSerials.Columns[4].HeaderCell.Value = "Closed Loop";
+                dtgvOrderSerials.Columns[5].HeaderCell.Value = "Extended IO";
+                dtgvOrderSerials.Columns[6].HeaderCell.Value = "Analog Inputs";
+                dtgvOrderSerials.Columns[7].HeaderCell.Value = "Rigid Tap";
+                dtgvOrderSerials.Columns[8].HeaderCell.Value = "Torch Height Control";
+                dtgvOrderSerials.Columns[9].HeaderCell.Value = "Macro Programming";
+                dtgvOrderSerials.Columns[10].HeaderCell.Value = "Threading";
+            }
         }
     }
 }

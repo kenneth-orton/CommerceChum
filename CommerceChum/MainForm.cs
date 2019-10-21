@@ -57,6 +57,7 @@ namespace CommerceChum
             txtTrackNum.Enabled = false;
             grpPayType.Enabled = false;
             chkInvAddToDB.Enabled = false;
+            txtSerialNumber.CharacterCasing = CharacterCasing.Upper;
 
             btnMoveItemUp.Text = ((char)0x25B2).ToString();
             btnMoveItemDown.Text = ((char)0x25BC).ToString();
@@ -1042,6 +1043,60 @@ namespace CommerceChum
             SerialNumber snNum = new SerialNumber(txtSerialNumber.Text, orderID, selectedProduct.productID, chkClosedLoop.Checked, chkAnaInp.Checked, chkRigidTap.Checked,
                                                   chkTHC.Checked, chkMacroProg.Checked, chkThreading.Checked);
             dbMngr.insertSN(snNum);
+            txtSerialNumber.Text = "";
+            cboSNParts.SelectedIndex = 0;
+            chkAnaInp.Checked = chkClosedLoop.Checked = chkExtIO.Checked = chkMacroProg.Checked = chkRigidTap.Checked = chkTHC.Checked = chkThreading.Checked = false;
+
+            int selectedIndex = cboSNOrderID.SelectedIndex;
+            cboSNOrderID.SelectedIndex = 0;
+            cboSNOrderID.SelectedIndex = selectedIndex;
+        }
+
+        private void cboSNOrderID_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int orderID = 0;
+            if (Int32.TryParse(cboSNOrderID.GetItemText(cboSNOrderID.SelectedItem), out orderID))
+                dbMngr.displayOrderSerials(orderID, dtgvOrderSerials);
+            else
+            {
+                dtgvOrderSerials.DataSource = null;
+                dtgvOrderSerials.Rows.Clear();
+                dtgvOrderSerials.Refresh();
+            }
+        }
+
+        private void btnSNRemove_Click(object sender, EventArgs e)
+        {
+            string result = "";
+            bool isTwelveChars = txtSerialNumber.TextLength == 12 ? true : false;
+            bool isHex = System.Text.RegularExpressions.Regex.IsMatch(txtSerialNumber.Text, @"\A\b[0-9a-fA-F]+\b\Z");
+
+            if (!(isTwelveChars && isHex))
+                result = "serial number";
+
+            if (result != "")
+            {
+                MessageBox.Show("  Error: " + result + " entry not valid. \n Re-enter information and try again.", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            dbMngr.removeSerialNumber(txtSerialNumber.Text);
+
+            int selectedIndex = cboSNOrderID.SelectedIndex;
+            cboSNOrderID.SelectedIndex = 0;
+            cboSNOrderID.SelectedIndex = selectedIndex;
+        }
+
+        private void dtgvOrderSerials_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dtgvOrderSerials.SelectedCells.Count > 0)
+            {
+                int selectedrowindex = dtgvOrderSerials.SelectedCells[0].RowIndex;
+
+                DataGridViewRow selectedRow = dtgvOrderSerials.Rows[selectedrowindex];
+
+                txtSerialNumber.Text = Convert.ToString(selectedRow.Cells[3].Value);
+            }
         }
     }
 }
