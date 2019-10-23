@@ -32,8 +32,8 @@ CREATE TABLE [customers] (
 , [specialPricing] bit NOT NULL DEFAULT 0
 );
 
---INSERT INTO customers(customerID, coName, contactName, payTerms, addressSame, specialPricing) VALUES(9121, "Mach Motion", "Carl", "Net-30", 0, 1);
---INSERT INTO customers(customerID, coName, contactName, payTerms, addressSame, specialPricing) VALUES(1250, "Hilmot LLC", "Jason Ocain", "Net-45", 1, 1);
+--INSERT INTO customers(customerID, coName, contactName, payTerms, addressSame, specialPricing) VALUES(9121, "Mach Motion", "hhhhh", "Net-30", 0, 1);
+--INSERT INTO customers(customerID, coName, contactName, payTerms, addressSame, specialPricing) VALUES(1250, "Hilmot LLC", "xxxxxx", "Net-45", 1, 1);
 
 drop table billAddress;
 
@@ -50,7 +50,7 @@ CREATE TABLE [billAddress] (
 , FOREIGN KEY(customerID) references customers(customerID) 
 );
 
---INSERT INTO billAddress(customerID, billCoName, billAddr1, billCity, billState, billZip, billCountry, billPhoneNo) VALUES(9121, "Edge Solutions LLC", "14518 County Road 7240", "Newburg", "MO", "65550-8929", "US", "573-341-1528");
+--INSERT INTO billAddress(customerID, billCoName, billAddr1, billCity, billState, billZip, billCountry, billPhoneNo) VALUES(9121, "a;lksjdl;kjf", "ijdidijdi", "asdfasdf", "zzO", "333333", "US", "3333333333");
 
 drop table shipAddress;
 
@@ -67,7 +67,7 @@ CREATE TABLE [shipAddress] (
 , FOREIGN KEY(customerID) references customers(customerID) 
 );
 
---INSERT INTO shipAddress(customerID, shipCoName, shipAddr1, shipCity, shipState, shipZip, shipCountry, shipPhoneNo) VALUES(9121, "MachMotion", "14518 County Road 7240", "Newburg", "MO", "65550-8929", "US", "573-341-1528");
+--INSERT INTO shipAddress(customerID, billCoName, billAddr1, billCity, billState, billZip, billCountry, billPhoneNo) VALUES(9121, "a;lksjdl;kjf", "ijdidijdi", "asdfasdf", "zzO", "333333", "US", "573-341-1528");
 
 drop table manifest;
 
@@ -94,7 +94,7 @@ CREATE TABLE [orderHistory] (
 , FOREIGN KEY(customerID) references customers(customerID)
 );
 
---INSERT INTO orderHistory(orderID, poNum, trackNum, shipType, shipDate, customerID) VALUES(11195, '5335', '1ZF9V5660392267102', 'UPS GND', '2017-04-11', 9121);
+--INSERT INTO orderHistory(orderID, poNum, trackNum, shipType, shipDate, customerID) VALUES(11195, '5335', 'sdasffwfwfwfff', 'UPS GND', '2017-04-11', 9121);
 
 drop table serialNumbers;
 
