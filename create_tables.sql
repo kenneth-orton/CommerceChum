@@ -32,8 +32,8 @@ CREATE TABLE [customers] (
 , [specialPricing] bit NOT NULL DEFAULT 0
 );
 
---INSERT INTO customers(customerID, coName, contactName, payTerms, addressSame, specialPricing) VALUES(9121, "Mach Motion", "hhhhh", "Net-30", 0, 1);
---INSERT INTO customers(customerID, coName, contactName, payTerms, addressSame, specialPricing) VALUES(1250, "Hilmot LLC", "xxxxxx", "Net-45", 1, 1);
+--INSERT INTO customers(customerID, coName, contactName, payTerms, addressSame, specialPricing) VALUES(9121, "ddfdef", "hhhhh", "Net-30", 0, 1);
+--INSERT INTO customers(customerID, coName, contactName, payTerms, addressSame, specialPricing) VALUES(1250, "lskjlksd", "xxxxxx", "Net-45", 1, 1);
 
 drop table billAddress;
 
