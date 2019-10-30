@@ -79,8 +79,8 @@ INSERT INTO product (name, description, price, active, hasSN) VALUES('180MAH4801
 INSERT INTO product (name, description, price, active, hasSN) VALUES('7729', 'EtherCAT Adapter Board', 550.00, 1, 0);
 INSERT INTO product (name, description, price, active, hasSN) VALUES('MACH4-INDUSTRIAL', 'Mach4-Industrial Software License', 1170.00, 1, 0);
 
-INSERT INTO billAddress(customerID, billContactName, billAddr1, billCity, billState, billZip, billCountry, billPhoneNo) VALUES(9121, "Carl", "14518 County Road 7240", "Newburg", "MO", "65550-8929", "US", "5555555555");
+INSERT INTO billAddress(customerID, billContactName, billAddr1, billCity, billState, billZip, billCountry, billPhoneNo) VALUES(9121, "dfssdaf", "sdasdfdfssdf", "Newburg", "MO", "3342243", "US", "5555555555");
 
-INSERT INTO shipAddress(customerID, shipContactName, shipAddr1, shipCity, shipState, shipZip, shipCountry, shipPhoneNo) VALUES(9121, "Carl", "14518 County Road 7240", "Newburg", "MO", "65550-8929", "US", "5555555555");
+INSERT INTO shipAddress(customerID, shipContactName, shipAddr1, shipCity, shipState, shipZip, shipCountry, shipPhoneNo) VALUES(9121, "asdfdf", "sdfsdfsdfasfda", "Newburg", "MO", "2342344", "US", "5555555555");
 
-INSERT INTO orderHistory(orderID, poNum, trackNum, shipType, shipDate, customerID) VALUES(11195, 5335, '1ZF9V5660392267102', 'UPS GND', '2017-4-5', 9121)
+INSERT INTO orderHistory(orderID, poNum, trackNum, shipType, shipDate, customerID) VALUES(11195, 5335, '1ZF9V566044447102', 'UPS GND', '2017-4-5', 9121)
