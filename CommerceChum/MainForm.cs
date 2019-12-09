@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace CommerceChum
+namespace CommerceApp
 {
     public partial class MainForm : Form
     {
@@ -106,7 +106,7 @@ namespace CommerceChum
                             comboBox.Items.Insert(i++, product.name);
                     }
 
-                    if (comboBox.Items.Count > 0)
+                    if (comboBox.Items.Count > 1)
                         comboBox.SelectedIndex = 1;
                     break;
                 case CBOBoxID.PRODUCTS_SP:
@@ -121,7 +121,7 @@ namespace CommerceChum
                             comboBox.Items.Insert(i++, product.name);
                     }
 
-                    if (comboBox.Items.Count > 0)
+                    if (comboBox.Items.Count > 1)
                         comboBox.SelectedIndex = 1;
                     break;
                 case CBOBoxID.PRODUCTS_SN:
@@ -130,7 +130,7 @@ namespace CommerceChum
                     foreach (var product in snProduct)
                         comboBox.Items.Insert(i++, product.name);
 
-                    if (comboBox.Items.Count > 0)
+                    if (comboBox.Items.Count > 1)
                         comboBox.SelectedIndex = 1;
                     break;
                 case CBOBoxID.CUSTOMERS:
@@ -142,7 +142,7 @@ namespace CommerceChum
                             comboBox.Items.Insert(i++, customer.companyName);
                     }
 
-                    if (comboBox.Items.Count > 0)
+                    if (comboBox.Items.Count > 1)
                         comboBox.SelectedIndex = 1;
                     break;
                 case CBOBoxID.ORDER_IDS:
@@ -151,7 +151,7 @@ namespace CommerceChum
                     foreach (var order in rsOrders)
                         comboBox.Items.Insert(i++, order.orderID);
 
-                    if (comboBox.Items.Count > 0)
+                    if (comboBox.Items.Count > 1)
                         comboBox.SelectedIndex = 1;
                     break;
             }
@@ -699,7 +699,10 @@ namespace CommerceChum
             if (chkSameAsBilling.Checked)
                 clearShippingAddrInfo();
             else
-                addShippingAddrInfo();
+            {
+                if (selectedCustomer != null)
+                    addShippingAddrInfo();
+            }
         }
 
         private void clearShippingAddrInfo()
@@ -761,7 +764,8 @@ namespace CommerceChum
                 if (selectedCustomer.shipAddress == null)
                     selectedCustomer.shipAddress = new ShipAddress();
 
-                addShippingAddrInfo();
+                if (selectedCustomer != null)
+                    addShippingAddrInfo();
             }
         }
 
@@ -786,6 +790,9 @@ namespace CommerceChum
             txtTrackNum.Enabled = true;
             chkInvAddToDB.Enabled = true;
 
+            if (selectedCustomer == null)
+                return;
+
             if (rdoInvoice.Checked && selectedCustomer.specialPricing)
             {
                 populateFormCombobox(cboProducts, CBOBoxID.PRODUCTS_SP);
@@ -801,6 +808,9 @@ namespace CommerceChum
             btnGenerate.Enabled = true;
             txtTrackNum.Enabled = true;
             chkInvAddToDB.Enabled = false;
+
+            if (selectedCustomer == null)
+                return;
 
             if (rdoPackingList.Checked && selectedCustomer.specialPricing)
             {
@@ -1097,6 +1107,21 @@ namespace CommerceChum
 
                 txtSerialNumber.Text = Convert.ToString(selectedRow.Cells[3].Value);
             }
+        }
+
+        private void mskTxtCustIDSpecPrice_MouseClick(object sender, MouseEventArgs e)
+        {
+            mskTxtCustIDSpecPrice.Select(mskTxtCustIDSpecPrice.Text.Length, 0);
+        }
+
+        private void mskTextSpecialPrice_MouseClick(object sender, MouseEventArgs e)
+        {
+            mskTextSpecialPrice.Select(mskTextSpecialPrice.Text.Length, 0);
+        }
+
+        private void mskTxtCustomerID_MouseClick(object sender, MouseEventArgs e)
+        {
+            mskTxtCustomerID.Select(mskTxtCustomerID.Text.Length, 0);
         }
     }
 }

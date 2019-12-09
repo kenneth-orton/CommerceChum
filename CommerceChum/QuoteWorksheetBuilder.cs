@@ -4,7 +4,7 @@ using OfficeOpenXml.Style;
 using System.Windows.Forms;
 using System.IO;
 
-namespace CommerceChum
+namespace CommerceApp
 {
     class QuoteWorksheetBuilder
     {

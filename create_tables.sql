@@ -1,4 +1,4 @@
-drop table product;
+drop table if exists product;
 
 CREATE TABLE [product] (
   [productID] INTEGER NOT NULL PRIMARY KEY
@@ -9,18 +9,7 @@ CREATE TABLE [product] (
 , [hasSN] bit NOT NULL DEFAULT 1
 );
 
-drop table specialPrices;
-
-CREATE TABLE [specialPrices] (
-  [customerID] INTEGER NOT NULL
-, [productID] INTEGER NOT NULL
-, [price] double(10, 2) NOT NULL
-, FOREIGN KEY(customerID) references customers(customerID) 
-, FOREIGN KEY(productID) references product(productID)
-, PRIMARY KEY(customerID, productID)
-);
-
-drop table customers;
+drop table if exists customers;
 
 CREATE TABLE [customers] (
   [customerID] INTEGER NOT NULL PRIMARY KEY
@@ -32,10 +21,18 @@ CREATE TABLE [customers] (
 , [specialPricing] bit NOT NULL DEFAULT 0
 );
 
---INSERT INTO customers(customerID, coName, contactName, payTerms, addressSame, specialPricing) VALUES(9121, "ddfdef", "hhhhh", "Net-30", 0, 1);
---INSERT INTO customers(customerID, coName, contactName, payTerms, addressSame, specialPricing) VALUES(1250, "lskjlksd", "xxxxxx", "Net-45", 1, 1);
+drop table if exists specialPrices;
 
-drop table billAddress;
+CREATE TABLE [specialPrices] (
+  [customerID] INTEGER NOT NULL
+, [productID] INTEGER NOT NULL
+, [price] double(10, 2) NOT NULL
+, FOREIGN KEY(customerID) references customers(customerID) 
+, FOREIGN KEY(productID) references product(productID)
+, PRIMARY KEY(customerID, productID)
+);
+
+drop table if exists billAddress;
 
 CREATE TABLE [billAddress] (
   [customerID] INTEGER NOT NULL PRIMARY KEY
@@ -50,9 +47,7 @@ CREATE TABLE [billAddress] (
 , FOREIGN KEY(customerID) references customers(customerID) 
 );
 
---INSERT INTO billAddress(customerID, billCoName, billAddr1, billCity, billState, billZip, billCountry, billPhoneNo) VALUES(9121, "a;lksjdl;kjf", "ijdidijdi", "asdfasdf", "zzO", "333333", "US", "3333333333");
-
-drop table shipAddress;
+drop table if exists shipAddress;
 
 CREATE TABLE [shipAddress] (
   [customerID] INTEGER NOT NULL PRIMARY KEY
@@ -67,9 +62,7 @@ CREATE TABLE [shipAddress] (
 , FOREIGN KEY(customerID) references customers(customerID) 
 );
 
---INSERT INTO shipAddress(customerID, billCoName, billAddr1, billCity, billState, billZip, billCountry, billPhoneNo) VALUES(9121, "a;lksjdl;kjf", "ijdidijdi", "asdfasdf", "zzO", "333333", "US", "573-341-1528");
-
-drop table manifest;
+drop table if exists manifest;
 
 CREATE TABLE [manifest] (
   [orderID] INTEGER NOT NULL
@@ -77,12 +70,10 @@ CREATE TABLE [manifest] (
 , [qty] INTEGER NOT NULL
 , FOREIGN KEY(orderID) references orderHistory(orderID)
 , FOREIGN KEY(productID) references product(productID)
-, PRIMARY KEY(customerID, productID)
+, PRIMARY KEY(orderID, productID)
 );
 
---INSERT INTO manifest(orderID, productID, qty) VALUES(11195, 8, 4);
-
-drop table orderHistory;
+drop table if exists orderHistory;
 
 CREATE TABLE [orderHistory] (
   [orderID] INTEGER NOT NULL PRIMARY KEY
@@ -94,9 +85,7 @@ CREATE TABLE [orderHistory] (
 , FOREIGN KEY(customerID) references customers(customerID)
 );
 
---INSERT INTO orderHistory(orderID, poNum, trackNum, shipType, shipDate, customerID) VALUES(11195, '5335', 'sdasffwfwfwfff', 'UPS GND', '2017-04-11', 9121);
-
-drop table serialNumbers;
+drop table if exists serialNumbers;
 
 CREATE TABLE [serialNumbers] (
   [ID] INTEGER NOT NULL PRIMARY KEY
@@ -113,5 +102,3 @@ CREATE TABLE [serialNumbers] (
 , FOREIGN KEY(orderID) references orderHistory(orderID)
 , FOREIGN KEY(productID) references product(productID)
 );
-
---INSERT INTO serialNumbers(productID, orderID, serialNum, closedLoop, extIO, analogInputs, rigidTap, thc, macroProg, threading) VALUES(9, 9211, '123412341234', 1, 0, 0, 0, 0, 0, 0)

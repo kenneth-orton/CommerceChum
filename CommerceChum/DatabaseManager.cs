@@ -6,7 +6,7 @@ using System.Linq;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Windows.Forms;
 
-namespace CommerceChum
+namespace CommerceApp
 {
     class dbContext : DbContext
     {
@@ -240,9 +240,9 @@ namespace CommerceChum
         {
             using (var context = new dbContext())
             {
-                if (customerExists(newCustomer.companyName))
+                if (customerExists(newCustomer.customerID))
                 {
-                    var customer = context.Customers.Include("BillAddress").Include("ShipAddress").FirstOrDefault(c => c.companyName == newCustomer.companyName);
+                    var customer = context.Customers.Include("BillAddress").Include("ShipAddress").FirstOrDefault(c => c.customerID == newCustomer.customerID);
 
                     if (customer.billAddress == null)
                         customer.billAddress = new BillAddress();
@@ -260,6 +260,7 @@ namespace CommerceChum
                         customer.specialPricing = newCustomer.specialPricing;
                         customer.billAddress = newCustomer.billAddress;
                         customer.shipAddress = newCustomer.shipAddress;
+                        customer.active = true;
                     }
                 }
                 else
@@ -274,12 +275,6 @@ namespace CommerceChum
                     throw new SQLiteException();
                 }
             }
-        }
-
-        private bool customerExists(string companyName)
-        {
-            using (var context = new dbContext())
-                return context.Customers.Where(c => c.companyName == companyName).Any();
         }
 
         public int getNextInvoiceNumber(Customer selectedCustomer)

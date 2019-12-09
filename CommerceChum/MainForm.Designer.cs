@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CommerceChum
+namespace CommerceApp
 {
     partial class MainForm
     {
@@ -217,7 +217,7 @@ namespace CommerceChum
             this.btnSpecialPrice.Location = new System.Drawing.Point(413, 17);
             this.btnSpecialPrice.Name = "btnSpecialPrice";
             this.btnSpecialPrice.Size = new System.Drawing.Size(75, 23);
-            this.btnSpecialPrice.TabIndex = 22;
+            this.btnSpecialPrice.TabIndex = 35;
             this.btnSpecialPrice.Text = "Submit";
             this.btnSpecialPrice.UseVisualStyleBackColor = true;
             this.btnSpecialPrice.Click += new System.EventHandler(this.btnSpecialPrice_Click);
@@ -230,8 +230,9 @@ namespace CommerceChum
             this.mskTextSpecialPrice.Name = "mskTextSpecialPrice";
             this.mskTextSpecialPrice.PromptChar = ' ';
             this.mskTextSpecialPrice.Size = new System.Drawing.Size(50, 20);
-            this.mskTextSpecialPrice.TabIndex = 21;
+            this.mskTextSpecialPrice.TabIndex = 34;
             this.mskTextSpecialPrice.Text = "0";
+            this.mskTextSpecialPrice.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mskTextSpecialPrice_MouseClick);
             // 
             // lblSpecialPrice
             // 
@@ -247,7 +248,7 @@ namespace CommerceChum
             this.txtPartName.Location = new System.Drawing.Point(207, 19);
             this.txtPartName.Name = "txtPartName";
             this.txtPartName.Size = new System.Drawing.Size(100, 20);
-            this.txtPartName.TabIndex = 19;
+            this.txtPartName.TabIndex = 33;
             // 
             // lblPartName
             // 
@@ -265,7 +266,8 @@ namespace CommerceChum
             this.mskTxtCustIDSpecPrice.Name = "mskTxtCustIDSpecPrice";
             this.mskTxtCustIDSpecPrice.PromptChar = ' ';
             this.mskTxtCustIDSpecPrice.Size = new System.Drawing.Size(58, 20);
-            this.mskTxtCustIDSpecPrice.TabIndex = 17;
+            this.mskTxtCustIDSpecPrice.TabIndex = 32;
+            this.mskTxtCustIDSpecPrice.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mskTxtCustIDSpecPrice_MouseClick);
             // 
             // lblCustIDSpecPrice
             // 
@@ -310,7 +312,7 @@ namespace CommerceChum
             this.chkSameAsBilling.Location = new System.Drawing.Point(12, 19);
             this.chkSameAsBilling.Name = "chkSameAsBilling";
             this.chkSameAsBilling.Size = new System.Drawing.Size(98, 17);
-            this.chkSameAsBilling.TabIndex = 24;
+            this.chkSameAsBilling.TabIndex = 23;
             this.chkSameAsBilling.Text = "Same As Billing";
             this.chkSameAsBilling.UseVisualStyleBackColor = true;
             this.chkSameAsBilling.CheckedChanged += new System.EventHandler(this.chkSameAsBilling_CheckedChanged);
@@ -329,7 +331,7 @@ namespace CommerceChum
             this.txtShipPhoneNumber.Location = new System.Drawing.Point(352, 99);
             this.txtShipPhoneNumber.Name = "txtShipPhoneNumber";
             this.txtShipPhoneNumber.Size = new System.Drawing.Size(93, 20);
-            this.txtShipPhoneNumber.TabIndex = 22;
+            this.txtShipPhoneNumber.TabIndex = 31;
             // 
             // lblShipCoName
             // 
@@ -345,7 +347,7 @@ namespace CommerceChum
             this.txtShipCoName.Location = new System.Drawing.Point(6, 60);
             this.txtShipCoName.Name = "txtShipCoName";
             this.txtShipCoName.Size = new System.Drawing.Size(162, 20);
-            this.txtShipCoName.TabIndex = 20;
+            this.txtShipCoName.TabIndex = 24;
             this.txtShipCoName.TextChanged += new System.EventHandler(this.txtShipCoName_TextChanged);
             // 
             // lblShipZip
@@ -389,7 +391,7 @@ namespace CommerceChum
             this.txtShipZip.Location = new System.Drawing.Point(174, 99);
             this.txtShipZip.Name = "txtShipZip";
             this.txtShipZip.Size = new System.Drawing.Size(60, 20);
-            this.txtShipZip.TabIndex = 8;
+            this.txtShipZip.TabIndex = 29;
             this.txtShipZip.TextChanged += new System.EventHandler(this.txtShipZip_TextChanged);
             // 
             // txtShipState
@@ -397,7 +399,7 @@ namespace CommerceChum
             this.txtShipState.Location = new System.Drawing.Point(90, 99);
             this.txtShipState.Name = "txtShipState";
             this.txtShipState.Size = new System.Drawing.Size(78, 20);
-            this.txtShipState.TabIndex = 9;
+            this.txtShipState.TabIndex = 28;
             this.txtShipState.TextChanged += new System.EventHandler(this.txtShipState_TextChanged);
             // 
             // txtShipCountry
@@ -405,7 +407,7 @@ namespace CommerceChum
             this.txtShipCountry.Location = new System.Drawing.Point(240, 99);
             this.txtShipCountry.Name = "txtShipCountry";
             this.txtShipCountry.Size = new System.Drawing.Size(106, 20);
-            this.txtShipCountry.TabIndex = 10;
+            this.txtShipCountry.TabIndex = 30;
             this.txtShipCountry.TextChanged += new System.EventHandler(this.txtShipCountry_TextChanged);
             // 
             // txtShipCity
@@ -413,7 +415,7 @@ namespace CommerceChum
             this.txtShipCity.Location = new System.Drawing.Point(6, 99);
             this.txtShipCity.Name = "txtShipCity";
             this.txtShipCity.Size = new System.Drawing.Size(78, 20);
-            this.txtShipCity.TabIndex = 11;
+            this.txtShipCity.TabIndex = 27;
             this.txtShipCity.TextChanged += new System.EventHandler(this.txtShipCity_TextChanged);
             // 
             // lblShipAddr2
@@ -430,7 +432,7 @@ namespace CommerceChum
             this.txtShipAddr2.Location = new System.Drawing.Point(351, 60);
             this.txtShipAddr2.Name = "txtShipAddr2";
             this.txtShipAddr2.Size = new System.Drawing.Size(185, 20);
-            this.txtShipAddr2.TabIndex = 12;
+            this.txtShipAddr2.TabIndex = 26;
             // 
             // lblShipAddr1
             // 
@@ -446,7 +448,7 @@ namespace CommerceChum
             this.txtShipAddr1.Location = new System.Drawing.Point(174, 60);
             this.txtShipAddr1.Name = "txtShipAddr1";
             this.txtShipAddr1.Size = new System.Drawing.Size(171, 20);
-            this.txtShipAddr1.TabIndex = 13;
+            this.txtShipAddr1.TabIndex = 25;
             this.txtShipAddr1.TextChanged += new System.EventHandler(this.txtShipAddr1_TextChanged);
             // 
             // grpBillAddr
@@ -485,7 +487,7 @@ namespace CommerceChum
             this.chkSpecialPricing.Location = new System.Drawing.Point(440, 42);
             this.chkSpecialPricing.Name = "chkSpecialPricing";
             this.chkSpecialPricing.Size = new System.Drawing.Size(96, 17);
-            this.chkSpecialPricing.TabIndex = 26;
+            this.chkSpecialPricing.TabIndex = 15;
             this.chkSpecialPricing.Text = "Special Pricing";
             this.chkSpecialPricing.UseVisualStyleBackColor = true;
             // 
@@ -494,7 +496,7 @@ namespace CommerceChum
             this.txtBillContact.Location = new System.Drawing.Point(7, 40);
             this.txtBillContact.Name = "txtBillContact";
             this.txtBillContact.Size = new System.Drawing.Size(162, 20);
-            this.txtBillContact.TabIndex = 25;
+            this.txtBillContact.TabIndex = 12;
             // 
             // lblBillContactName
             // 
@@ -519,7 +521,7 @@ namespace CommerceChum
             this.txtBillPayTerms.Location = new System.Drawing.Point(345, 40);
             this.txtBillPayTerms.Name = "txtBillPayTerms";
             this.txtBillPayTerms.Size = new System.Drawing.Size(86, 20);
-            this.txtBillPayTerms.TabIndex = 22;
+            this.txtBillPayTerms.TabIndex = 14;
             this.txtBillPayTerms.TextChanged += new System.EventHandler(this.txtBillPayTerms_TextChanged);
             // 
             // label4
@@ -553,7 +555,7 @@ namespace CommerceChum
             this.txtBillCoName.Location = new System.Drawing.Point(176, 40);
             this.txtBillCoName.Name = "txtBillCoName";
             this.txtBillCoName.Size = new System.Drawing.Size(162, 20);
-            this.txtBillCoName.TabIndex = 20;
+            this.txtBillCoName.TabIndex = 13;
             this.txtBillCoName.TextChanged += new System.EventHandler(this.txtBillCoName_TextChanged);
             // 
             // lblBillZip
@@ -597,7 +599,7 @@ namespace CommerceChum
             this.txtBillZip.Location = new System.Drawing.Point(174, 121);
             this.txtBillZip.Name = "txtBillZip";
             this.txtBillZip.Size = new System.Drawing.Size(60, 20);
-            this.txtBillZip.TabIndex = 8;
+            this.txtBillZip.TabIndex = 20;
             this.txtBillZip.TextChanged += new System.EventHandler(this.txtBillZip_TextChanged);
             // 
             // txtBillState
@@ -605,7 +607,7 @@ namespace CommerceChum
             this.txtBillState.Location = new System.Drawing.Point(90, 121);
             this.txtBillState.Name = "txtBillState";
             this.txtBillState.Size = new System.Drawing.Size(78, 20);
-            this.txtBillState.TabIndex = 9;
+            this.txtBillState.TabIndex = 19;
             this.txtBillState.TextChanged += new System.EventHandler(this.txtBillState_TextChanged);
             // 
             // txtBillCountry
@@ -613,7 +615,7 @@ namespace CommerceChum
             this.txtBillCountry.Location = new System.Drawing.Point(240, 121);
             this.txtBillCountry.Name = "txtBillCountry";
             this.txtBillCountry.Size = new System.Drawing.Size(106, 20);
-            this.txtBillCountry.TabIndex = 10;
+            this.txtBillCountry.TabIndex = 21;
             this.txtBillCountry.TextChanged += new System.EventHandler(this.txtBillCountry_TextChanged);
             // 
             // txtBillCity
@@ -621,7 +623,7 @@ namespace CommerceChum
             this.txtBillCity.Location = new System.Drawing.Point(6, 121);
             this.txtBillCity.Name = "txtBillCity";
             this.txtBillCity.Size = new System.Drawing.Size(78, 20);
-            this.txtBillCity.TabIndex = 11;
+            this.txtBillCity.TabIndex = 18;
             this.txtBillCity.TextChanged += new System.EventHandler(this.txtBillCity_TextChanged);
             // 
             // lblBillAddr2
@@ -638,7 +640,7 @@ namespace CommerceChum
             this.txtBillAddr2.Location = new System.Drawing.Point(184, 81);
             this.txtBillAddr2.Name = "txtBillAddr2";
             this.txtBillAddr2.Size = new System.Drawing.Size(184, 20);
-            this.txtBillAddr2.TabIndex = 12;
+            this.txtBillAddr2.TabIndex = 17;
             // 
             // lblBillAddr1
             // 
@@ -654,7 +656,7 @@ namespace CommerceChum
             this.txtBillAddr1.Location = new System.Drawing.Point(7, 81);
             this.txtBillAddr1.Name = "txtBillAddr1";
             this.txtBillAddr1.Size = new System.Drawing.Size(171, 20);
-            this.txtBillAddr1.TabIndex = 13;
+            this.txtBillAddr1.TabIndex = 16;
             this.txtBillAddr1.TextChanged += new System.EventHandler(this.txtBillAddr1_TextChanged);
             // 
             // grpCustomers
@@ -679,7 +681,8 @@ namespace CommerceChum
             this.mskTxtCustomerID.Name = "mskTxtCustomerID";
             this.mskTxtCustomerID.PromptChar = ' ';
             this.mskTxtCustomerID.Size = new System.Drawing.Size(58, 20);
-            this.mskTxtCustomerID.TabIndex = 16;
+            this.mskTxtCustomerID.TabIndex = 8;
+            this.mskTxtCustomerID.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mskTxtCustomerID_MouseClick);
             this.mskTxtCustomerID.TextChanged += new System.EventHandler(this.mskTxtCustomerID_TextChanged);
             // 
             // rdoRemoveCustomer
@@ -688,7 +691,7 @@ namespace CommerceChum
             this.rdoRemoveCustomer.Location = new System.Drawing.Point(392, 20);
             this.rdoRemoveCustomer.Name = "rdoRemoveCustomer";
             this.rdoRemoveCustomer.Size = new System.Drawing.Size(65, 17);
-            this.rdoRemoveCustomer.TabIndex = 3;
+            this.rdoRemoveCustomer.TabIndex = 10;
             this.rdoRemoveCustomer.Text = "Remove";
             this.rdoRemoveCustomer.UseVisualStyleBackColor = true;
             this.rdoRemoveCustomer.CheckedChanged += new System.EventHandler(this.rdoRemoveCustomer_CheckedChanged);
@@ -698,7 +701,7 @@ namespace CommerceChum
             this.btnCustomerSubmit.Location = new System.Drawing.Point(460, 17);
             this.btnCustomerSubmit.Name = "btnCustomerSubmit";
             this.btnCustomerSubmit.Size = new System.Drawing.Size(75, 23);
-            this.btnCustomerSubmit.TabIndex = 14;
+            this.btnCustomerSubmit.TabIndex = 11;
             this.btnCustomerSubmit.Text = "Submit";
             this.btnCustomerSubmit.UseVisualStyleBackColor = true;
             this.btnCustomerSubmit.Click += new System.EventHandler(this.btnCustomerSubmit_Click);
@@ -710,7 +713,7 @@ namespace CommerceChum
             this.rdoAddCustomer.Location = new System.Drawing.Point(319, 20);
             this.rdoAddCustomer.Name = "rdoAddCustomer";
             this.rdoAddCustomer.Size = new System.Drawing.Size(67, 17);
-            this.rdoAddCustomer.TabIndex = 1;
+            this.rdoAddCustomer.TabIndex = 9;
             this.rdoAddCustomer.TabStop = true;
             this.rdoAddCustomer.Text = "Add/Edit";
             this.rdoAddCustomer.UseVisualStyleBackColor = true;
@@ -722,7 +725,7 @@ namespace CommerceChum
             this.cboDBCustomers.Location = new System.Drawing.Point(6, 19);
             this.cboDBCustomers.Name = "cboDBCustomers";
             this.cboDBCustomers.Size = new System.Drawing.Size(210, 21);
-            this.cboDBCustomers.TabIndex = 0;
+            this.cboDBCustomers.TabIndex = 7;
             this.cboDBCustomers.SelectedIndexChanged += new System.EventHandler(this.cboDBCustomers_SelectedIndexChanged);
             // 
             // lblCustomerID
@@ -759,7 +762,7 @@ namespace CommerceChum
             this.rdoDBRemove.Location = new System.Drawing.Point(352, 20);
             this.rdoDBRemove.Name = "rdoDBRemove";
             this.rdoDBRemove.Size = new System.Drawing.Size(65, 17);
-            this.rdoDBRemove.TabIndex = 17;
+            this.rdoDBRemove.TabIndex = 2;
             this.rdoDBRemove.Text = "Remove";
             this.rdoDBRemove.UseVisualStyleBackColor = true;
             this.rdoDBRemove.CheckedChanged += new System.EventHandler(this.rdoDBRemove_CheckedChanged);
@@ -771,7 +774,7 @@ namespace CommerceChum
             this.rdoDBAdd.Location = new System.Drawing.Point(279, 20);
             this.rdoDBAdd.Name = "rdoDBAdd";
             this.rdoDBAdd.Size = new System.Drawing.Size(67, 17);
-            this.rdoDBAdd.TabIndex = 15;
+            this.rdoDBAdd.TabIndex = 1;
             this.rdoDBAdd.TabStop = true;
             this.rdoDBAdd.Text = "Add/Edit";
             this.rdoDBAdd.UseVisualStyleBackColor = true;
@@ -782,7 +785,7 @@ namespace CommerceChum
             this.btnDBActions.Location = new System.Drawing.Point(460, 57);
             this.btnDBActions.Name = "btnDBActions";
             this.btnDBActions.Size = new System.Drawing.Size(75, 23);
-            this.btnDBActions.TabIndex = 14;
+            this.btnDBActions.TabIndex = 6;
             this.btnDBActions.Text = "Submit";
             this.btnDBActions.UseVisualStyleBackColor = true;
             this.btnDBActions.Click += new System.EventHandler(this.btnDBActions_Click);
@@ -822,7 +825,7 @@ namespace CommerceChum
             this.mskTxtDBPrice.Name = "mskTxtDBPrice";
             this.mskTxtDBPrice.PromptChar = ' ';
             this.mskTxtDBPrice.Size = new System.Drawing.Size(50, 20);
-            this.mskTxtDBPrice.TabIndex = 10;
+            this.mskTxtDBPrice.TabIndex = 5;
             this.mskTxtDBPrice.Text = "0";
             // 
             // txtDBPartDesc
@@ -830,7 +833,7 @@ namespace CommerceChum
             this.txtDBPartDesc.Location = new System.Drawing.Point(112, 59);
             this.txtDBPartDesc.Name = "txtDBPartDesc";
             this.txtDBPartDesc.Size = new System.Drawing.Size(289, 20);
-            this.txtDBPartDesc.TabIndex = 3;
+            this.txtDBPartDesc.TabIndex = 4;
             this.txtDBPartDesc.TextChanged += new System.EventHandler(this.txtDBPartDesc_TextChanged);
             // 
             // txtDBPartName
@@ -838,7 +841,7 @@ namespace CommerceChum
             this.txtDBPartName.Location = new System.Drawing.Point(6, 59);
             this.txtDBPartName.Name = "txtDBPartName";
             this.txtDBPartName.Size = new System.Drawing.Size(100, 20);
-            this.txtDBPartName.TabIndex = 2;
+            this.txtDBPartName.TabIndex = 3;
             this.txtDBPartName.TextChanged += new System.EventHandler(this.txtDBPartName_TextChanged);
             // 
             // cboProductsEdit
@@ -847,7 +850,7 @@ namespace CommerceChum
             this.cboProductsEdit.Location = new System.Drawing.Point(6, 19);
             this.cboProductsEdit.Name = "cboProductsEdit";
             this.cboProductsEdit.Size = new System.Drawing.Size(257, 21);
-            this.cboProductsEdit.TabIndex = 1;
+            this.cboProductsEdit.TabIndex = 0;
             this.cboProductsEdit.SelectedIndexChanged += new System.EventHandler(this.cboProductsEdit_SelectedIndexChanged);
             // 
             // tabQuote
