@@ -1,7 +1,7 @@
 # Commerce App
 
 <p align="center">
-  <img src="/img/desk_jockey.PNG" width="500"/>
+  <img src="/img/gui.PNG" width="500"/>
 </p>
 
 ## Built With
