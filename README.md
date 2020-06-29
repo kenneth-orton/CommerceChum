@@ -3,11 +3,7 @@
 A Windows form application for managing customers and inventory using an SQLite database. 
  
 <p align="center">
-<<<<<<< HEAD
   <img src="/img/screenshot.png" width="500"/>
-=======
-  <img src="/img/gui.PNG" width="500"/>
->>>>>>> e4048965fddb78e57cbfa4350e32a31370680822
 </p>
 
 ## Built With
