@@ -1,7 +1,9 @@
 # Commerce App
 
+A Windows form application for managing customers and inventory using an SQLite database. 
+ 
 <p align="center">
-  <img src="/img/desk_jockey.PNG" width="500"/>
+  <img src="/img/screenshot.png" width="500"/>
 </p>
 
 ## Built With
